@@ -108,7 +108,7 @@ int IterasiAitken(float coeff[], int deg) {
 
     int i = 1;
     printf("|No| |delta_x\t|\n");
-    while(i < N) {
+    while(i <= N) {
         
         result_common_iteration[i] = Polynomial(coeff, deg, x);
         if (i <= 2) {
@@ -222,6 +222,7 @@ int main(){
             if (next == 'y') {
                 system("cls");
                 Biseksi:
+                system("cls");
                 printf("Masukan derajat polinom: ");
                 scanf("%d", &deg);
                 for (j = 0; j <= deg; j++) {
@@ -259,6 +260,7 @@ int main(){
             if (next == 'y') {
                 system("cls");
                 IterasiSederhana:
+                system("cls");
                 printf("Masukan derajat polinom: ");
                 scanf("%d", &deg);
                 for (j = 0; j <= deg; j++) {
@@ -297,6 +299,7 @@ int main(){
             if (next == 'y') {
                 system("cls");
                 IterasiAitken:
+                system("cls");
                 printf("Masukan derajat polinom: ");
                 scanf("%d", &deg);
                 for (j = 0; j <= deg; j++) {
@@ -335,6 +338,7 @@ int main(){
             if (next == 'y') {
                 system("cls");
                 RegulaFalsi:
+                system("cls");
                 printf("Masukan derajat polinom: ");
                 scanf("%d", &deg);
                 for (j = 0; j <= deg; j++) {
@@ -372,6 +376,7 @@ int main(){
             if (next == 'y') {
                 system("cls");
                 NewtonRaphson:
+                system("cls");
                 printf("Masukan derajat polinom: ");
                 scanf("%d", &deg);
                 for (j = 0; j <= deg; j++) {
