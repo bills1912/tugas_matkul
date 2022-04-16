@@ -48,7 +48,7 @@ int Biseksi(float coeff[], int deg) {
         if (result_a * result_b > 0){
             printf("Tidak ada solusi\n");
         } else {
-            while (i < N) {
+            while (i <= N) {
                 x = (a + b) / 2;
                 result_x = Polynomial(coeff, deg, x);
                 printf("|%d.| |%.10f|, |%.10f|, |%.10f|, |%.10f|, |%.10f|, |%.10f  |, |%.10f|\n", 
@@ -61,6 +61,10 @@ int Biseksi(float coeff[], int deg) {
                 else {
                     b = x;
                     result_b = result_x;
+                }
+                if (fabs((b - a) / 2) < TOL) {
+                    printf("\nNilai akar yang memenuhi: %.10f\n", x);
+                    break;
                 }
                 i++;
             }
@@ -84,12 +88,14 @@ int IterasiSederhana(float coeff[], int deg) {
 
     int i = 1;
     printf("|No|, |x_n|, \t|F(x_n)|\n");
-    while(i < N) {
+    while(i <= N) {
         result_xn = Polynomial(coeff, deg, x);
         printf("|%d.| |%.10f|, |%.10f|\n", 
                 i, x, Polynomial(coeff, deg, x));
-        if (fabs(result_xn - x) < TOL)
+        if (fabs(result_xn - x) < TOL){
+            printf("\nNilai akar yang memenuhi: %.10f\n", x);
             break;
+        }
         x = result_xn;
         i++;
         
@@ -153,6 +159,10 @@ int RegulaFalsi(float coeff[], int deg) {
         result_x_asterisk = Polynomial(coeff, deg, x_asterisk);
         printf("|%d.| |%.10f|, |%.10f|, |%.10f|, |%.10f|, |%.10f|, |%.10f|\n", 
                 i, x_n, x_nplus1, result_x_n, result_x_nplus1, x_asterisk, result_x_asterisk);
+        if (fabs(result_x_asterisk) < err) {
+            printf("\nNilai akar yang memenuhi: %.10f\n", x_asterisk);
+            break;
+        }
         if (result_x_asterisk * result_x_n > 0) {
             x_n = x_asterisk;
             result_x_n = result_x_asterisk;
@@ -192,6 +202,7 @@ int main(){
     char next, stay;
     
     Utama:
+    system("cls");
     printf("SELAMAT DATANG DI APLIKASI ALGORITMA PENCARIAN SOLUSI DARI POLINOM\n\n");
     printf("Pilih menu yang tersedia:\n");
     printf("1. Metode Biseksi\n");
@@ -395,6 +406,7 @@ int main(){
             } else {
                 goto Utama;
             }
+            break;
 
         case 6:
             exit(0);
