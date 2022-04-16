@@ -190,6 +190,10 @@ int NewtonRaphson(float coeff[], int deg) {
         x_nplus1 = x_n - Polynomial(coeff, deg, x_n) / Derivative(coeff, deg, x_n);
         printf("|%d.| |%.10f|\n", 
                 i, x_n);
+        if (fabs(x_nplus1 - x_n) < TOL) {
+            printf("\nNilai akar yang memenuhi: %.10f\n", x_nplus1);
+            break;
+        }
         x_n = x_nplus1;
         i++;
     }
@@ -217,7 +221,7 @@ int main(){
 
     switch (no_menu) {
         case 1:
-            printf("ALGORITMA BISEKS\n\n");
+            printf("ALGORITMA BISEKSI\n\n");
             printf("Ketentuan dari algoritma ini antara lain:\n");
             printf("1. User memasukan langsung nilai batas bawah (a) dan batas atas (b);\n");
             printf("2. User memasukan nilai toleransi (TOL) secara manual;\n");
