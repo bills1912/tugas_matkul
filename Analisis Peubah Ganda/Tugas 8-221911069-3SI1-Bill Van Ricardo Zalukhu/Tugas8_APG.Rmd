@@ -1,0 +1,286 @@
+---
+title: "Tugas_APG_8"
+author: "Bill Van Ricardo Zalukhu"
+date: '2022-04-20'
+output: html_document
+---
+
+```{r library, message=FALSE}
+library(factoextra)
+library(dplyr)
+```
+
+## 8.11
+```{r}
+tot_pop <- c(5.935, 1.523, 2.599, 4.009, 4.687, 8.044, 2.766, 6.538, 6.451, 3.314, 3.777, 1.530, 2.768, 6.585)
+med_school_year <- c(14.2, 13.1, 12.7, 15.2, 14.7, 15.6, 13.3, 17, 12.9, 12.2, 13, 13.8, 13.6, 14.9)
+tot_emp <- c(2.265, .597, 1.237, 1.649, 2.312, 3.641, 1.244, 2.618, 3.147, 1.606, 2.119, .798, 1.336, 2.763)
+health_ser <- c(2.27, .75, 1.11, .81, 2.5, 4.51, 1.03, 2.39, 5.52, 2.18, 2.83, .84, 1.75, 1.91)
+med_val_home <- c(29.1, 26.2, 17.2, 30.2, 22.2, 23.6, 19.7, 18.5, 20.1, 18.2, 18, 42.5, 26.4, 31.7)
+
+cen_tract <- cbind(tot_pop, med_school_year, tot_emp, health_ser, med_val_home)
+```
+
+```{r}
+S_cen <- cov(cen_tract)
+S_cen
+```
+
+```{r}
+eig_cen <- eigen(S_cen)
+eig_val_cen <- eig_cen$values
+eig_vec_cen <- eig_cen$vectors
+```
+
+```{r}
+eig_val_cen
+```
+
+```{r}
+eig_vec_cen
+```
+
+
+```{r}
+prop_var_cen <- c()
+temp <- 0
+
+for (i in c(1:5)){
+  temp <- temp + eig_val_cen[i]
+  prop_var <- (temp / sum(eig_val_cen)) * 100
+  prop_var_cen <- append(prop_var_cen, prop_var)
+}
+prop_var_cen
+```
+
+```{r}
+rho_cen <- matrix(nrow = 5, ncol = 5)
+for (i in c(1:5)){
+  for(j in c(1:5)){
+    rho_cen[j, i] <- (eig_vec_cen[j, i] * sqrt(eig_val_cen[i]))/sqrt(S_cen[j, j])
+  }
+}
+rho_cen
+```
+
+## 8.12
+```{r}
+wind <- c(8, 7, 7, 10, 6, 8, 9, 5, 7, 8, 6, 6, 7, 10, 10, 9, 8, 8, 9, 9, 10, 9, 8, 5, 6, 8, 6, 8, 6, 10, 8, 7, 5, 6, 10, 8, 5, 5, 7, 7, 6, 8)
+solar_rad <- c(98, 107, 103, 88, 91, 90, 84, 72, 82, 64, 71, 91, 72, 70, 72, 77, 76, 71, 67, 69, 62, 88, 80, 30, 83, 84, 78, 79, 62, 37, 71, 52, 
+             48, 75, 35, 85, 86, 86, 79, 79, 68, 40)
+co <- c(7, 4, 4, 5, 4, 5, 7, 6, 5, 5, 5, 4, 7, 4, 4, 4, 4, 5, 4, 3, 5, 4, 4, 3, 5, 3, 4, 2, 4, 3, 4, 4, 6, 4, 4, 4, 3, 7, 7, 5, 6, 4)
+no <- c(2, 3, 3, 2, 2, 2, 4, 4, 1, 2, 4, 2, 4, 2, 1, 1, 1, 3, 2, 3, 3, 2, 2, 3, 1, 2, 2, 1, 3, 1, 1, 1, 5, 1, 1, 1, 1, 2, 4, 2, 2, 3)
+no_2 <- c(12, 9, 5, 8, 8, 12, 12, 21, 11, 13, 10, 12, 18, 1, 8, 9, 7, 1, 13, 9, 14, 7, 13, 5, 10, 7, 1, 7, 9, 7, 10, 12, 8, 10, 6, 9, 6, 13, 9, 8, 1, 6)
+o_3 <- c(8, 5, 6, 15, 10, 12, 15, 14, 11, 9, 3, 7, 10, 7, 10, 10, 7, 4, 2, 5, 4, 6, 11, 2, 23, 6, 11, 10, 8, 2, 7, 8, 4, 24, 9, 10, 12, 18, 25, 6, 14, 2)
+hc <- c(2, 3, 3, 4, 3, 4, 5, 4, 3, 4, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 4, 3, 4, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3, 3, 2, 2, 2, 2, 3, 2, 3, 2)
+
+air_pollution <- cbind(wind, solar_rad, co, no, no_2, o_3, hc)
+```
+
+```{r}
+S_pollution <- cov(air_pollution)
+S_pollution
+```
+
+```{r}
+cor(air_pollution)
+```
+
+```{r}
+eig_poll_cov <- eigen(S_pollution)
+```
+
+```{r}
+eig_val_cov <- eig_poll_cov$values
+eig_vec_cov <- eig_poll_cov$vectors
+```
+
+- Analysis menggunakan matriks kovarian
+a. Manual
+```{r}
+prop_var_poll_cov <- c()
+temp <- 0
+
+for (i in c(1:7)){
+  temp <- temp + eig_val_cov[i]
+  prop_var <- (temp / sum(eig_val_cov)) * 100
+  prop_var_poll_cov <- append(prop_var_poll_cov, prop_var)
+}
+prop_var_poll_cov
+```
+
+```{r}
+rho_poll_cov <- matrix(nrow = 7, ncol = 7)
+for (i in c(1:7)){
+  for(j in c(1:7)){
+    rho_poll_cov[j, i] <- (eig_vec_cov[j, i] * sqrt(eig_val_cov[i]))/sqrt(S_pollution[j, j])
+  }
+}
+rho_poll_cov
+```
+
+```{r}
+components <- matrix(nrow = 42, ncol = 7)
+for(i in c(1:7)){
+  for(j in c(1:42)){
+    components[j, i] <- t(eig_vec_cov[,i]) %*% air_pollution[j, ]
+  }
+}
+```
+
+
+b. Dengan Package
+```{r}
+pca_poll_cov <- prcomp(air_pollution, scale = FALSE)
+```
+
+```{r}
+fviz_eig(pca_poll_cov)
+```
+
+```{r}
+fviz_pca_var(pca_poll_cov,
+             col.var = "contrib", # Color by contributions to the PC
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE     # Avoid text overlapping
+             )
+```
+
+- Menggunakan Matriks Korelasi
+```{r}
+pollution_norm <- as.data.frame(air_pollution) %>% mutate_all(~(scale(.) %>% as.vector))
+```
+
+```{r}
+cov(pollution_norm)
+```
+
+
+a. Manual
+```{r}
+R_poll_norm <- cor(pollution_norm)
+R_poll_norm
+```
+
+```{r}
+eig_poll_cor <- eigen(R_poll_norm)
+eig_val_cor <- eig_poll_cor$values
+eig_vec_cor <- eig_poll_cor$vectors
+```
+
+```{r}
+components_poll_norm <- matrix(nrow = 42, ncol = 7)
+for (i in c(1:7)){
+  for (j in c(1:42)){
+    components_poll_norm[j, i] <- t(eig_vec_cor[, i]) %*% t(pollution_norm[j, ])
+  }
+}
+```
+
+```{r}
+prop_var_poll_cor <- c()
+temp <- 0
+
+for (i in c(1:7)){
+  temp <- temp + eig_val_cor[i]
+  prop_var <- (temp / sum(eig_val_cor)) * 100
+  prop_var_poll_cor <- append(prop_var_poll_cor, prop_var)
+}
+prop_var_poll_cor
+```
+
+
+b. Package
+```{r}
+pca_poll_cor <- prcomp(air_pollution, scale = TRUE)
+```
+
+```{r}
+fviz_eig(pca_poll_cor)
+```
+
+Dari hasil analisis kedua jenis `principal component` di atas, dapat kita lihat perbedaan dari sisi banyaknya komponen prinsipal yang dijadikan pengganti dari nilai x dari data awal. Terbukti dari nilai proporsi varians penjelas nya, pada principal component yang menggunakan matriks kovarian, kita hanya menggunakan 2 komponen saja. Sedangkan untuk principal component yang menggunakan matriks korelasi (dengan menormalisasi data), kita menggunakan 6 komponen untuk dijadikan pengganti variabel x karena nilai dari proporsi varians kumulatif yang lebih opotimal di komponen ke 6.
+
+
+## 8.14
+```{r}
+sweet_rate <- c(3.7, 5.7, 3.8, 3.2, 3.1, 4.6, 2.4, 7.2, 6.7, 5.4, 3.9, 4.5, 3.5, 4.5, 1.5, 8.5, 4.5, 6.5, 4.1, 5.5)
+sodium <- c(48.5, 65.1, 47.2, 53.2, 55.5, 36.1, 24.8, 33.1, 47.4, 54.1, 36.9, 58.8, 27.8, 40.2, 13.5, 56.4, 71.6, 52.8, 44.1, 40.9)
+potassium <- c(9.3, 8, 10.9, 12, 9.7, 7.9, 14, 7.6, 8.5, 11.3, 12.7, 12.3, 9.8, 8.4, 10.1, 7.1, 8.2, 10.9, 11.2, 9.4)
+
+sweet_data <- cbind(sweet_rate, sodium, potassium)
+```
+
+```{r}
+S_sweet <- cov(sweet_data)
+S_sweet
+```
+
+```{r}
+sweet_eig <- eigen(S_sweet)
+sweet_eig_val <- sweet_eig$values
+sweet_eig_vec <- sweet_eig$vector
+```
+
+```{r}
+sweet_eig_val
+```
+
+```{r}
+sweet_eig_vec
+```
+
+```{r}
+prop_var_sweet <- c()
+temp <- 0
+
+for(i in c(1:3)){
+  temp <- temp + sweet_eig_val[i]
+  prop_var <- (temp / sum(sweet_eig_val)) * 100
+  prop_var_sweet <- append(prop_var_sweet, prop_var)
+}
+
+prop_var_sweet
+```
+
+```{r}
+rho_sweet <- matrix(nrow = 3,  ncol = 3)
+for(i in c(1:3)){
+  for(j in c(1:3))
+    rho_sweet[j, i] <- (sweet_eig_vec[j, i] * sqrt(sweet_eig_val[i])) / sqrt(S_sweet[j, j])
+}
+
+rho_sweet
+```
+
+```{r}
+componets_sweet <- matrix(nrow = 20, ncol = 3)
+for(i in c(1:3)){
+  for(j in c(1:20)){
+    componets_sweet[j, i] <- t(sweet_eig_vec[, i]) %*% sweet_data[j, ]
+  }
+}
+```
+
+```{r}
+pca_sweet_data <- prcomp(sweet_data, scale = F)
+```
+
+```{r}
+fviz_eig(pca_sweet_data)
+```
+
+Jika kita melihat dari hasil scree plot dan proporsi varians nya, dapat kita simpulkan bahwa komponen prinsipal yang dipakai untuk menggantikan variabel x adalah komponen prinsipal pertama.
+
+
+Q-Q Plot dari PC1
+```{r}
+car::qqPlot(componets_sweet[, 1])
+```
+
+```{r}
+shapiro.test(componets_sweet[, 1])
+```
+
+Dari hasil q-q plot dan uji normalitas di atas, terlihat bahwa komponen prinsipal pertama yang digunakan sebagai pengganti variabel x pada data sebelumnya memiliki nilai p-value > $\alpha$, sehingga PC1 berdistribusi normal.
+

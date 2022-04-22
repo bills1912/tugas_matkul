@@ -1,0 +1,120 @@
+---
+title: "Tugas 2 APG (Matriks Korelasi, Matriks Kovarian, Eigenvaluen, dan Eigenvektor)"
+author: "Bill Van Ricardo Zalukhu"
+date: '2022-02-27'
+output: html_document
+---
+## Mendefinisikan Data yang Dibutuhkan
+Pada bagian pertama ini, didefinisikan data yang akan digunakan untuk menghitung matriks kovarian dan korelasi nya
+
+```{r}
+X1 <- c(9,2,6,5,8)
+X2 <- c(12, 8, 6, 4, 10)
+X3 <- c(3,4,0,2,1)
+n = 5
+```
+
+Selanjutnya kita bentuk matriks dari data dan juga mendefinisikan matriks kosong yang nantinya akan kita gunakan selama masa pemrosesan.
+```{r}
+mdat <- cbind(X1, X2, X3)
+S <- matrix(nrow = 3, ncol = 3)
+Sn <- matrix(nrow = 3, ncol = 3)
+d_i <- matrix(nrow = 5, ncol = 3)
+s <- matrix(nrow = 3, ncol = 3)
+```
+
+
+## Cara 1: Matriks Kovarian dengan Menggunakan Deviasi
+Pada cara pertama ini, kita akan memanfaatkan metode deviasi untuk membentuk matriks kovarian. Cara ini terlihat lebih simpel, dimana kita memanfaatkan matriks dekomposisi untuk menghitung setiap elemen yang ada di dalam matriks kovarian nantinya.
+
+```{r}
+for(i in c(1:3)){
+  for(j in c(1:5))
+    d_i[j,i] <- mdat[j,i] - mean(mdat[, i])
+}
+d_i
+```
+Hasil di atas merupakan bentuk matriks dari kumpulan vektor dekomposisi dari data awal.
+Kemudian, setelah kita mendapatkan vektor dekomposisi dari setiap variabel, kita akan menggunakannya untuk menghitung elemen dari matriks kovarian yang akan kita bentuk.
+```{r pressure, echo=FALSE}
+for(i in c(1:3)){
+  for(j in c(1:3))
+    Sn[i,j] <- (t(d_i[, i]) %*% d_i[, j])/n
+}
+Sn
+```
+Hasil di atas merupakan matriks `Sn`, yang masih perlu diolah untuk mendapatkan matriks kovarian dari sampel yang sebenarnya.
+```{r}
+S <- (n/(n-1))*Sn
+S
+```
+Dengan mengalikan matriks `Sn` dengan pengali `n/(n-1)`, kita akan mendapatkan matriks kovarian sampel yang sebenarnya, `S`.
+
+## Cara 2: Menggunakan Rumus Statistik dari Kovarian
+Cara kedua ini merupakan cara yang umum digunakan untuk membentuk matriks kovarian, yaitu denga menggunakan rumus dari kovarian itu sendiri.
+```{r}
+for(i in c(1:3)){
+  for(j in c(1:3))
+    S[i,j] <- sum((mdat[,i]-mean(mdat[,i]))*(mdat[,j]-mean(mdat[,j])))/(n-1)
+}
+S
+```
+Dari hasil di atas, kita dapat melihat bahwa hasil dari cara pertama dan cara kedua mengandung elemen yang sama. Cara kedua diterapkan dengan memanfaatkan nilai mean dari setiap kolom data, yang dikurangkan dengan data di masing-masing kolom tertentu, lalu dibagikan dengan nilai `(n-1)`.
+
+## Cara Tambahan
+Pada cara tambahan kali ini, pertama-tama kita akan membentuk matriks kolom yang elemennya merupakan nilai rataan dari setiap variabel.
+```{r}
+M <- matrix(data = 1, nrow = 5) %*% cbind(mean(X1), mean(X2), mean(X3))
+S <- ((n-1)^(-1)) * (t(mdat) - t(M)) %*% (mdat - M)
+S
+```
+Hasil di atas memiliki nilai elemen yang sama dengan 2 cara utama di atas. Cara di atas memanfaatkan matriks kolom dari rataan data, lalu dioperasikan dengan data aslinya sedemikian rupa, sehingga didapatkan matriks kovarian yang serupa dengan cara yang sebelumnya.
+
+## Menghitung Matriks Korelasi
+Setelah kita mendapatkan hasil dari matriks kovarian dari data, selanjutnya matriks tersebut akan digunakan untuk membentuk matriks korelasi dari data. Kita memanfaatkan rumus relasi antara kovarian dengan korelasi untuk menghitung elemen dari matriks korelasi yang akan dibentuk.
+```{r}
+mcov_diag <- diag(S)
+R <- matrix(nrow = 3, ncol = 3)
+for(i in c(1:3)){
+  for(j in c(1:3))
+    R[i,j] <- (mcov_diag[i])^(-1/2) * (mcov_diag[j])^(-1/2) * S[i,j]
+}
+R
+```
+Hasil dari matriks korelasi di atas didapatkan dengan memanfaatkan matriks kolom dari matriks kovarian, lalu dilakukan pemrosesan sedemikian rupa sehingga kita mendapatkan hasil dari matriks korelasi yang kita cari.
+
+## Membandingkan Hasil dari Matriks Kovarian dan Korelasi dari Hasil Kodingan Manual dengan Hasil dari Fungsi Bawaan Bahasa R
+Pada bagian ini, kita akan membandingkan hasil dari matriks kovarian dan korelasi dari kodingan secara manual (dari beberapa proses sebelumnya), dengan hasil yang berasal dari penghitungan dengan fungsi bawaan bahasa R.
+```{r}
+M1 <- cov(mdat)
+M1
+```
+Secara visual, dapat kita lihat bahwa hasil dari fungsi `cov()` dari bahasa R menghasilkan matriks kovarian yang sama dengan hasil dari kodingan manual yang telah dikerjakan sebelumnya.
+```{r}
+M2 <- cor(mdat)
+M2
+```
+Begitu juga dengan matriks korelasinya, secara visual juga menghasilkan matriks yang sama dengan hasil kodingan manual.
+Sekarang kita akan uji secara logika nya:
+```{r}
+S == M1
+```
+Secara logika, ternyata kedua matriks memiliki hasil yang sama juga. Dapat kita simpulkan bahwa hasil dari kodingan secara manual memiliki hasil yang sama persis dengan hasil dari fungsi bawaan dari R, tidak ada gap dari hasil tersebut (terlihat dari hasil matriks logika yang dihasilkan, nilai kembaliannya bernilai `TRUE` semua).
+
+```{r}
+R == M2
+```
+Tetapi, saat kita menguji secara logika antara matriks dari kodingan manual dengan fungsi `cor()`, ternya ada keluaran dari matriks tersebut yang bernilai `FALSE`. Hal ini bisa mengartikan bahwa ada gap antara hasil matriks dari fungsi `cor()` dengan matriks dari kodingan manual. Gap yang terjadi bisa saja berupa perbedaan pembulatan dari masing-masing hasil di setiap elemen pada matriks logikanya yang bernilai `FALSE`.
+```{r}
+cor(mdat) - R
+```
+Hasil di atas merupakan gap antara kedua matriks. Terlihat bahwa gap yang terjadi berada pada angka di belakang koma antara kedua elemen bersesuaian.
+Dengan mencari kombinasi yang tepat, didapatkan kondisi yang tepat untuk memberikan keluaran yang bernilai `TRUE` di setiap elemennya:
+```{r}
+cor(mdat) >= R | cor(mdat) <= R
+```
+Dari hasil diatas, kita bisa melihat bahwa:
+
+* nilai pada elemen (1,1) dari matriks korelasi hasil kodingan manual memiliki nilai < dari hasil dari fungsi `cor()`;
+* nilai pada elemen (2,3) dan (3,2) pada matriks korelasi hasil kodingan awal memiliki nilai > dari hasil matriks dari fungsi `cor()`.
+

@@ -1,0 +1,215 @@
+---
+title: "Tugas 3 APG"
+author: "Bill Van Ricardo Zalukhu"
+date: '2022-03-02'
+output: html_document
+---
+
+```{r library, message=FALSE}
+library('MVN')
+library('mvoutlier')
+library('rcompanion')
+library('caret')
+library('openxlsx')
+library('car')
+library('RVAideMemoire')
+```
+
+
+```{r read_data, message=FALSE}
+milk_tranport <- read.xlsx('C://Users//bilva//OneDrive//Documents//3SI1//Semester 6//Analisis Peubah Ganda//Tugas 3//Milk_Transport.xlsx')
+```
+
+## Mendeteksi Outlier Menggunakan Bivariate Scatter Plot, Chi-Square Plot, dan Q-Q Plot Univariate
+
+```{r qqplot_scatterplot_function}
+panel.qq <- function(x, y, ...) {
+  usr <- par("usr"); on.exit(par(usr))
+  par(usr = c(0, 1, 0, 1), new = TRUE)
+  qqplot(x, y, xlab = deparse(substitute(x)), ylab = deparse(substitute(y)),
+         xaxt = "n", yaxt = "n")
+  abline(c(0,1), ...)
+}
+
+pairs(milk_tranport, lower.panel = panel.qq)
+```
+
+```{r qqplot_fuel}
+qqPlot(milk_tranport[, 1], ylab = 'Fuel')
+```
+
+```{r qqplot_repair}
+qqPlot(milk_tranport[, 2], ylab = 'Repair')
+```
+
+```{r qqplot_capital}
+qqPlot(milk_tranport[, 3], ylab = 'Capital')
+```
+
+
+```{r Oulier Detection Using Chi-square Plot, message=FALSE}
+chisq.plot(milk_tranport)
+```
+
+Jika kita melihat dari hasil scatter plot, Chi-Square plot, dan Q-Q plot dari setiap variabel dan/atau kombinasinya, kita bisa melihat bahwa data mengandung outlier. Khususnya untuk variabel `Fuel`, jika kita melihat dari Q-Q plot nya, terlihat bahwa ada outlier pada varabel tersebut.
+
+## Nomor 2: Uji Multivariat Normal pada Data Mentah
+1. Henze-Zikler Test
+```{r}
+mvn(milk_tranport, showOutliers = T)
+```
+
+2. Mardia Test
+```{r}
+mvn(milk_tranport, mvnTest = 'mardia', showOutliers = TRUE)
+```
+
+3. Royston Test
+```{r}
+mvn(milk_tranport, mvnTest = 'royston', showOutliers = TRUE)
+```
+
+4. E-Statistics Test
+```{r}
+mvn(milk_tranport, mvnTest = 'energy', showOutliers = T)
+```
+
+5. Shapiro-Wilk
+```{r}
+mshapiro.test(milk_tranport)
+```
+
+
+## Nomor 3: Uji Multivariat Normal Dengan Data yang Telah Diolah
+Pada bagian ini, kita akan melakukan uji multivariat normal pada data yang telah diolah sedimikian rupa, sehingga diharapkan data bisa berdistribusi multivariat normal. Untuk penanganan ketidaknormalan, cara yang akan diterapkan adalah membuang observasi yang mengandung outlier dan juga melakukan transformasi pada data mentah.
+
+### 1. Membuang Observasi yang Mengandung Outliers
+
+1.1 Menghapus Variabel yang Mengandung Outlier
+```{r}
+milkTranport_clean <- milk_tranport[, c(2, 3)]
+```
+
+a. Menggunakan Mardia Test
+```{r}
+mvn(milkTranport_clean, mvnTest = 'mardia')
+```
+
+b. Menggunakan Henze-Zikler Test
+```{r}
+mvn(milkTranport_clean)
+```
+
+c. Menggunakan Royston Test
+```{r}
+mvn(milkTranport_clean, mvnTest = 'royston')
+```
+
+d. Menggunakan E-Statistics Test
+```{r}
+mvn(milkTranport_clean, mvnTest = 'energy')
+```
+
+e. Menggunakan Shapiro-Wilk
+```{r}
+mshapiro.test(milkTranport_clean)
+```
+
+1.2. Menghapus Elemen Outlier
+```{r}
+Q1 <- quantile(milk_tranport$fuel, .25)
+Q3 <- quantile(milk_tranport$fuel, .75)
+IQR <- (Q3 - Q1)
+
+upper_bound <- Q3 + (IQR * 1.5)
+lower_bound <- Q1 - (IQR * 1.5)
+
+eliminated <- subset(milk_tranport, milk_tranport$fuel > lower_bound & milk_tranport$fuel < upper_bound)
+```
+
+
+a. Menggunakan Mardia Test
+```{r}
+set.seed(1000)
+mvn(eliminated, mvnTest = 'mardia')
+```
+
+b. Menggunakan Henze-Zikler Test
+```{r}
+set.seed(1000)
+mvn(eliminated)
+```
+
+c. Menggunakan Royston Test
+```{r}
+set.seed(1000)
+mvn(eliminated, mvnTest = 'royston')
+```
+
+d. Menggunakan E-Statistics Test
+```{r}
+set.seed(1000)
+mvn(eliminated, mvnTest = 'energy')
+```
+
+e. Menggunakan Shapiro-Wilk
+```{r}
+mshapiro.test(eliminated)
+```
+
+## 2. Melakukan Transformasi Data
+
+```{r}
+milkTranport_temp <- car::powerTransform(object = cbind(fuel, repair, capital) ~ 1, data = milk_tranport)
+
+milkTranport_tf <- data.frame()
+
+for(i in c(1:3)){
+  for(j in c(1:25))
+    milkTranport_tf[j,i] <- (milk_tranport[j,i]^(milkTranport_temp$lambda[i])-1)/(milkTranport_temp$lambda[i])
+}
+```
+
+a. Menggunakan Mardia Test
+```{r}
+set.seed(1000)
+mvn(milkTranport_tf, mvnTest = 'mardia')
+```
+
+b. Menggunakan Henze-Zikler Test
+```{r}
+set.seed(1000)
+mvn(milkTranport_tf)
+```
+
+c. Menggunakan Royston Test
+```{r}
+set.seed(1000)
+mvn(milkTranport_tf, mvnTest = 'royston')
+```
+
+d. Menggunakan E-Statistics Test
+```{r}
+set.seed(1000)
+mvn(milkTranport_tf, mvnTest = 'energy')
+```
+
+e. Menggunakan Shapiro-Wilk
+```{r}
+mshapiro.test(milkTranport_tf)
+```
+
+Dari hasil pengujian multivariat normal di atas, ada beberapa informasi yang dapat kita peroleh, diantaranya:
+
+* pada uji multivariat normal pada data mentah, semua ujinya mendeteksi jika data secara natural tidak berdistribusi multivariat normal;
+* pada saat kita menghapus variabel yang mengandung outlier, kita dapat melihat bahwa semua uji mendeteksi jika data berdistribusi multivariat normal;
+* pada saat kita menghapus observasi yang dideteksi sebagai outlier pada setiap variabel nya, semua uji mendeteksi bahwa data tersebut berdistribusi multivariat normal;
+* pada saat kita mentransformasi data mentah (yang outlier nya belum diatasi), ketika diuji kenormalannya, uji Henze-Zikler, Royston, dan E-Statistics menunjukan hasil bahwa data berdistribusi multivariat normal, sedangkan untuk uji Mardia mendeteksi jika data tidak berdistribusi multivariat normal.
+* untuk uji menggunakan multivariat Shapiro-Wilk, uji mendeteksi data berdistribusi normal hanya jika menghapus variabel yang mengandung outlier (variabel fuel), sedangkan untuk kondisi lain, semua menunjukan hasil kalau data tidak berdistribusi multivariat normal
+
+Dari beberapa poin di atas, kita dapat mengambil kesimpulan:
+
+* data secar natural (tanpa adanya pengolahan lanjutan) tidak berdistribusi multivariat normal;
+* uji multivariat normal sensitif terhadap data outlier;
+* uji Mardia berkemungkinan besar sensitif terhadap data outlier (terlihat dari 2 hasil deteksi kenormalan pada data yang belum dibersihkan outliernya dan data yang telah dinormalisasi namun outlier nya belum diatasi);
+* ada kemungkinan variabel yang mengandung outlier (dalam hal ini variabel Fuel) membuat hasil dari test multivariat Shapiro-Wilk membuat hasil pengujian tidak multivariat normal ketika tidak dihapus.

@@ -1,0 +1,520 @@
+---
+title: "Tugas 6 APG"
+author: "Bill Van Ricardo Zalukhu"
+date: '2022-03-24'
+output: html_document
+---
+
+```{r library, message=FALSE, echo=FALSE}
+library('openxlsx')
+library('caret')
+library('dplyr')
+```
+
+
+> 6.7
+
+Data pada soal menceritakan tentang pengujian tingkat penggunaan listrik pada suatu perumahan, dimana populasi dari data yang dikumpulkan berdasarkan kepemilikan Air Conditioner (AC) di rumah sampel terpilih.
+Variabel pertama (X1) adalah variabel yang menjelaskan ukuran total konsumsi listrik yang maksimum dari sampel, dan variabel kedua (X2) menjelaskan ukuran total konsumsi off-peak dari sampel.
+
+```{r}
+n1 <- 45
+n2 <- 55
+
+xbar1 <- c(204.4, 556.6)
+xbar2 <- c(130, 355)
+
+elm_s1 <- c(13825.3, 23823.4, 23823.4, 73107.4)
+elm_s2 <- c(8632, 19616.7, 19616.7, 55964.5)
+S1 <- matrix(nrow = 2, ncol = 2, data = elm_s1)
+S2 <- matrix(nrow = 2, ncol = 2, data = elm_s2)
+Spooled <- (1/(n1 + n2 - 2)) * ((n1 - 1) * S1 + (n2 - 1) * S2)
+```
+
+
+```{r}
+T2 <- t(xbar1 - xbar2) %*% solve(((1/n1) + (1/n2)) * Spooled) %*% (xbar1 - xbar2)
+T2
+```
+
+```{r}
+p1 <- 2
+alpha1 <- 1 - 0.05
+
+crit_val1 <- (((n1 + n2 - 2)*p1)/(n1 + n2 - p1 - 1)) * qf(p = alpha1, df1 = p1, df2 = n1 + n2 - p1 - 1)
+crit_val1
+```
+
+Ternyata, hasil dari nilai $T_{2}$ > $F$, yang mengartikan bahwa hasil uji hipotesisnya adalah `tolak H0`, yang konsisten dengan hasil pengujian confidence interval yang telah dilakukan di buku. Oleh karena itu, dapat kita simpulkan bahwa ada perbedaan konsumsi total dari listrik antara perumahan yang memiliki AC dengan yang tidak memiliki Ac.
+
+```{r}
+lin_comb <- solve(Spooled) %*% (xbar1 - xbar2)
+lin_comb
+```
+
+Jadi, nilai kesebandingan koefisien rataan yang bertanggung jawab terhadap penolakan H0 adalah (0.00170252, 0.00259163).
+
+> 6.8
+
+```{r}
+x1_treat1 <- c(6, 5, 8, 4, 7)
+x2_treat1 <- c(7, 9, 6, 9, 9)
+x1_treat2 <- c(3, 1, 2)
+x2_treat2 <- c(3, 6, 3)
+x1_treat3 <- c(2, 5, 3, 2)
+x2_treat3 <- c(3, 1, 1, 3)
+
+treat1 <- rbind(x1_treat1, x2_treat1)
+treat2 <- rbind(x1_treat2, x2_treat2)
+treat3 <- rbind(x1_treat3, x2_treat3)
+```
+
+a.
+```{r}
+n_treat1 <- ncol(treat1)
+n_treat2 <- ncol(treat2)
+n_treat3 <- ncol(treat3)
+
+xbar_treat1 <- rowMeans(treat1)
+as.data.frame((xbar_treat1))
+xbar_treat2 <- rowMeans(treat2)
+as.data.frame(xbar_treat2)
+xbar_treat3 <- rowMeans(treat3)
+as.data.frame(xbar_treat3)
+```
+
+
+```{r}
+xbar_all <- (1/(n_treat1 + n_treat2 + n_treat3)) * 
+            ((n_treat1 * xbar_treat1) + (n_treat2 * xbar_treat2) + 
+            (n_treat3 * xbar_treat3))
+as.data.frame(xbar_all)
+```
+
+
+```{r}
+mean_11 <- c(1, 1, 1, 1, 1) * xbar_all[1]
+mean_12 <- c(1, 1, 1) * xbar_all[1]
+mean_13 <- c(1, 1, 1, 1) * xbar_all[1]
+names(mean_11) <- c("x1", "x2", "x3", "x4", "x5")
+names(mean_12) <- c("x1", "x2", "x3")
+names(mean_13) <- c("x1", "x2", "x3", "x4")
+mean_overall_1 <- as.data.frame(bind_rows(mean_11, mean_12, mean_13))
+mean_overall_1
+
+mean_21 <- c(1, 1, 1, 1, 1) * xbar_all[2]
+mean_22 <- c(1, 1, 1) * xbar_all[2]
+mean_23 <- c(1, 1, 1, 1) * xbar_all[2]
+names(mean_21) <- c("x1", "x2", "x3", "x4", "x5")
+names(mean_22) <- c("x1", "x2", "x3")
+names(mean_23) <- c("x1", "x2", "x3", "x4")
+mean_overall_2 <- as.data.frame(bind_rows(mean_21, mean_22, mean_23))
+mean_overall_2
+```
+
+
+```{r}
+treatment_eff_11 <- (xbar_treat1[1] - xbar_all[1]) * c(1, 1, 1, 1, 1)
+treatment_eff_12 <- (xbar_treat2[1] - xbar_all[1]) * c(1, 1, 1)
+treatment_eff_13 <- (xbar_treat3[1] - xbar_all[1]) * c(1, 1, 1, 1)
+names(treatment_eff_11) <- c("t1_x1", "t2_x1", "t3_x1", "t4_x1", "t5_x1")
+names(treatment_eff_12) <- c("t1_x1", "t2_x1", "t3_x1")
+names(treatment_eff_13) <- c("t1_x1", "t2_x1", "t3_x1", "t4_x1")
+treatment_effect_1 <- as.data.frame(bind_rows(treatment_eff_11, treatment_eff_12, treatment_eff_13))
+treatment_effect_1
+
+treatment_eff_21 <- (xbar_treat1[2] - xbar_all[2]) * c(1, 1, 1, 1, 1)
+treatment_eff_22 <- (xbar_treat2[2] - xbar_all[2]) * c(1, 1, 1)
+treatment_eff_23 <- (xbar_treat3[2] - xbar_all[2]) * c(1, 1, 1, 1)
+names(treatment_eff_21) <- c("t1_x2", "t2_x2", "t3_x2", "t4_x2", "t5_x2")
+names(treatment_eff_22) <- c("t1_x2", "t2_x2", "t3_x2")
+names(treatment_eff_23) <- c("t1_x2", "t2_x2", "t3_x2", "t4_x2")
+treatment_effect_2 <- as.data.frame(bind_rows(treatment_eff_21, treatment_eff_22, treatment_eff_23))
+treatment_effect_2
+```
+
+
+```{r}
+error_11 <- x1_treat1 - xbar_treat1[1]
+error_12 <- x1_treat2 - xbar_treat2[1]
+error_13 <- x1_treat3 - xbar_treat3[1]
+names(error_11) <- c("e1_x1", "e2_x1", "e3_x1", "e4_x1", "e5_x1")
+names(error_12) <- c("e1_x1", "e2_x1", "e3_x1")
+names(error_13) <- c("e1_x1", "e2_x1", "e3_x1", "e4_x1")
+error_1 <- as.data.frame(bind_rows(error_11, error_12, error_13))
+error_1
+
+error_21 <- x2_treat1 - xbar_treat1[2]
+error_22 <- x2_treat2 - xbar_treat2[2]
+error_23 <- x2_treat3 - xbar_treat3[2]
+names(error_21) <- c("e1_x2", "e2_x2", "e3_x2", "e4_x2", "e5_x2")
+names(error_22) <- c("e1_x2", "e2_x2", "e3_x2")
+names(error_23) <- c("e1_x2", "e2_x2", "e3_x2", "e4_x2")
+error_2 <- as.data.frame(bind_rows(error_21, error_22, error_23))
+error_2
+```
+
+
+b.
+
+- Matrix Treatment (B)
+
+```{r}
+b_treat1 <- n_treat1 * ((xbar_treat1 - xbar_all) %*% t(xbar_treat1 - xbar_all))
+b_treat2 <- n_treat2 * ((xbar_treat2 - xbar_all) %*% t(xbar_treat2 - xbar_all))
+b_treat3 <- n_treat3 * ((xbar_treat3 - xbar_all) %*% t(xbar_treat3 - xbar_all))
+
+B_treat <- b_treat1 + b_treat2 + b_treat3
+B_treat
+```
+
+- Matrix Error (W)
+
+```{r}
+w_error1 <- (treat1 - xbar_treat1) %*% t(treat1 - xbar_treat1)
+w_error2 <- (treat2 - xbar_treat2) %*% t(treat2 - xbar_treat2)
+w_error3 <- (treat3 - xbar_treat3) %*% t(treat3 - xbar_treat3)
+
+W_error <- w_error1 + w_error2 + w_error3
+W_error
+```
+
+- Matrix Total Corrected
+
+```{r}
+Total_Corr <- B_treat + W_error
+Total_Corr
+```
+
+c.
+
+```{r}
+lambda_ast <- det(W_error)/det(Total_Corr)
+lambda_ast
+```
+
+```{r}
+g <- 3
+n_total <- n_treat1 + n_treat2 + n_treat3
+Wilk_dist <- ((1 - sqrt(lambda_ast))/sqrt(lambda_ast)) * ((n_total - g - 1)/(g - 1))
+Wilk_dist
+```
+
+```{r}
+alpha <- 1 - 0.01
+
+crit_val <- qf(p = alpha, df1 = 2 * (g - 1), df2 = 2 * (n_total - g - 1))
+crit_val
+```
+
+Ternyata hasil dari perhitungan uji statistik hitung dan nilai statistik tabel nya menunjukan bahwa $T_{2}$ > $F$, sehingga keputusan pengujian hipotesisnya adalah `tolak H0`. Dapat disimpukan bahwa ada perbedaan treatmen terhadap populasi yang diuji.
+
+Dengan menggunakan asumsi bahwa ukuran sampel ($\Sigma n_{l}$ = n) berukuran besar:
+```{r}
+p <- 2
+
+Barlett_corr <- (-(n_total - 1 - ((p + g)/2))) * log(lambda_ast)
+Barlett_corr
+```
+
+```{r}
+crit_val_chi <- qchisq(p = alpha, df = p * (g - 1))
+crit_val_chi
+```
+
+Setelah menggunakan Barlett's correction value dan dibandingkan dengan nilai dari distribusi $\chi^{2}_{p(g-1)}$ nya, ternyata hasil keputusan untuk pengujian hipotesisnya sama dengan yang sebelumnya, yaitu `tolak H0`.
+
+> 6.19
+
+Data pada soal ini bercerita tentang studi yang dilakukan terhadap biaya yang dikeluarkan oleh sebuah peternakan dalam mengantarkan hasil susu yang telah dikumpulkan dari hewan ternaknya. Biaya yang dikeluarkan itu adalah biaya bahan bakar, perbaikan, dan modal yang digunakan. Studi ini ingin menguji mana pengeluaran biaya yang lebih besar antara transportasi yang menggunakan gasoline, dengan transportasi yang menggunakan diesel.
+Pada pengujian ini, diasumsikan $\Sigma_{gasoline}$ = $\Sigma_{diesel}$
+
+```{r}
+gasoline_pop <- read.xlsx("C://Users//bilva//OneDrive//Documents//3SI1//Semester 6//Analisis Peubah Ganda//Tugas 6-221911069-3SI1-Bill Van Ricardo Zalukhu//Gasoline_Pop.xlsx")
+
+diesel_pop <- read.xlsx("C://Users//bilva//OneDrive//Documents//3SI1//Semester 6//Analisis Peubah Ganda//Tugas 6-221911069-3SI1-Bill Van Ricardo Zalukhu//Diesel_Pop.xlsx")
+```
+
+a.
+```{r}
+xbar_gasoline <- colMeans(gasoline_pop)
+xbar_diesel <- colMeans(diesel_pop)
+
+xbar_gasoline
+xbar_diesel
+```
+
+
+```{r}
+n_gasoline <- nrow(gasoline_pop)
+n_diesel <- nrow(diesel_pop)
+
+S_gasoline <- cov(gasoline_pop)
+S_diesel <- cov(diesel_pop)
+
+Spooled_milkTransport <- (1/(n_gasoline + n_diesel - 2)) * 
+                         (((n_gasoline - 1) * S_gasoline) + 
+                         ((n_diesel - 1) * S_diesel))
+Spooled_milkTransport
+```
+
+```{r}
+T2_milkTransport <- t(xbar_gasoline - xbar_diesel) %*% solve(((1/n_gasoline) + (1/n_diesel)) * Spooled_milkTransport) %*% (xbar_gasoline - xbar_diesel)
+
+T2_milkTransport
+```
+
+```{r}
+p_milkTransport <- 3
+alpha_milkTransport <- 1 - 0.01
+
+crit_val_milkTransport <- (((n_gasoline + n_diesel - 2) * p_milkTransport)/(n_gasoline + n_diesel - p_milkTransport - 1)) * qf(p = alpha_milkTransport, df1 = p_milkTransport, df2 = n_gasoline + n_diesel - p_milkTransport - 1)
+
+crit_val_milkTransport
+```
+
+Dari penghitungan nilai statistik hitung dan statistik tabel nya, ternyata didapatkan bahwa $T_{2}$ > $F$, sehingga keputusan hasil pengujian hipotesisnya adalah `tolak H0`. Dapat kita simpulkan bahwa ada perbedaan biaya bahan bakar, perbaikan, dan modal antara kendaraan angkutan dengan bahan bakar bensin (gasoline) dengan yang berbahan bakar diesel.
+
+b.
+```{r}
+lin_comb_milkTransport <- solve(Spooled_milkTransport) %*% (xbar_gasoline - xbar_diesel)
+lin_comb_milkTransport
+```
+
+c.
+```{r}
+sim_milkTransport <- NULL
+
+for (j in c(1:3)) {
+  sim_milkTransport <- c(sim_milkTransport, 
+                 (xbar_gasoline[j] - xbar_diesel[j]) - 
+                  sqrt(crit_val_milkTransport * (((1/n_gasoline) + (1/n_diesel))) *
+                       Spooled_milkTransport[j,j]),
+                 xbar_gasoline[j] - xbar_diesel[j] + 
+                  sqrt(crit_val_milkTransport * (((1/n_gasoline) + (1/n_diesel))) *
+                       Spooled_milkTransport[j,j]))
+}
+
+rtab <- rbind(sim_milkTransport)
+round(rtab, 3)
+```
+
+Dari hasil simultaneous confidence interval di atas, kita bisa melihat jika yang memiliki selisih perbedaan signifikan antara kendaraan dengan bahan bakar bensin dengan yang berbahan bakar diesel yaitu biaya modal yang dikeluarkan (dilihat dari interval nya yang tidak mengandung 0).
+
+d.
+```{r}
+gasoline_pop_clean <- gasoline_pop[-c(9, 21), ]
+```
+
+```{r}
+n_gasoline_clean <- nrow(gasoline_pop_clean)
+xbar_gasoline_clean <- colMeans(gasoline_pop_clean)
+S_gasoline_clean <- cov(gasoline_pop_clean)
+```
+
+```{r}
+Spooled_gas_clean <- (1/(n_gasoline_clean + n_diesel - 2)) * 
+                         (((n_gasoline_clean - 1) * S_gasoline_clean) + 
+                         ((n_diesel - 1) * S_diesel))
+Spooled_gas_clean
+```
+
+```{r}
+T2_gas_clean <- t(xbar_gasoline_clean - xbar_diesel) %*% solve(((1/n_gasoline_clean) + (1/n_diesel)) * Spooled_gas_clean) %*% (xbar_gasoline_clean - xbar_diesel)
+
+T2_gas_clean
+```
+
+```{r}
+p_milkTransport <- 3
+alpha_milkTransport <- 1 - 0.01
+
+critVal_gas_clean <- (((n_gasoline_clean + n_diesel - 2) * p_milkTransport)/(n_gasoline_clean + n_diesel - p_milkTransport - 1)) * qf(p = alpha_milkTransport, df1 = p_milkTransport, df2 = n_gasoline_clean + n_diesel - p_milkTransport - 1)
+
+crit_val_milkTransport
+```
+
+Setelah observasi yang dianggap outlier pada data populasi kendaraan berbahan bakar bensin dibersihkan, tetap saja hasil pengujian hipotesisnya memberikan hasil yang sama dengan sebelumnya, yaitu `tolak H0`. Dapat disimpulkan bahwa tetap ada perbedaan biaya bensin, perbaikan, dan model yang digunakan pada kendaraan berbahan bakar bensin, dengan kendaraan berbahan bakar diesel. 
+
+> 6.21
+
+Data pada soal ini bercerita tentang penghitungan current ratio, long-term interest rate, debt-to-equity ratio, dan rate of return on equity dari sebuah perusahaan menggunakan metod Moody's bond. Didapatkan 20 perusahaan dengan rating top-medium (Aa) dan juga 20 perusahaan dengan rating middle-high sebagai sampel pada studi di soal ini.
+Pada pengujian ini, diasumsikan bahwa $\Sigma_{Aa}$ = $\Sigma_{Baa}$.
+
+a.
+```{r}
+n_one = n_two <- 20
+
+xbar_one <- c(2.287, 12.600, 0.347, 14.830)
+xbar_two <- c(2.404, 7.155, 0.524, 12.480)
+```
+
+```{r}
+sOne_row1 <- c(0.459, 0.254, -0.026, -0.244)
+sOne_row2 <- c(0.254, 27.465, -0.589, -0.267)
+sOne_row3 <- c(-0.026, -0.589, 0.030, 0.102)
+sOne_row4 <- c(-0.244, -0.267, 0.102, 6.854)
+
+S_one <- rbind(sOne_row1, sOne_row2, sOne_row3, sOne_row4)
+```
+
+```{r}
+sTwo_row1 <- c(0.944, -0.089, -0.002, -0.719)
+sTwo_row2 <- c(-0.089, 16.432, -0.400, 19.044)
+sTwo_row3 <- c(0.002, -0.400, 0.024, -0.094)
+sTwo_row4 <- c(-0.719, 19.044, -0.094, 61.854)
+
+S_two <- rbind(sTwo_row1, sTwo_row2, sTwo_row3, sTwo_row4)
+```
+
+```{r}
+Spooled_row1 <- c(0.701, 0.083, -0.012, -0.481)
+Spooled_row2 <- c(0.083, 21.949, -0.494, 9.388)
+Spooled_row3 <- c(-0.012, -0.494, 0.027, 0.004)
+Spooled_row4 <- c(-0.481, 9.388, 0.004, 34.354)
+
+Spooled_moodysBond <- rbind(Spooled_row1, Spooled_row2, Spooled_row3, Spooled_row4)
+Spooled_moodysBond
+```
+
+```{r}
+Spooled_count <- (1/(n_one + n_two - 2)) * (((n_one - 1) * S_one) + ((n_two - 1) * S_two))
+Spooled_count
+```
+
+Setelah dihitung secara manual, ternyata matrix kovarian gabungannya memiliki nilai yang berbeda (dikarenakan pembulatan) dengan matrix kovarian yang telah diketahui pada soal.
+
+b.
+```{r}
+T2_moodyBond <- t(xbar_one - xbar_two) %*% solve(((1/n_one) + (1/n_two)) * Spooled_count) %*% (xbar_one - xbar_two)
+
+T2_moodyBond
+```
+
+```{r}
+p_moodyBond <- 4
+alpha_moodyBond <- 1 - 0.05
+
+crit_val_moodyBond <- (((n_one + n_two - 2) * p_moodyBond)/(n_one + n_two - p_moodyBond - 1)) * qf(p = alpha_moodyBond, df1 = p_moodyBond, df2 = n_one + n_two - p_moodyBond - 1)
+
+crit_val_moodyBond
+```
+
+Setelah dilakukan penghitungan nilai statistik hitung dengan nilai statistik tabel nya, diperoleh bahwa nilai $T_{2}$ > $F$, sehingga hasil pengujian hipotesisnya adalah `tolak H0`. Dapat disimpulkan bahwa terdapat perbedaan karakteristik finansial (current ratio, long-term interest rate, debt-to-equity ratio, dan rate of return on equity) antara perusahaan Aa corporate bond dengan Baa corporate bond.
+
+c.
+```{r}
+lin_comb_moodyBond <- solve(Spooled_count) %*% (xbar_one - xbar_two)
+lin_comb_moodyBond
+```
+
+d.
+
+Jika kita melihat perbandingan nilai pada nilai kombinasi linear pada bagian c, bisa kita simpulkan bahwa karakteristik yang bisa digunakan dalam mengelompokan perusahaan yang memiliki kualitas yang "tinggi" dengan kualitas yang "sedang" yaitu:
+
+- memiliki current ratio yang besar;
+- memiliki long-term interest rate yang kecil;
+- memiliki debt-to-equity ratio yang besar; dan
+- memiliki rate of return on equity yang kecil.
+
+> 6.23
+
+Data ini menceritakan tentang pengujian terhadap panjan dan lebar sepal dan kelopak bunga dari masing-masing spesies bunga iris, yaitu spesies setosa, versicolor, dan virginica. Yang difokuskan pada penghitungan kali ini adalah lebar dari sepal dan kelopak bunga dari masing-masing spesies.
+Pada pengujian kali ini, diasumsikan bahwa $\Sigma_{setosa}$ = $\Sigma_{versicolor}$ = $\Sigma_{virginica}$
+
+```{r}
+data(iris)
+X <- as.matrix(iris[, c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")])
+```
+
+```{r}
+species <- as.factor(iris$Species)
+model <- lm(X ~ species)
+```
+
+```{r}
+fit <- manova(model)
+fit
+```
+
+```{r}
+model.summary <- summary(fit, test = "Wilks")
+model.summary
+```
+
+```{r}
+model.summary$SS
+```
+
+Ternyata, dari hasil pengujian hipotesis didapatkan bahwa nilai dari `p-value` < $\alpha$, sehingga kesimpulan hasil uji hipotesisnya adalah `tolak H0`. Dapat disimpulkan bahwa terdapat pebedaan lebar sepal dan kelopak bunga antara spesies setosa, versicolor, dan virginica.
+
+Untuk simultaneous confidence interval dari pasangan populasi, berikut pengerjaanya:
+```{r}
+iris_setosa <- iris[c(1:50), c("Sepal.Width", "Petal.Width")]
+iris_versicolor <- iris[c(51:100), c("Sepal.Width", "Petal.Width")]
+iris_virginica <- iris[c(101:150), c("Sepal.Width", "Petal.Width")]
+```
+
+```{r}
+n_setosa <- nrow(iris_setosa)
+n_versicolor <- nrow(iris_versicolor)
+n_virginica <- nrow(iris_virginica)
+
+xbar_setosa <- colMeans(iris_setosa)
+xbar_versicolor <- colMeans(iris_versicolor)
+xbar_virginica <- colMeans(iris_virginica)
+```
+
+```{r}
+S_setosa <- cov(iris_setosa)
+S_versicolor <- cov(iris_versicolor)
+S_virginica <- cov(iris_virginica)
+```
+
+```{r}
+Spooled_setVer <- (1/(n_setosa + n_versicolor - 2)) * (((n_setosa - 1) * S_setosa) + ((n_versicolor - 1) * S_versicolor))
+
+Spooled_setVir <- (1/(n_setosa + n_virginica - 2)) * (((n_setosa - 1) * S_setosa) + ((n_virginica - 1) * S_virginica))
+
+Spooled_verVir <- (1/(n_versicolor + n_virginica - 2)) * (((n_versicolor - 1) * S_versicolor) + ((n_virginica - 1) * S_virginica))
+```
+
+```{r}
+p_iris <- 2
+alpha_iris <- 1 - 0.05
+
+crit_val_setVer <- (((n_setosa + n_versicolor - 2) * p_iris)/(n_setosa + n_versicolor - p_iris - 1)) * qf(p = alpha_iris, df1 = p_iris, df2 = n_setosa + n_versicolor - p_iris - 1)
+
+crit_val_setVir <- (((n_setosa + n_virginica - 2) * p_iris)/(n_setosa + n_virginica - p_iris - 1)) * qf(p = alpha_iris, df1 = p_iris, df2 = n_setosa + n_virginica - p_iris - 1)
+
+crit_val_verVir <- (((n_versicolor + n_virginica - 2) * p_iris)/(n_versicolor + n_virginica - p_iris - 1)) * qf(p = alpha_iris, df1 = p_iris, df2 = n_versicolor + n_virginica - p_iris - 1)
+```
+
+Simultaneous CI untuk kombinasi setiap populasi (Iris Setosa - Iris Versicolor, Iris Setosa - Iris Virginica, dan Iris Versicolor - Iris Virginica) diperlihatkan pada perhitungan berikut: 
+
+```{r}
+sim_iris_setVer <- NULL
+sim_iris_setVir <- NULL
+sim_iris_verVir <- NULL
+
+for (k in c(1:2)) {
+  sim_iris_setVer <- c(sim_iris_setVer, 
+                   (xbar_setosa[k] - xbar_versicolor[k]) - sqrt(crit_val_setVer * ((1/n_setosa) + (1/n_versicolor)) * Spooled_setVer[k,k]), 
+                   (xbar_setosa[k] - xbar_versicolor[k]) + sqrt(crit_val_setVer * ((1/n_setosa) + (1/n_versicolor)) * Spooled_setVer[k,k]))
+  
+  sim_iris_setVir <- c(sim_iris_setVir, 
+                   (xbar_setosa[k] - xbar_virginica[k]) - sqrt(crit_val_setVir * ((1/n_setosa) + (1/n_virginica)) * Spooled_setVir[k,k]), 
+                   (xbar_setosa[k] - xbar_virginica[k]) + sqrt(crit_val_setVir * ((1/n_setosa) + (1/n_virginica)) * Spooled_setVir[k,k]))
+  
+  sim_iris_verVir <- c(sim_iris_verVir, 
+                   (xbar_versicolor[k] - xbar_virginica[k]) - sqrt(crit_val_verVir * ((1/n_versicolor) + (1/n_virginica)) * Spooled_verVir[k,k]), 
+                   (xbar_versicolor[k] - xbar_virginica[k]) + sqrt(crit_val_verVir * ((1/n_versicolor) + (1/n_virginica)) * Spooled_verVir[k,k]))
+
+}
+
+rtab <- rbind(sim_iris_setVer, sim_iris_setVir, sim_iris_verVir)
+round(rtab, 3)
+```
+
+Dari hasil perhitungan simultaneous confidence interval di atas, terlihat bahwa semua interval tidak mengandung 0, yang mengartikan bahwa semua confidence interval nya konsisten dengan hasil pengujian hipotesisnya.
+Dapat disimpulkan secara keseluruhan bahwa terdapat perbedaan ukuran lebar dari sepal dan kelopak bunga antara bunga iris setosa, iris versicolor, dan iris virgininca.

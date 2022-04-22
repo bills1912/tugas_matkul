@@ -265,7 +265,7 @@ int main(){
             printf("2. User memasukan nilai toleransi (TOL) secara manual;\n");
             printf("3. User memasukan nilai iterasi (N); dan\n");
             printf("4. User memasukan secara manual fungsi polinomial yang ingin diketahui solusinya.\n\n");
-            printf("Untuk contoh implementasi, silahkan gunakan polinomial berikut: 2/7(x^3 - 1)\n");
+            printf("Untuk contoh implementasi, silahkan gunakan polinomial berikut: 2/7(x^3 + 1)\n");
             printf("Masukan nilai x awal: 1\n");
             printf("Silahkan diingat input polinom dan x nya.\n\n");
             printf("NOTE: Jika koefisien polinomial berbentuk pecahan, jangan lupa mengubahnya menjadi bilangan desimal\ndengan angka signifikan yang sesuai dengan ketentuan pada soal.");
@@ -305,7 +305,7 @@ int main(){
             printf("4. User memasukan secara manual fungsi polinomial yang ingin diketahui solusinya.\n\n");
             printf("Untuk contoh implementasi, silahkan gunakan polinomial berikut: (x^2 + 8)/6\n");
             printf("Masukan nilai x_0: 1\n");
-            printf("Masukan jumlah iterasi: 4\n");
+            printf("Masukan jumlah iterasi: 3\n");
             printf("Silahkan diingat input polinom dan x nya.\n\n");
             printf("NOTE: Jika koefisien polinomial berbentuk pecahan, jangan lupa mengubahnya menjadi bilangan desimal\ndengan angka signifikan yang sesuai dengan ketentuan pada soal.");
             

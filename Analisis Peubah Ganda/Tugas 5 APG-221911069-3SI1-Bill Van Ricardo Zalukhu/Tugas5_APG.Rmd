@@ -1,0 +1,461 @@
+---
+title: "Tugas APG Pertemuan 5"
+author: "Bill Van Ricardo Zalukhu"
+date: '2022-03-16'
+output: html_document
+---
+
+```{r}
+library('MVN')
+library('car')
+library('openxlsx')
+```
+
+
+
+```{r pressure, echo=FALSE}
+clab_bod <- c(6,6,18,8,11,34,28,71,43,33,20)
+clab_ss <- c(27,23,64,44,30,75,26,124,54,30,14)
+slab_bod <- c(25,28,36,35,15,44,42,54,34,29,39)
+slab_ss <- c(15,13,22,29,31,64,30,64,56,20,21)
+effluent_data <- cbind(clab_bod, clab_ss, slab_bod, slab_ss)
+```
+
+
+```{r}
+d1 <- effluent_data[, 1] - effluent_data[, 3]
+d2 <- effluent_data[, 2] - effluent_data[, 4]
+data_delta <- cbind(d1, d2)
+```
+
+
+```{r}
+dbar <- colMeans(data_delta)
+dbar
+```
+
+```{r}
+sd <- cov(data_delta)
+sd
+```
+
+
+```{r}
+n <- nrow(data_delta)
+T2 <- n * t(dbar) %*% solve(sd) %*% dbar
+T2
+```
+
+```{r}
+n <- nrow(data_delta)
+p <- ncol(data_delta)
+alpha <- 0.05
+
+CI <- (((n - 1)*p)/(n - p)) * qf(p = 1 - alpha, df1 = p, df2 = n - p)
+CI
+```
+
+Dari hasil pengujian hipotesis di atas, ternyata nilai $T^{2}$ > $F$, artinya hasilnya adalah `tolak H0`. Oleh karena itu, dapat kita simpulkan bahwa terdapat perbedaan kebutuhan oksigen biokimia dan padatan tersuspend antara lab komersial dan lab dari pemerintah.
+
+1.
+```{r}
+n <- nrow(data_delta)
+p <- ncol(data_delta)
+Sd <- cov(data_delta)
+tconst <- sqrt((p/n)*((n-1)/(n-p)) * qf(1-alpha,p,n-p)) 
+id <- c(1,2)
+plot(ellipse(center=dbar[id], shape=Sd[id,id], radius=tconst, draw=F),type="n", xlab="d1", ylab="d2") 
+lines(ellipse(center=dbar[id], shape=Sd[id,id], radius=tconst, lwd=3), xlab="d1", ylab="d2") 
+points(0, 0,col="red", pch = 16)
+text(0,-1.5,expression(delta)) 
+text(dbar[1],dbar[2]-2.5,expression(bar(d)))
+```
+
+Berdasarkan hasil dari penggambaran confidence region ellipsoid dari data, hasilnya ternyata konsisten terhadap hasil uji hipotesisnya. Dalam artian, memang benar, kebutuhan tanaman terhadap oksigen biokimia dan padatan tersuspend yang diuji pada lab komersial berbeda dengan hasil dari lab pemerintah.
+
+
+2. 
+```{r}
+bon <- NULL 
+alpha1 <-1-0.05 
+alpha2 <-1-(0.05/2) 
+alpha3 <- 1 - 0.05/(2*2)
+
+for(k in 1:2){
+  bon <- c(bon, dbar[k] - sqrt(Sd[k,k]/n) * qt(alpha3, df=n-1), dbar[k] + sqrt(Sd[k,k]/n) * qt(alpha3, df=n-1))
+}
+
+rtab <- rbind(bon)
+round(rtab, 2)
+```
+
+Dari hasil penghitungan confidence interval Bonferoni, ternyata interval nya mengandung nilai 0. Ini mengartikan bahwa terjadi ketidakkonsistenan antara uji hipotesis dan confidence region ellipsoid, dengan hasil dari confidence Bonferoni, yang mengindikasikan ada satu atau semua variabel yang uji hipotesis univariat nya menghasilkan `gagal tolak H0`.
+
+
+3.
+```{r}
+eff_clean <- effluent_data[-c(8), ]
+```
+
+
+```{r}
+dclean1 <- eff_clean[, 1] - eff_clean[, 3]
+dclean2 <- eff_clean[, 2] - eff_clean[, 4]
+data_clean <- cbind(dclean1, dclean2)
+```
+
+
+```{r}
+dbar_clean <- colMeans(data_clean)
+dbar_clean
+```
+
+```{r}
+sd_clean <- cov(data_clean)
+sd_clean
+```
+
+
+```{r}
+n_clean <- nrow(data_clean)
+T2_clean <- n * t(dbar_clean) %*% solve(sd_clean) %*% dbar_clean
+T2_clean
+```
+
+```{r}
+p_clean <- ncol(data_delta)
+alpha <- 0.05
+
+CI <- (((n_clean - 1)*p)/(n_clean - p)) * qf(p = 1 - alpha, df1 = p, df2 = n_clean - p)
+CI
+```
+
+Dari hasil pengujian hipotesis terhadap data yang telah dibersihkan dari observasi yang dianggap sebagai outlier pada data, ternyata nilai $T^{2}$ > $F$ (masih sama), artinya hasilnya adalah tetap `tolak H0`. Oleh karena itu, dapat kita simpulkan bahwa terdapat perbedaan kebutuhan oksigen biokimia dan padatan tersuspend antara lab komersial dan lab dari pemerintah, baik sebelum maupun sesudah observasi yang dianggap outlier dihilangkan.
+
+```{r}
+n <- nrow(data_clean)
+p <- ncol(data_clean)
+Sd_clean <- cov(data_clean)
+tconst_clean <- sqrt((p/n)*((n-1)/(n-p)) * qf(1-alpha,p,n-p)) 
+id <- c(1,2)
+plot(ellipse(center=dbar_clean[id], shape=Sd_clean[id,id], radius=tconst_clean, draw=F),type="n", xlab="d1_clean", ylab="d2_clean") 
+lines(ellipse(center=dbar_clean[id], shape=Sd_clean[id,id], radius=tconst_clean, lwd=3), xlab="d1_clean", ylab="d2_clean") 
+points(0, 0,col="red", pch = 16)
+text(0,-1.5,expression(delta)) 
+text(dbar_clean[1],dbar_clean[2]-2.5,expression(bar(d)))
+```
+
+Dari hasil confidence region ellipsoidnya, juga menunjukan hasil yang sama dengan yang sebelumnya, yaitu area delta masih berada di luar area penerimaan hipotesis. Artinya adalah hasil dari confidence region, baik sebelum maupun sesudah observasi yang dianggap outlier dihilangkan, masih menghasilkan tolak H0.
+
+
+```{r}
+bon <- NULL 
+alpha3 <- 1 - 0.05/(2*p)
+
+for(k in 1:2){
+  bon <- c(bon, dbar_clean[k] - sqrt(Sd_clean[k,k]/n_clean) * qt(alpha3, df=n_clean-1), dbar_clean[k] + sqrt(Sd_clean[k,k]/n_clean) * qt(alpha3, df=n_clean-1))
+}
+
+rtab <- rbind(bon)
+round(rtab, 2)
+```
+
+Dari hasil Bonferoni, ternyata ada satu variabel selisih yang interval nya masih mengandung 0, yaitu variabel selisih padatan tersuspensi, sedangkan variabel yang berkorespondensi dengan hasil pengujian hipotesis sebelumnya yaitu variabel selish oksigen biokimia (dalam artian bahwa ada perbedaan kebutuhan oksigen biokimia antara tempat pengujian tanaman komersial dengan tempat pengujian miliki pemerintah). 
+
+4.
+a.
+```{r}
+eff_tf <- log(effluent_data)
+eff_tf
+```
+```{r}
+dTf1 <- eff_tf[, 1] - eff_tf[, 3]
+dTf2 <- eff_tf[, 2] - eff_tf[, 4]
+data_transform <- cbind(dTf1, dTf2)
+```
+
+```{r}
+dbar_tf <- colMeans(data_transform)
+dbar_tf
+```
+
+```{r}
+sd_tf <- cov(data_transform)
+sd_tf
+```
+
+
+```{r}
+n_tf <- nrow(data_delta)
+T2_tf <- n_tf * t(dbar_tf) %*% solve(sd_tf) %*% dbar_tf
+T2_tf
+```
+
+```{r}
+p_tf <- ncol(data_transform)
+alpha <- 0.05
+
+CI_tf <- (((n_tf - 1)*p_tf)/(n_tf - p_tf)) * qf(p = 1 - alpha, df1 = p_tf, df2 = n_tf - p_tf)
+CI_tf
+```
+
+Dari hasil pengujian hipotesis untuk data yang telah ditransform, ternyata nilai $T^{2}$ > $F$, artinya hasilnya tetap `tolak H0`. Dapat kita simpulkan bahwa data tetap menghasilkan tolak H0 bahkan setelah ditranformasi.
+
+```{r}
+T.ci <- function(mu, Sigma, n, avec=rep(1,length(mu)), level=0.95){ 
+  p <- length(mu) 
+  if(nrow(Sigma)!=p) stop("Need length(mu) == nrow(Sigma).") 
+  if(ncol(Sigma)!=p) stop("Need length(mu) == ncol(Sigma).") 
+  if(length(avec)!=p) stop("Need length(mu) == length(avec).") 
+  if(level <=0 | level >= 1) stop("Need 0 < level < 1.") 
+  cval <- qf(level, p, n-p) * p * (n-1) / (n-p) 
+  zhat <- crossprod(avec, mu) 
+  zvar <- crossprod(avec, Sigma %*% avec) / n 
+  const <- sqrt(cval * zvar) 
+  c(lower = zhat - const, upper = zhat + const) } 
+S<-cov(eff_tf) 
+n <- nrow(eff_tf) 
+p <- ncol(eff_tf) 
+T.ci(mu=dbar_tf, Sigma=sd_tf, n=n_tf, avec=c(1,0))
+T.ci(mu=dbar_tf, Sigma=sd_tf, n=n_tf, avec=c(0,1))
+```
+
+Ternyata, jika menggunakan simultaneous confidence interval, semua selangnya mengandung 0, artinya hasil keputusannya adalah gagal tolak H0, bertolak belakang dengan hasil pengujian hipotesis nya yang menghasilkan tolak H0.
+
+b.
+
+```{r}
+bon <- NULL 
+alpha1 <-1-0.05 
+alpha2 <-1-(0.05/2) 
+alpha3 <- 1 - 0.05/(2*2)
+
+for(k in 1:2){
+  bon <- c(bon, dbar_tf[k] - sqrt(sd_tf[k,k]/n_tf) * qt(alpha3, df=n_tf-1), dbar_tf[k] + sqrt(sd_tf[k,k]/n_tf) * qt(alpha3, df=n_tf-1))
+}
+
+rtab <- rbind(bon)
+round(rtab, 2)
+```
+
+Dari hasil confidence Bonferoni, ternyata bahkan setelah ditransformasi pun, masih ada variabel yang intervalnya mengandung 0 dan variabelnya masih sama, yaitu variabel selisih kabutuhan padatan tersuspensi, sedangkan unutuk variabel selisih kebutuhan oksigen biokimia masih konsisten dengan hasil uji hipotesisnya (tidak mengandung 0).
+
+c.
+
+- Mardia Test
+
+```{r}
+mvn(data_transform, mvnTest = 'mardia')
+```
+
+- Henze-Zikler Test
+
+```{r}
+mvn(data_transform)
+```
+
+- Royston
+
+```{r}
+mvn(data_transform, mvnTest = 'royston')
+```
+
+- E-Statistics Test
+
+```{r}
+mvn(data_transform, mvnTest = 'energy')
+```
+
+Dari semua uji yang dilakukan terhadap data selisih dari hasil transformasi, semua uji menyimpulkan bahwa data `berdistribusi multivariat normal`. Artinya, tidak ada pelanggarang kenormalan dari data selisih terhadap data yang telah ditransformasi.
+
+
+5.
+```{r}
+word_arabic <- read.xlsx("C://Users//bilva//OneDrive//Documents//3SI1//Semester 6//Analisis Peubah Ganda//Tugas5 APG-221911069-3SI1-Bill Van Ricardo Zalukhu//Word_Arabic.xlsx")
+```
+
+a.
+Beberapa pernyataan kontras yang bisa didefinisikan dari kasus pada data percobaan antara lain:
+
+- ($\mu_{3}$ + $\mu_{4}$) - ($\mu_{1}$ + $\mu_{2}$) -> kontras terhadap format dari tulisan
+- ($\mu_{1}$ + $\mu_{3}$) - ($\mu_{2}$ + $\mu_{4}$) -> kontras terhadap parity
+- ($\mu_{1}$ + $\mu_{4}$) - ($\mu_{2}$ + $\mu_{3}$) -> kontras terhadap interaksi antar format tulisan dan parity
+
+```{r}
+treatment1 <- c(-1,-1,1,1)
+treatment2 <- c(1,-1,1,-1)
+treatment3 <- c(1,-1,-1,1)
+C <- rbind(treatment1, treatment2, treatment3)
+```
+
+
+```{r}
+xbar <- colMeans(word_arabic)
+xbar
+S <- cov(word_arabic)
+```
+
+
+```{r}
+n <- nrow(word_arabic)
+T2 <- n * t(C %*% xbar) %*% solve(C %*% S %*% t(C)) %*% (C %*% xbar)
+T2
+```
+
+```{r}
+q <- ncol(word_arabic)
+
+alpha <- 0.05
+
+CI <- (((n - 1)*(q - 1))/(n - q + 1)) * qf(p = 1 - alpha, df1 = q - 1, df2 = n - q + 1)
+CI
+```
+
+Terlihat bahwa nilai dari $T^{2}$ > nilai $F$ nya. Hal ini menunjukan bahwa terdapat perbedaan efek dari keempat treatment yang diberikan kepada sampel untuk merespon antara format penulisan huruf dengan format Arabic.
+
+b.
+```{r}
+sim <- NULL
+alpha3 <- 1 - 0.05
+
+sim1 <- c(sim, 
+          ((xbar[3] + xbar[4]) - (xbar[1] + xbar[2])) - sqrt((t(C[1, ]) %*% S %*% C[1, ])/n) * sqrt((((n - 1)*(q - 1))/(n - q + 1)) * qf(p = alpha3, df1 = q - 1, df2 = n - q + 1)), 
+          ((xbar[3] + xbar[4]) - (xbar[1] + xbar[2])) + sqrt((t(C[1, ]) %*% S %*% C[1, ])/n) * sqrt((((n - 1)*(q - 1))/(n - q + 1)) * qf(p = alpha3, df1 = q - 1, df2 = n - q + 1)))
+
+sim2 <- c(sim, 
+          ((xbar[1] + xbar[3]) - (xbar[2] + xbar[4])) - sqrt((t(C[2, ]) %*% S %*% C[2, ])/n) * sqrt((((n - 1)*(q - 1))/(n - q + 1)) * qf(p = alpha3, df1 = q - 1, df2 = n - q + 1)), 
+          ((xbar[1] + xbar[3]) - (xbar[2] + xbar[4])) + sqrt((t(C[2, ]) %*% S %*% C[2, ])/n) * sqrt((((n - 1)*(q - 1))/(n - q + 1)) * qf(p = alpha3, df1 = q - 1, df2 = n - q + 1)))
+
+sim3 <- c(sim, 
+          ((xbar[1] + xbar[4]) - (xbar[2] + xbar[3])) - sqrt((t(C[3, ]) %*% S %*% C[3, ])/n) * sqrt((((n - 1)*(q - 1))/(n - q + 1)) * qf(p = alpha3, df1 = q - 1, df2 = n - q + 1)), 
+          ((xbar[1] + xbar[4]) - (xbar[2] + xbar[3])) + sqrt((t(C[3, ]) %*% S %*% C[3, ])/n) * sqrt((((n - 1)*(q - 1))/(n - q + 1)) * qf(p = alpha3, df1 = q - 1, df2 = n - q + 1)))
+
+rtab <- rbind(sim1, sim2, sim3)
+round(rtab, 2)
+```
+
+```{r}
+bon <- NULL
+alpha3_bon <- 1 - (0.05/2 * (q - 1))
+
+bon1 <- c(bon, 
+          ((xbar[3] + xbar[4]) - (xbar[1] + xbar[2])) - sqrt((t(C[1, ]) %*% S %*% C[1, ])/n) * qt(alpha3_bon, df = n - 1), 
+          ((xbar[3] + xbar[4]) - (xbar[1] + xbar[2])) + sqrt((t(C[1, ]) %*% S %*% C[1, ])/n) * qt(alpha3_bon, df = n-1))
+
+bon2 <- c(bon, 
+          ((xbar[1] + xbar[3]) - (xbar[2] + xbar[4])) - sqrt((t(C[2, ]) %*% S %*% C[2, ])/n) * qt(alpha3_bon, df = n - 1), 
+          ((xbar[1] + xbar[3]) - (xbar[2] + xbar[4])) + sqrt((t(C[2, ]) %*% S %*% C[2, ])/n) * qt(alpha3_bon, df = n - 1))
+
+bon3 <- c(bon, 
+          ((xbar[1] + xbar[4]) - (xbar[2] + xbar[3])) - sqrt((t(C[3, ]) %*% S %*% C[3, ])/n) * qt(alpha3_bon, df = n - 1), 
+          ((xbar[1] + xbar[4]) - (xbar[2] + xbar[3])) + sqrt((t(C[3, ]) %*% S %*% C[3, ])/n) * qt(alpha3_bon, df = n-1))
+
+rtab <- rbind(bon1, bon2, bon3)
+round(rtab, 2)
+```
+
+Jika kita bandingkan antar hasil simultaneous confidence interval dan Bonferoni confidence interval, dapat kita lihat hasilnya memiliki bentuk selang yang sama, dimana selang untuk kontras pertama dan kedua itu konsisten terhadap hasil pengujiannya (tolak H0), sedangkan selang untuk kontras ketiga nya mengandung 0, tidak konsisten terhadap hasil pengujian hipotesis nya (gagal tolak H0).
+Dapat disimpulkan bahwa tidak ada interaksi yang terjadi antartreatment yang diberikan kepada sampel yang diberi pengujian.
+
+c. 
+
+Jika melihat dari hasil pengujian simultaneous confidence interval nya, khususnya pada kombinasi kontras atau interval ke tiga, dapat kita melihat bahwa interval nya mengandung 0, artinya tidak ada interaksi yang terjadi antartreatment yang dilakukan, baik tes yang menggunakan kata-kata sebagai pembandingnya, maupun yang menggunakan format Arab. Dengan begitu, dapat kita simpulkan bahwa model yang cocok untuk mendukung tes tersebut adalah model M.
+
+d.
+
+-> Bentuk data pertama
+
+Untuk bentuk data pertama, diperoleh dengan mengalikan data semual dengan setiap vektor kontras yang telah didefinisikan sebelumnya.
+
+```{r}
+wordArabic_matrix <- as.matrix(word_arabic)
+format <- wordArabic_matrix %*% C[1, ]
+parity <- wordArabic_matrix %*% C[2, ]
+interaction <- wordArabic_matrix %*% C[3, ]
+
+construct_score <- cbind(format, parity, interaction)
+```
+
+Setelah kita membangung score berdasarkan perkalian antara matriks kontras dengan data awal, kita akan lakukan uji multivariat normal terhadap data tersebut.
+
+- Mardia Test
+
+```{r}
+set.seed(1000)
+mvn(construct_score, mvnTest = 'mardia')
+```
+
+- Henze-Zikler
+
+```{r}
+set.seed(1000)
+mvn(construct_score)
+```
+
+- Royston
+
+```{r}
+set.seed(1000)
+mvn(construct_score, mvnTest = 'royston')
+```
+
+- E-Statistics
+
+```{r}
+set.seed(1000)
+mvn(construct_score, mvnTest = 'energy')
+```
+
+- Mulvariat Shapiro-Wilk
+
+```{r}
+set.seed(1000)
+RVAideMemoire::mshapiro.test(construct_score)
+```
+
+Ternyata, berdasarkan uji multivariat normal dari data score hasil perkalian antara kombinasi treatment dengan data semula, hasilnya menunjukan bahwa data score melanggar asumsi kenormalan.
+
+-> Bentuk data kedua
+
+Untuk bentuk data kedua, diperoleh dengan melakukan operasi aritmetik terhadap data awal, mengikuti kombinasi kontras yang telah didefinisikan sebelumnya.
+
+```{r}
+format_2 <- (word_arabic[, 3] + word_arabic[, 4]) - (word_arabic[, 1] + word_arabic[, 2])
+parity_2 <- (word_arabic[, 1] + word_arabic[, 3]) - (word_arabic[, 2] + word_arabic[, 4])
+interaction_2 <- (word_arabic[, 1] + word_arabic[, 4]) - (word_arabic[, 2] + word_arabic[, 3])
+constructScore_2 <- cbind(format_2, parity_2, interaction_2)
+constructScore_2
+```
+
+- Mardia Test
+
+```{r}
+mvn(constructScore_2, mvnTest = 'mardia')
+```
+
+- Henze-Zikler
+
+```{r}
+mvn(constructScore_2)
+```
+
+- Royston
+
+```{r}
+mvn(construct_score, mvnTest = 'royston')
+```
+
+- E-Statistics
+
+```{r}
+mvn(construct_score, mvnTest = 'energy')
+```
+
+```{r}
+RVAideMemoire::mshapiro.test(construct_score)
+```
+
+
+
+
+

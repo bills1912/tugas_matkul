@@ -1,0 +1,326 @@
+---
+title: "Tugas 4 APG"
+author: "Bill Van Ricardo Zalukhu"
+date: '2022-03-09'
+output: html_document
+---
+
+```{r library, message=FALSE}
+library('MVN')
+library('mvoutlier')
+library('rcompanion')
+library('caret')
+library('openxlsx')
+library('car')
+library('RVAideMemoire')
+```
+
+
+Fungsi dari Hotelling's T Distrbution
+```{r hotelling_T}
+T.test <- function(X, mu=0){ 
+  X <- as.matrix(X) 
+  n <- nrow(X) 
+  p <- ncol(X) 
+  df2 <- n - p 
+  if(df2 < 1L) stop("Need nrow(X) > ncol(X).") 
+  if(length(mu) != p) 
+    mu <- rep(mu[1], p) 
+  xbar <- colMeans(X) 
+  S <- cov(X) 
+  T2 <- n * t(xbar - mu) %*% solve(S) %*% (xbar - mu) 
+  Fstat <- T2 / (p * (n-1) / df2) 
+  pval <- 1 - pf(Fstat, df1=p, df2=df2) 
+  data.frame(T2=as.numeric(T2), Fstat=as.numeric(Fstat), df1=p, df2=df2,
+             p.value=as.numeric(pval), row.names="")
+}
+```
+
+
+1.
+```{r}
+data_first <- read.xlsx('C://Users//bilva//OneDrive//Documents//3SI1//Semester 6//Analisis Peubah Ganda//Tugas 4//Data_Y1.xlsx')
+```
+
+a. Mendefinisikan Vektor Rataan
+```{r mean_vector}
+xbar_1 <- colMeans(data_first)
+xbar_1
+```
+
+b. Melakukan Uji Hotelling's T
+```{r uji_T}
+myu_first <- c(6, 11)
+T.test(data_first, myu_first)
+```
+
+c. Melakukan Penghitungan Nilai Statistik Uji dan `p-value`
+```{r}
+y_first <- as.matrix(data_first) - matrix(c(6, 11),nrow(data_first),ncol(data_first),byrow=T)
+model_first<-anova(lm(y_first ~ 1)) 
+model_first
+```
+
+```{r}
+n <- nrow(data_first)
+p <- ncol(data_first)
+alpha <- 0.05
+
+CI <- (((n - 1)*p)/(n - p)) * qf(p = 1 - alpha, df1 = p, df2 = n - p)
+CI
+```
+
+```{r}
+n <- nrow(data_first)
+p <- ncol(data_first)
+S <- cov(data_first)
+tconst <- sqrt((p/n)*((n-1)/(n-p)) * qf(1-alpha,p,n-p)) 
+id <- c(1,2)
+plot(ellipse(center=xbar_1[id], shape=S[id,id], radius=tconst, draw=F),type="n", xlab="y1", ylab="y2") 
+lines(ellipse(center=xbar_1[id], shape=S[id,id], radius=tconst, lwd=3), xlab="y1", ylab="y2") 
+points(6,11,col="red", pch = 16)
+text(6,10.4,expression(mu[0])) 
+text(xbar_1[1],xbar_1[2]+1,expression(bar(x)))
+```
+
+Dari hasil pengujian hipotesis dan juga visualisai confidence region elipsoid nya diperoleh identifikasi bahwa nilai Hotteling' s $T^{2}$ < nilai distribusi `F` nya, nilai `p-value` > 0.05, dan nilai dari $\mu_{0}$ nya berada `di dalam` area luasan elips. Dengan hasil tersebut, diperoleh bahwa hasil uji hipotesisnya adalah `gagal tolak H0`, sehingga dapat disimpulkan bahwa nilai dari rataan data `masih berada pada sekitaran rataan sebelumnya`.
+
+2.
+```{r}
+probe_words <- read.xlsx('C://Users//bilva//OneDrive//Documents//3SI1//Semester 6//Analisis Peubah Ganda//Tugas 4//Probe_Words.xlsx')
+```
+
+a. Mendefinisikan Vektor Rataan
+```{r}
+xbar_2 <- colMeans(probe_words)
+xbar_2
+```
+
+b. Melakukan Uji Hotelling's T
+```{r}
+myu_second <- c(30, 25, 40, 25, 30)
+T.test(probe_words, myu_second)
+```
+
+c. Melakukan Penghitungan Nilai Statistik Uji dan `p-value`
+```{r}
+y_second <- as.matrix(probe_words) - matrix(c(30, 25, 40, 25, 30),nrow(probe_words),ncol(probe_words),byrow=T)
+model_second<-anova(lm(y_second ~ 1)) 
+model_second
+```
+
+```{r}
+n <- nrow(probe_words)
+p <- ncol(probe_words)
+alpha <- 0.05
+
+CI <- (((n - 1)*p)/(n - p)) * qf(p = 1 - alpha, df1 = p, df2 = n - p)
+CI
+```
+
+```{r}
+T.ci <- function(mu, Sigma, n, avec=rep(1,length(mu)), level=0.95){ 
+  p <- length(mu) 
+  if(nrow(Sigma)!=p) stop("Need length(mu) == nrow(Sigma).") 
+  if(ncol(Sigma)!=p) stop("Need length(mu) == ncol(Sigma).") 
+  if(length(avec)!=p) stop("Need length(mu) == length(avec).") 
+  if(level <=0 | level >= 1) stop("Need 0 < level < 1.") 
+  cval <- qf(level, p, n-p) * p * (n-1) / (n-p) 
+  zhat <- crossprod(avec, mu) 
+  zvar <- crossprod(avec, Sigma %*% avec) / n 
+  const <- sqrt(cval * zvar) 
+  c(lower = zhat - const, upper = zhat + const)
+} 
+S<-cov(probe_words) 
+n <- nrow(probe_words) 
+p <- ncol(probe_words) 
+T.ci(mu=xbar_2, Sigma=S, n=n, avec=c(1,0,0,0,0))
+T.ci(mu=xbar_2, Sigma=S, n=n, avec=c(0,1,0,0,0))
+T.ci(mu=xbar_2, Sigma=S, n=n, avec=c(0,0,1,0,0))
+T.ci(mu=xbar_2, Sigma=S, n=n, avec=c(0,0,0,1,0))
+T.ci(mu=xbar_2, Sigma=S, n=n, avec=c(0,0,0,0,1))
+```
+
+
+```{r}
+TCI <- tCI <- bon <- NULL 
+alpha1<-1-0.05 
+alpha2<-(0.05/2) 
+alpha3 <- 1 - 0.05/(2*5) 
+for(k in 1:5){ 
+  avec <- rep(0, 5) 
+  avec[k] <- 1 
+  TCI <- c(TCI, T.ci(xbar_2, S, n, avec,level=alpha1))
+  tCI <- c(tCI, xbar_2[k] - sqrt(S[k,k]/n) * qt(alpha2, df=n-1, lower.tail = F), xbar_2[k] + sqrt(S[k,k]/n) * qt(alpha2, df=n-1, lower.tail = F))
+  bon <- c(bon, xbar_2[k] - sqrt(S[k,k]/n) * qt(alpha3, df=n-1), xbar_2[k] + sqrt(S[k,k]/n) * qt(alpha3, df=n-1))
+}
+
+rtab <- rbind(TCI, tCI, bon) 
+round(rtab, 2)
+```
+
+Dari hasil pengujian hipotesis pada data `Probe Words` di atas, ternyata hasil dari uji hipotesis dengan simultaneous confidence memberikan hasil yang tidak sama (incosistent). Terlihat dari hasil pengujian hipotesis untuk per variabel, ternyata untuk variabel `y1` dan `y3` memiliki nilai $\mu_{0}$ yang berada di luar batas confidence interval. Hal ini bisa mengakibatkan terjadinya ketidakkonsistenan hasil pengujian hipotesis dari data `Probe Words` secara univariat dan multivariat.
+
+3. 
+3.1. Melakukan Uji Hipotesis
+```{r read_data}
+data_test <- read.xlsx('C://Users//bilva//OneDrive//Documents//3SI1//Semester 6//Analisis Peubah Ganda//Tugas 4//College_Test.xlsx')
+```
+
+
+a. Mendefinisikan Vektor Rataan
+```{r}
+xbar <- colMeans(data_test)
+xbar
+```
+
+b. Melakukan Uji Hotelling's T
+```{r}
+myu <- c(500, 50, 30)
+T.test(data_test, myu)
+```
+
+c. Melakukan Penghitungan Nilai Statistik Uji dan `p-value`
+```{r}
+y <- as.matrix(data_test) - matrix(c(500,50, 30),nrow(data_test),ncol(data_test),byrow=T)
+model1<-anova(lm(y ~ 1)) 
+model1
+```
+
+d. Menghitung Batas Confidence Interval
+```{r conffidence_interval}
+n <- nrow(data_test)
+p <- ncol(data_test)
+alpha <- 0.05
+
+CI <- (((n - 1)*p)/(n - p)) * qf(p = 1 - alpha, df1 = p, df2 = n - p)
+CI
+```
+
+Dari hasil pengujian di atas, dapat kita lihat bahwa nilai dari `p-value` dengan kedua metode uji yang digunkan ternyata kurang dari nilai `alpha`, dan juga nilai hasil Hotelling's $T^{2}$ lebih besar dari hasil uji `F`, sehingga dapat disimpulkan `tolak H0` yang mengartikan bahwa nilai rataan dari nilai test `Social Science, Verbal, dan Science` sudah tidak sama dengan nilai rataan sebelumnya.
+
+3.2. Membuat Confidence Region Ellipsoid
+```{r}
+n <- nrow(data_test)
+p <- ncol(data_test)
+S <- cov(data_test)
+tconst <- sqrt((p/n)*((n-1)/(n-p)) * qf(1-alpha,p,n-p)) 
+id <- c(1,2)
+plot(ellipse(center=xbar[id], shape=S[id,id], radius=tconst, draw=F),type="n", xlab="social_science", ylab="verbal", ylim = c(45, 60), xlim = c(490, 560)) 
+lines(ellipse(center=xbar[id], shape=S[id,id], radius=tconst, lwd=3), xlab="social_science", ylab="verbal") 
+points(500,50,col="red", pch = 16)
+text(500.5,49.4,expression(mu[0])) 
+text(xbar[1]+1.5,xbar[2],expression(bar(x)))
+```
+
+```{r}
+n <- nrow(data_test)
+p <- ncol(data_test)
+S <- cov(data_test)
+tconst <- sqrt((p/n)*((n-1)/(n-p)) * qf(1-alpha,p,n-p)) 
+id <- c(1,3)
+plot(ellipse(center=xbar[id], shape=S[id,id], radius=tconst, draw=F),type="n", xlab="social_science", ylab="science", ylim = c(23, 31), xlim = c(490, 560)) 
+lines(ellipse(center=xbar[id], shape=S[id,id], radius=tconst, lwd=3), xlab="social_science", ylab="science") 
+points(500,30,col="red", pch = 16)
+text(500.5,29.4,expression(mu[0])) 
+text(xbar[1]+1.5,xbar[3],expression(bar(x)))
+```
+
+```{r}
+n <- nrow(data_test)
+p <- ncol(data_test)
+S <- cov(data_test)
+tconst <- sqrt((p/n)*((n-1)/(n-p)) * qf(1-alpha,p,n-p)) 
+id <- c(2,3)
+plot(ellipse(center=xbar[id], shape=S[id,id], radius=tconst, draw=F),type="n", xlab="verbal", ylab="science", xlim = c(49, 59), ylim = c(23, 31)) 
+lines(ellipse(center=xbar[id], shape=S[id,id], radius=tconst, lwd=3), xlab="verbal", ylab="science") 
+points(50,30,col="red", pch = 16)
+text(50.1,29.6,expression(mu[0])) 
+text(xbar[2]+.2,xbar[3],expression(bar(x)))
+```
+
+Dari hasil penggambaran elipsoid dari confidence region nya, ternyata hasilnya juga sama dengan hasil pengujian hipotesis sebelumnya, yaitu `tolak H0`.
+
+3.3. Menghitung Confidence Simultaneous dengan Teknik Bonferoni
+```{r}
+bon <- NULL 
+alpha1 <-1-0.05 
+alpha2 <-1-(0.05/2) 
+alpha3 <- 1 - 0.05/(2*3)
+
+for(k in 1:3){
+  bon <- c(bon, xbar[k] - sqrt(S[k,k]/n) * qt(alpha3, df=n-1), xbar[k] + sqrt(S[k,k]/n) * qt(alpha3, df=n-1))
+}
+
+rtab <- rbind(bon)
+round(rtab, 2)
+```
+
+3.4. Melakukan Visualisasi Terhadap Data dengan Menggunakan `Q-Q Plot` dan `Chi-Square Plot`
+
+a. Visualisasi Data dengan Menggunakan `Q-Q Plot`
+```{r}
+qqPlot(data_test[, 1])
+```
+
+
+```{r}
+qqPlot(data_test[, 2])
+```
+
+
+```{r}
+qqPlot(data_test[, 3])
+```
+
+b. Visualisasi dengan Menggunakan `Chi-Square Plot`
+```{r}
+xbarM <- colMeans(data_test)
+S <- cov(data_test)
+d <- apply(data_test, 1, function(data_test) t(data_test - xbarM) %*% solve(S) %*% (data_test - xbarM))
+plot(qchisq((1:nrow(data_test) -1/2) / nrow(data_test), df =3), sort(d), xlab = expression(paste(chi[3]^2," Quantile")), ylab ="Ordered distances")
+abline(a =0, b =1)
+```
+
+Dengan melihat hasil dari `qqnorm plot` setiap variabel dan `chi-square plot` dari data, terlihat bahwa data ternyata cenderung berada pada garis 45 derajat, yang mengindikasikan bahwa data berkemungkinan untuk berdistribusi normal. Dari hasil `chi-square plot` nya juga kita bisa melihat bahwa ada satu buah outlier dari kumpulan data tersebut.
+
+
+3.5. Pengujian Multivariat Normal dari Data
+
+- Mardia Test
+
+```{r}
+mvn(data_test, mvnTest = "mardia")
+```
+
+- Henze-Zikler Test
+
+```{r}
+mvn(data_test)
+```
+
+- Royston
+
+```{r}
+mvn(data_test, mvnTest = "royston")
+```
+
+- E-Statitics
+
+```{r}
+mvn(data_test, mvnTest = "energy")
+```
+
+- Multivariat Shapiro-Wilk
+
+```{r}
+mshapiro.test(data_test)
+```
+
+Mengecek Outlier dari Data secara Multivariat
+```{r}
+mvoutlier::aq.plot(data_test)
+```
+
+
+Dari hasil pengujian multivariat normal dari data, ternyata uji multivariat menunjukan hasil yang sama, yaitu data berdistribusi multivariat normal untuk semua uji. Dapat kita simpulkan bahwa data dari nilai test sebuah kampus ini memenuhi asumsi multivariat normal.
