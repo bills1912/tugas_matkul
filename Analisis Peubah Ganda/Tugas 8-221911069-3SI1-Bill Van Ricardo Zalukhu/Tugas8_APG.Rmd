@@ -21,11 +21,15 @@ med_val_home <- c(29.1, 26.2, 17.2, 30.2, 22.2, 23.6, 19.7, 18.5, 20.1, 18.2, 18
 cen_tract <- cbind(tot_pop, med_school_year, tot_emp, health_ser, med_val_home)
 ```
 
+a.
 ```{r}
 S_cen <- cov(cen_tract)
 S_cen
 ```
 
+Pada bagian ini, saya menggunakan data dengan variabel ke lima yang sudah diskala ulang (dikalikan dengan 10). Jika pada soal, hal itu bisa dilakukan karena data kelima akan diskala ulang, yang mengakibatkan semua elemen pada matriks kovarian yang mengandung variabel ke lima akan terkena efek penskalaan ulang tersebut. Untuk elemen yang mengandung satu data variabel kelima (yaitu elemen kovarians) akan dikalikan 10 karena perubahan berbanding lurus dengan data, sedangkan untuk varians nya sendiri dikalikan dengan 100 karena bentuk dari varians sendiri merupakan bentuk kuadrat, sehingga jika terjadi perubahan skala pada datanya akan dikuadratkan (dalam hal ini karena data akan dikalikan 10, karena bentuk kuadrat, maka akan dikalikan kuadrat dari 10, yaitu 100).
+
+b.
 ```{r}
 eig_cen <- eigen(S_cen)
 eig_val_cen <- eig_cen$values
@@ -53,6 +57,7 @@ for (i in c(1:5)){
 prop_var_cen
 ```
 
+c.
 ```{r}
 rho_cen <- matrix(nrow = 5, ncol = 5)
 for (i in c(1:5)){
@@ -62,6 +67,8 @@ for (i in c(1:5)){
 }
 rho_cen
 ```
+
+Dengan adanya perubahan skala yang dilakukan pada variabel ke lima, terlihat bahwa terjadi juga perubahan pada eigenvalue dan eigenvector dari data, dibandingkan dengan contoh 8.3. Selain kedua nilai itu, terlihat juga bahwa terjadi perubahan pada nilai-nilai korelasi parsial terhadap nilai-nilai yang bersesuaian.
 
 ## 8.12
 ```{r}
