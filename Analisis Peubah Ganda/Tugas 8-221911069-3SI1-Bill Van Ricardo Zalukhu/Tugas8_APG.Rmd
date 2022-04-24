@@ -206,6 +206,15 @@ pca_poll_cor <- prcomp(air_pollution, scale = TRUE)
 fviz_eig(pca_poll_cor)
 ```
 
+```{r}
+fviz_pca_var(pca_poll_cor,
+             col.var = "contrib", # Color by contributions to the PC
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE     # Avoid text overlapping
+             )
+```
+
+
 Dari hasil analisis kedua jenis `principal component` di atas, dapat kita lihat perbedaan dari sisi banyaknya komponen prinsipal yang dijadikan pengganti dari nilai x dari data awal. Terbukti dari nilai proporsi varians penjelas nya, pada principal component yang menggunakan matriks kovarian, kita hanya menggunakan 2 komponen saja. Sedangkan untuk principal component yang menggunakan matriks korelasi (dengan menormalisasi data), kita menggunakan 6 komponen untuk dijadikan pengganti variabel x karena nilai dari proporsi varians kumulatif yang lebih opotimal di komponen ke 6.
 
 
