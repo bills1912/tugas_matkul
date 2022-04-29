@@ -14,13 +14,39 @@ library(ggplot2)
 library(car)
 library(openxlsx)
 library(dplyr)
+library(plotly)
 ```
 
 ```{r}
+dry_beans <- read.xlsx("C://Users//bilva//OneDrive//Documents//3SI1//Semester 6//Tugas Matkul//tugas_matkul//Analisis Peubah Ganda//Tugas Kelompok 7 APG//Dry_Bean_Dataset.xlsx")
+```
+
+```{r}
+str(dry_beans)
+```
+
+```{r}
+X <- dry_beans[, -c(17)]
+y <- dry_beans[, 17]
+```
+
+```{r}
+describe(X)
+```
+
+```{r}
+sum(is.na(X))
+```
+
+
+```{r}
+corr_data <- cor(X)
 
 ```
 
 
-
+```{r}
+plot_ly(as.data.frame(cor(X)), type = "heatmap")
+```
 
 
