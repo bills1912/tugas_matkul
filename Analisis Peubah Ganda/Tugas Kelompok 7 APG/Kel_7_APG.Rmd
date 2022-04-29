@@ -1,0 +1,26 @@
+---
+title: "APG Presentasi"
+author: "Bill Van Ricardo Zalukhu"
+date: '2022-04-29'
+output: html_document
+---
+
+```{r library, message=FALSE, echo=FALSE}
+library(MVN)
+library(psych)
+library(corrplot)
+library("psych")
+library(ggplot2)
+library(car)
+library(openxlsx)
+library(dplyr)
+```
+
+```{r}
+
+```
+
+
+
+
+
