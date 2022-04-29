@@ -1,0 +1,401 @@
+---
+title: "Tugas_APG_EFA"
+author: "Bill Van Ricardo Zalukhu"
+date: '2022-04-27'
+output: html_document
+---
+
+```{r}
+library(psych)
+library(corrplot)
+library("psych")
+library(ggplot2)
+library(car)
+library(openxlsx)
+library(dplyr)
+```
+
+## 9.10
+
+Jika dilihat dari hasil kedua loadings yang diperoleh antara sebelum dan setelah dirotasi, ternyata hasil loading dari rotasi $varimax$ lebih baik dibanding dengan sebelum dirotasi, sehingga factor loadings yang kita gunakan yaitu yang berasal dari hasil rotasi $varimax$. Tetapi karena kebutuhan soal mengharuskan kita menggunakan $unrotated$, maka factor loadings yang kita gunakan adalah factor loadings yang berasal dari hasil yang sebelum dirotasi.
+
+```{r}
+F_1 <- c(.602, .467, .926, 1, .874, .894)
+F_2 <- c(.2, .154, .143, 0, .476, .327)
+
+l_unrotated <- cbind(F_1, F_2)
+as.data.frame(l_unrotated)
+```
+
+```{r}
+R_chicken <- matrix(c(1.000, .505, .569, .602, .621, .603,
+              .505, 1.000, .422, .467, .482, .450,
+              .569, .422, 1.000, .926, .877, .878,
+              .602, .467, .926, 1.000, .874, .894,
+              .621, .482, .877, .874, 1.000, .937,
+              .603, .450, .878, .894, .937, 1.000
+              ), nrow = 6, ncol = 6)
+R_chicken
+```
+
+
+a.
+Untuk menghitung $specific \space variance$, kita bisa menggunakan persamaan berikut:
+$$\tilde{\Psi} = R - \sum_{j=1}^{m} l_{ij}^{2}$$
+
+```{r}
+psi_chicken <- matrix(0, 6, 6)
+for(i in c(1:6))
+  psi_chicken[i, i] <- R_chicken[i,i] - ((l_unrotated[i, 1]^2) + (l_unrotated[i, 2]^2))
+as.data.frame(diag(psi_chicken))
+```
+
+b.
+$Communalities$ dapat diperoleh menggunakan rumus:
+$$\tilde{h}^2 = l_{i,1}^2 + l_{i,2}^2 + ... +l_{i,m}^2$$
+maka:
+```{r}
+comm_chicken <- matrix(nrow = 6)
+for(i in c(1:6))
+  comm_chicken[i] <- ((l_unrotated[i, 1]^2) + (l_unrotated[i, 2]^2))
+as.data.frame(comm_chicken)
+```
+
+Jika kita melihat dari hasil $communalities$ di atas, terlihat bahwa sebagian besar nilainya sudah sangat besar, yang menandakan bahwa model factor yang dibentuk dari data tersebut sudah baik, walau masih ada nilai yang kecil (seperti pada $\tilde{h}_{1}$ dan $\tilde{h}_{2}$)
+
+c.
+```{r}
+prop_var_chicken <- colMeans(l_unrotated^2)
+prop_var_chicken
+```
+
+```{r}
+tot_prop_chicken <- sum(prop_var_chicken)
+tot_prop_chicken
+```
+
+Dari hasil proporsi varians yang bisa dijelaskan dari factor yang berasal dari unrotated factor, terlihat bahwa $F_{1}$ bisa menjelaskan $66.68\%$ dari data yang ada, sedangkan $F_{2}$ hanya bisa menjelaskan $6,96\%$ dari data yang ada. Jika kita melihat dari total proporsi varians yang bisa dijelaskan oleh kedua factor ini, terlihat bahwa totalnya sebesar $73,64\%$, yang masih belum dikatakan cukup baik.
+
+d.
+Berikut rumus dari $residual \space matrix$ yang akan dicari:
+$$R - \tilde{L}\tilde{L'} - \tilde{\Psi}$$
+
+```{r}
+res_chicken <- R_chicken - (l_unrotated %*% t(l_unrotated)) - psi_chicken
+res_chicken
+```
+
+## 9.19
+
+```{r}
+salespeople_dat <- read.xlsx("C://Users//bilva//OneDrive//Documents//3SI1//Semester 6//Tugas Matkul//tugas_matkul//Analisis Peubah Ganda//Tugas9-221911069-3SI1-Bill Van Ricardo Zalukhu//Salespeople_data.xlsx")
+```
+
+Tahap pertama, kita lakukan pengujian KMO untuk menguji kecocokan data apakah bisa dilakukan analisis faktor atau tidak, dan pengujian Bartlett Sphericity untuk menguji apakah antar variabel pada data berkorelasi.
+
+- KMO
+```{r}
+KMO(salespeople_dat)
+```
+
+Dari hasil pengujian KMO di atas, terlihat bahwa nilai KMO nya sebesar 0.63, sudah lebih besar dari nilai toleransi nya, yaitu 0.6, sehingga kesimpulannya adalah bahwa data cocok untuk dilakukan analisis faktor.
+
+- Bartlett Sphericity
+```{r}
+cortest.bartlett(salespeople_dat)
+```
+
+Jika dilihat dari hasil pengujian Bartlett Sphericity di atas, terlihat bahwa $p-value$ < $\alpha$, sehingga kesimpulan yang didapatkan adalah terdapat fenomena korelasi yang terjadi antar variabel di dalam data.
+Dari hasil kedua pengujian di atas, dapat kita ambil kesimpulan bahwa data yang digunakan dalam analisis telah cocok untuk dilakukan analisis faktor.
+
+Sesuai dengan instruksi soal, kita harus menormalkan data yang akan dianalisi karena adanya perbedaan tipe data pada variabel.
+```{r}
+salespeople_norm <- salespeople_dat %>% mutate_all(~(scale(.) %>% as.vector))
+```
+
+```{r}
+fafitfree <- fa(salespeople_norm,nfactors = ncol(salespeople_norm), rotate = "none")
+n_factors <- length(fafitfree$e.values)
+scree     <- data.frame(
+  Factor_n =  as.factor(1:n_factors), 
+  Eigenvalue = fafitfree$e.values)
+ggplot(scree, aes(x = Factor_n, y = Eigenvalue, group = 1)) + 
+  geom_point() + geom_line() +
+  xlab("Number of factors") +
+  ylab("Initial eigenvalue") +
+  labs( title = "Scree Plot", 
+        subtitle = "(Based on the unreduced correlation matrix)")
+```
+
+Jika dilihat dari hasil scree plot di atas, terlihat bahwa jumlah maksimum factor terbaik yang bisa kita gunakan dalam analisis faktor adalah sebanyak 5 faktor (sudah sesuai dengan instruksi dari soal yang menggunakan 2 dan 3 faktor untuk analisis nya)
+
+a.
+a.1. m = 2
+- Faktor tidak dirotasi
+```{r}
+fa_salespeople_unrotated_m2 <- fa(r = salespeople_norm, nfactors = 2, covar = F, fm = "ml", max.iter = 100, rotate = "none")
+print(fa_salespeople_unrotated_m2)
+```
+
+- Faktor dirotasi dengan metode $varimax$
+```{r}
+fa_salespeople_rotated_m2 <- fa(r = salespeople_norm, nfactors = 2, covar = F, fm = "ml", max.iter = 100, rotate = "varimax")
+print(fa_salespeople_rotated_m2)
+```
+
+a.2. m = 3
+- Faktor tidak dirotasi
+```{r}
+fa_salespeople_unrotated_m3 <- fa(r = salespeople_norm, nfactors = 3, covar = F, fm = "ml", max.iter = 100, rotate = "none")
+print(fa_salespeople_unrotated_m3)
+```
+
+- Faktor dirotasi dengan metode $varimax$
+```{r}
+fa_salespeople_rotated_m3 <- fa(r = salespeople_norm, nfactors = 3, covar = F, fm = "ml", max.iter = 100, rotate = "varimax")
+print(fa_salespeople_rotated_m3)
+```
+
+
+b.
+
+```{r}
+fa_salespeople_rotated_m2$loadings
+```
+
+```{r}
+fa_salespeople_rotated_m3$loadings
+```
+
+
+Beberapa hal yang bisa kita dapatkan dari hasil factor analysis diatas antara lain:
+
+- jika kita melihat dari factor loadings antara hasil faktor yang telah dirotasi antara hasil analisis faktor dengan m = 2 dan m = 3, didapatkan bahwa antar satu faktor dengan faktor yang lainnya sudah memiliki nilai unique loadings nya masing-masing, sehingga ambiguitas pada kasus ini sudah lebih terminimalisir setelah faktor dirotasi, baik faktor dengan m = 2 maupun faktor dengan m = 3;
+
+- jika kita lihat dari proporsi varians kumulatif yang bisa dijelaskan, faktor dengan $m = 3$ memiliki persentase yang sudah sangat tinggi, yaitu $90,7\%$, dibanding dengan faktor dengan $m = 2$ yang hanya sebesar $80,3\%$.
+
+c.
+- $Communalities$ ($\tilde{h}_{i}$)
+```{r}
+as.data.frame(cbind(fa_salespeople_rotated_m2$communalities, fa_salespeople_rotated_m3$communalities))
+```
+
+- $Uniquenesses$ atau $Specific \space Variance$ ($\tilde{\Psi}_{i}$)
+```{r}
+as.data.frame(cbind(fa_salespeople_rotated_m2$uniquenesses, fa_salespeople_rotated_m3$uniquenesses))
+```
+
+- Estimasi Matriks Kovarian dari Data (dalam hal ini karena menggunakan data yang ternormalisasi, maka matriks kovarians data = matriks korelasi data) ($\tilde{L}\tilde{L}' + \tilde{\Psi}_{i}$)
+
+-> matriks korelasi sebenarnya
+```{r}
+cor(salespeople_dat)
+```
+
+-> untuk m = 2
+```{r}
+fa_salespeople_rotated_m2$loadings[, c(1:2)] %*% t(fa_salespeople_rotated_m2$loadings[, c(1:2)]) + diag(fa_salespeople_rotated_m2$uniquenesses)
+```
+
+-> untuk m = 3
+```{r}
+fa_salespeople_rotated_m3$loadings[, c(1:3)] %*% t(fa_salespeople_rotated_m3$loadings[, c(1:3)]) + diag(fa_salespeople_rotated_m3$uniquenesses)
+```
+
+Dari beberapa nilai di atas, berikut beberapa analisisnya:
+
+- jika dilihat dari $communalities$ dan $specific \space variance$ antara kedua hasil, bisa kita simpulkan model faktor dengan $m = 3$ lebih baik karena mayoritas nilai $communalities$ nya sudah besar dan nilai dari $specific \space variance$ sudah kecil dibanding faktor dengan $m = 2$, sehingga dapat disimpulkan bahwa model faktor terbaik yang dapat dibangun diantar kedua jenis hasil analisis ini adalah faktor dengan $m = 3$;
+
+- jika dilihat dari estimasi matriks kovarians antara faktor dengan $m = 2$ dan $m = 3$, jika kita bandingkan dengan matriks korelasi data yang sebenaranya, dapat kita lihat bahwa estimasi matriks kovarians yang cenderung konvergen dan mendekati nilai yang sebenarnya adalah estimasi matriks kovarians dengan $m = 3$. Hal ini dimungkinkan karena tingkat error dari hasil analisis faktornya yang mayoritas lebih rendah.
+
+d.
+Hipotesis:
+$$H_{0}: \Sigma = \tilde{L}\tilde{L}' + \tilde{\Psi}_{i} \\
+  H_{1}: \Sigma \not = \tilde{L}\tilde{L}' + \tilde{\Psi}_{i}$$
+
+-> untuk m = 2
+
+```{r}
+est_cor_m1 <- fa_salespeople_rotated_m2$loadings[, c(1:2)] %*% t(fa_salespeople_rotated_m2$loadings[, c(1:2)]) + diag(fa_salespeople_rotated_m2$uniquenesses)
+```
+
+
+```{r}
+p <- 7
+m1 <- 2
+n <- 50
+
+(n - 1 - (2 * p + 4 * m1 + 5)/6) * log(det(est_cor_m1)/det(cor(salespeople_norm)))
+```
+
+```{r}
+df_m1 <- ((p - m1)^2 - p - m1)/2
+qchisq(p = 1 - 0.01, df = df_m1)
+```
+
+-> untuk m = 3
+```{r}
+est_cor_m2 <- fa_salespeople_rotated_m3$loadings[, c(1:3)] %*% t(fa_salespeople_rotated_m3$loadings[, c(1:3)]) + diag(fa_salespeople_rotated_m3$uniquenesses)
+```
+
+```{r}
+p <- 7
+m2 <- 3
+n <- 50
+
+(n - 1 - (2 * p + 4 * m2 + 5)/6) * log(det(est_cor_m2)/det(cor(salespeople_norm)))
+```
+
+```{r}
+df_m2 <- ((p - m2)^2 - p - m2)/2
+qchisq(p = 1 - 0.01, df = df_m2)
+```
+
+Dari hasil kedua pengujian hipotesis, terlihat bahwa hasil uji statistik dari kedua macam faktor, m = 2 dan m = 3, memiliki nilai yang lebih besar dari nilai statistik tabel $\chi^2_{[(p-m)^2 - p - m]}$, sehingga hasil uji hipotesis nya adalah tolak $H_{0}$.
+Jika membandingkan antara hasil pada poin (b), (c), dan (d), maka model faktor yang terbaik dibentuk dari faktor dengan $m = 3$.
+
+e. 
+```{r}
+mean_salespeople <- colMeans(salespeople_dat)
+x <- c(110, 98, 105, 15, 18, 12, 35)
+z <- matrix(nrow = 7)
+for(i in c(1:7)){
+  z[i] <- (x[i] - mean_salespeople[i])/sd(salespeople_dat[, i])
+}
+z
+```
+
+-> Weigthed Least Square
+
+```{r}
+fa_salespeople_rotated_pca_m3 <- fa(r = salespeople_dat, nfactors = 3, covar = T, fm = "pa", max.iter = 100, rotate = "varimax")
+print(fa_salespeople_rotated_pca_m3)
+```
+
+
+```{r}
+delta <- t(fa_salespeople_rotated_pca_m3$loadings[, c(1:3)]) %*% solve(diag(fa_salespeople_rotated_pca_m3$uniquenesses)) %*% fa_salespeople_rotated_pca_m3$loadings[, c(1:3)]
+
+solve(delta) %*% t(fa_salespeople_rotated_pca_m3$loadings[, c(1:3)]) %*% solve(diag(fa_salespeople_rotated_pca_m3$uniquenesses)) %*% (z - mean(z))
+```
+
+-> Regression
+```{r}
+reg <- matrix(nrow = 7)
+t(fa_salespeople_rotated_m3$loadings[, c(1:3)]) %*% solve(cor(salespeople_norm)) %*% z
+```
+
+
+## 9.20
+Data yang digunakan pada soal ini adalah data yang ada pada tabel 1.5, tetapi cukup menggunakan 4 data saja, yaitu $wind$, $solar \space radiation$, $NO_{2}$, dan $O_{3}$.
+
+```{r}
+wind <- c(8, 7, 7, 10, 6, 8, 9, 5, 7, 8, 6, 6, 7, 10, 10, 9, 8, 8, 9, 9, 10, 9, 8, 5, 6, 8, 6, 8, 6, 10, 8, 7, 5, 6, 10, 8, 5, 5, 7, 7, 6, 8)
+solar_rad <- c(98, 107, 103, 88, 91, 90, 84, 72, 82, 64, 71, 91, 72, 70, 72, 77, 76, 71, 67, 69, 62, 88, 80, 30, 83, 84, 78, 79, 62, 37, 71, 52, 48, 75, 35, 85, 86, 86, 79, 79, 68, 40)
+no_2 <- c(12, 9, 5, 8, 8, 12, 12, 21, 11, 13, 10, 12, 18, 11, 8, 9, 7, 16, 13, 9, 14, 7, 13, 5, 10, 7, 11, 7, 9, 7, 10, 12, 8, 10, 6, 9, 6, 13, 9, 8, 11, 6)
+o_3 <- c(8, 5, 6, 15, 10, 12, 15, 14, 11, 9, 3, 7, 10, 7, 10, 10, 7, 4, 2, 5, 4, 6, 11, 2, 23, 6, 11, 10, 8, 2, 7, 8, 4, 24, 9, 10, 12, 18, 25, 6, 14, 5)
+
+air_pollution_v2 <- cbind(wind, solar_rad, no_2, o_3)
+```
+
+```{r}
+S_poll <- cov(air_pollution_v2)
+S_poll
+```
+
+Dari hasil matriks kovarian di atas, bisa kita lihat bahwa data memiliki variasi nilai varians yang sangat beragam dan skalanya berbeda jauh dikarenakan satuan dari setiap variabel nya yang berbeda satu sama lain. Dapat kita simpulkan bahwa secara general, data sangat bervariasi.
+
+```{r}
+KMO(air_pollution_v2)
+```
+
+```{r}
+cortest.bartlett(air_pollution_v2)
+```
+
+Jika dilihat dari hasil pengujian KMO dan Bartlett Sphericity nya, nilai KMO dari data masih kurang dari yang seharusnya, yaitu minimal 0.6, barulah data dikatakan sudah baik untuk dilakukan analisis faktor, tetapi karena kebutuhan soal, kita asumsikan bahwa uji KMO nya terpenuhi. Untuk hasil uji Bartlett Sphericity nya, $p-value$ nya sudah lebih besar dari $\alpha$, sehingga dapat kita simpulkan bahwa terjadi korelasi antarvariabel pada data.
+
+```{r}
+library(ggplot2)
+fafitfree <- fa(air_pollution_v2,nfactors = ncol(air_pollution_v2), rotate = "none")
+n_factors <- length(fafitfree$e.values)
+scree     <- data.frame(
+  Factor_n =  as.factor(1:n_factors), 
+  Eigenvalue = fafitfree$e.values)
+ggplot(scree, aes(x = Factor_n, y = Eigenvalue, group = 1)) + 
+  geom_point() + geom_line() +
+  xlab("Number of factors") +
+  ylab("Initial eigenvalue") +
+  labs( title = "Scree Plot", 
+        subtitle = "(Based on the unreduced covariance matrix)")
+```
+
+Jika dilihat dari scree plot di atas, jumlah factor yang baik yaitu sebanyak 2 faktor yang bisa digunakan dalam melakukan analisis. Tetapi karena kebutuhan pengerjaan soal, kita akan menggunakan variasi data faktor, yaitu 1 faktor dan 2 faktor dengan 2 metode analisis, yaitu $PCA$ dan $MLE$
+
+a.
+a.1. m = 1
+- Tidak merotasi faktor
+```{r}
+fa_pca_unrotated1 <- fa(r = air_pollution_v2, nfactors = 1, covar = T, fm = "pa", max.iter = 100, rotate = "none")
+
+print(fa_pca_unrotated1)
+```
+
+- Dengan merotasi faktor
+```{r}
+fa_pca_rotated1 <- fa(r = air_pollution_v2, nfactors = 1, covar = T, fm = "pa", max.iter = 100, rotate = "varimax")
+
+print(fa_pca_rotated1)
+```
+
+a.2. m = 2
+- Tidak merotasi faktor
+```{r}
+#fa_pca_unrotated2 <- fa(r = air_pollution_v2, nfactors = 2, covar = T, fm = "pa", max.iter = 100, rotate = "none")
+
+#print(fa_pca_unrotated2)
+```
+
+- Dengan merotasi faktor
+```{r}
+#fa_pca_rotated2 <- fa(r = air_pollution_v2, nfactors = 2, covar = T, fm = "pa", max.iter = 100, rotate = "varimax")
+
+#print(fa_pca_rotated2)
+```
+
+
+b.
+b.1. m = 1
+- Faktor tidak dirotasi
+```{r}
+fa_mle_unrotated1 <- fa(r = cov(air_pollution_v2), nfactors = 1, covar = T, fm = "ml", max.iter = 100, rotate = "none")
+
+print(fa_mle_unrotated1)
+```
+
+- Faktor dirotasi
+```{r}
+fa_mle_rotated1 <- fa(r = cov(air_pollution_v2), nfactors = 1, covar = T, fm = "ml", max.iter = 100, rotate = "varimax")
+
+print(fa_mle_rotated1)
+```
+
+b.2. m = 2
+- Faktor tidak dirotasi
+```{r}
+fa_mle_unrotated2 <- fa(r=cov(air_pollution_v2), nfactors = 2, covar = T, fm = "ml", max.iter = 100, rotate = "none")
+
+print(fa_mle_unrotated2)
+```
+
+- Faktor dirotasi
+```{r}
+fa_mle_rotated2 <- fa(r=cov(air_pollution_v2), nfactors = 2, covar = T, fm = "ml", max.iter = 100, rotate = "varimax")
+
+print(fa_mle_rotated2)
+```
+
+
+
+
+

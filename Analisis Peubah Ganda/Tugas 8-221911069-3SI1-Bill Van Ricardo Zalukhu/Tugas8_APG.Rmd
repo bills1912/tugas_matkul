@@ -37,6 +37,11 @@ eig_vec_cen <- eig_cen$vectors
 ```
 
 ```{r}
+eig_vec_cen
+```
+
+
+```{r}
 eig_val_cen
 ```
 
@@ -77,8 +82,8 @@ solar_rad <- c(98, 107, 103, 88, 91, 90, 84, 72, 82, 64, 71, 91, 72, 70, 72, 77,
              48, 75, 35, 85, 86, 86, 79, 79, 68, 40)
 co <- c(7, 4, 4, 5, 4, 5, 7, 6, 5, 5, 5, 4, 7, 4, 4, 4, 4, 5, 4, 3, 5, 4, 4, 3, 5, 3, 4, 2, 4, 3, 4, 4, 6, 4, 4, 4, 3, 7, 7, 5, 6, 4)
 no <- c(2, 3, 3, 2, 2, 2, 4, 4, 1, 2, 4, 2, 4, 2, 1, 1, 1, 3, 2, 3, 3, 2, 2, 3, 1, 2, 2, 1, 3, 1, 1, 1, 5, 1, 1, 1, 1, 2, 4, 2, 2, 3)
-no_2 <- c(12, 9, 5, 8, 8, 12, 12, 21, 11, 13, 10, 12, 18, 1, 8, 9, 7, 1, 13, 9, 14, 7, 13, 5, 10, 7, 1, 7, 9, 7, 10, 12, 8, 10, 6, 9, 6, 13, 9, 8, 1, 6)
-o_3 <- c(8, 5, 6, 15, 10, 12, 15, 14, 11, 9, 3, 7, 10, 7, 10, 10, 7, 4, 2, 5, 4, 6, 11, 2, 23, 6, 11, 10, 8, 2, 7, 8, 4, 24, 9, 10, 12, 18, 25, 6, 14, 2)
+no_2 <- c(12, 9, 5, 8, 8, 12, 12, 21, 11, 13, 10, 12, 18, 11, 8, 9, 7, 16, 13, 9, 14, 7, 13, 5, 10, 7, 11, 7, 9, 7, 10, 12, 8, 10, 6, 9, 6, 13, 9, 8, 11, 6)
+o_3 <- c(8, 5, 6, 15, 10, 12, 15, 14, 11, 9, 3, 7, 10, 7, 10, 10, 7, 4, 2, 5, 4, 6, 11, 2, 23, 6, 11, 10, 8, 2, 7, 8, 4, 24, 9, 10, 12, 18, 25, 6, 14, 5)
 hc <- c(2, 3, 3, 4, 3, 4, 5, 4, 3, 4, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 4, 3, 4, 3, 4, 3, 3, 3, 3, 3, 3, 4, 3, 3, 2, 2, 2, 2, 3, 2, 3, 2)
 
 air_pollution <- cbind(wind, solar_rad, co, no, no_2, o_3, hc)
@@ -100,6 +105,14 @@ eig_poll_cov <- eigen(S_pollution)
 ```{r}
 eig_val_cov <- eig_poll_cov$values
 eig_vec_cov <- eig_poll_cov$vectors
+```
+
+```{r}
+eig_val_cov
+```
+
+```{r}
+eig_vec_cov
 ```
 
 - Analysis menggunakan matriks kovarian
@@ -176,13 +189,13 @@ eig_vec_cor <- eig_poll_cor$vectors
 ```
 
 ```{r}
-components_poll_norm <- matrix(nrow = 42, ncol = 7)
-for (i in c(1:7)){
-  for (j in c(1:42)){
-    components_poll_norm[j, i] <- t(eig_vec_cor[, i]) %*% t(pollution_norm[j, ])
-  }
-}
+eig_val_cor
 ```
+
+```{r}
+eig_vec_cor
+```
+
 
 ```{r}
 prop_var_poll_cor <- c()
@@ -194,6 +207,15 @@ for (i in c(1:7)){
   prop_var_poll_cor <- append(prop_var_poll_cor, prop_var)
 }
 prop_var_poll_cor
+```
+
+```{r}
+components_poll_norm <- matrix(nrow = 42, ncol = 7)
+for (i in c(1:7)){
+  for (j in c(1:42)){
+    components_poll_norm[j, i] <- t(eig_vec_cor[, i]) %*% t(pollution_norm[j, ])
+  }
+}
 ```
 
 
@@ -210,12 +232,15 @@ fviz_eig(pca_poll_cor)
 fviz_pca_var(pca_poll_cor,
              col.var = "contrib", # Color by contributions to the PC
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-             repel = TRUE     # Avoid text overlapping
+             repel = T     # Avoid text overlapping
              )
 ```
 
+- Dari hasil analisis kedua jenis `principal component` di atas, dapat kita lihat perbedaan dari sisi banyaknya komponen prinsipal yang dijadikan pengganti dari nilai x dari data awal. Terbukti dari nilai proporsi varians penjelas nya, pada principal component yang menggunakan matriks kovarian, kita hanya menggunakan 1 komponen saja. Sedangkan untuk principal component yang menggunakan matriks korelasi (dengan data yang dinormalisasi), kita menggunakan 4 komponen untuk dijadikan pengganti variabel x karena nilai dari proporsi varians kumulatif yang lebih opotimal di komponen ke 4. Perbedaan ini dimungkinkan karena perbedaan rentang niai antar variabel yang berbeda jauh, ada yang terlalu kecil juga ada yang terlalu besar, yang menyebabkan nilai varians dari setiap variabel nya juga ada yang memiliki nilai yang terllau tinggi, ada yang terlalu besar, yang berefek ke nilai proporsi varians nya juga.
 
-Dari hasil analisis kedua jenis `principal component` di atas, dapat kita lihat perbedaan dari sisi banyaknya komponen prinsipal yang dijadikan pengganti dari nilai x dari data awal. Terbukti dari nilai proporsi varians penjelas nya, pada principal component yang menggunakan matriks kovarian, kita hanya menggunakan 2 komponen saja. Sedangkan untuk principal component yang menggunakan matriks korelasi (dengan menormalisasi data), kita menggunakan 6 komponen untuk dijadikan pengganti variabel x karena nilai dari proporsi varians kumulatif yang lebih opotimal di komponen ke 6.
+- Jika dilihat dari koefisien setiap komponen terpilih (sesuai dengan pilihan pada jawaban ini), dapat kita simpulkan untuk komponen yang berasal dari matriks kovarians, secara esensial komponen tersebut adalah variabel "solar radiation", terlihat dari nilai koefisien nya yang paling besar yang menandakan bahwa variabel tersebut memiliki kontribusi terbesar terhadap pembentukan komponen tersebutn (dengan nilai koefisien sebesar 0.99936420). Sedangkan jika yang berasal dari matriks korelasi: a. untuk komponen pertama, secara esensial merupakan variabel "$solar \space radiation$"; b. untuk komponen kedua, secara esensial merupakan variabel "$o_3$"; c. untuk komponen ketiga, secara esensial merupakan variabel "$wind$", dan d. untuk komponen keempat, secara esensial merupakan variabel "$NO$".
+
+- Jika dibandingkan antara hasil dari menggunakan matriks kovarian dengan matriks korelasi, hasil PC yang lebih baik adalah PC yang dihasilkan oleh matriks Korelasi.
 
 
 ## 8.14
