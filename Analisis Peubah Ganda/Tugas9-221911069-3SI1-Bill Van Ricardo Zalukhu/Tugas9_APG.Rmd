@@ -2,10 +2,12 @@
 title: "Tugas_APG_EFA"
 author: "Bill Van Ricardo Zalukhu"
 date: '2022-04-27'
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
-```{r}
+```{r library, message=FALSE}
 library(psych)
 library(corrplot)
 library("psych")
@@ -166,7 +168,6 @@ fa_salespeople_rotated_m2$loadings
 fa_salespeople_rotated_m3$loadings
 ```
 
-
 Beberapa hal yang bisa kita dapatkan dari hasil factor analysis diatas antara lain:
 
 - jika kita melihat dari factor loadings antara hasil faktor yang telah dirotasi antara hasil analisis faktor dengan m = 2 dan m = 3, didapatkan bahwa antar satu faktor dengan faktor yang lainnya sudah memiliki nilai unique loadings nya masing-masing, sehingga ambiguitas pada kasus ini sudah lebih terminimalisir setelah faktor dirotasi, baik faktor dengan m = 2 maupun faktor dengan m = 3;
@@ -178,6 +179,7 @@ c.
 ```{r}
 as.data.frame(cbind(fa_salespeople_rotated_m2$communalities, fa_salespeople_rotated_m3$communalities))
 ```
+dimana V1 merupakan $communalities$ dari factor dengan $m = 2$, dan V2 merupakan $communalities$ dari factor dengan $m = 3$. Jika dibandingkan, terlihat bahwa $communalities$  dari factor $m = 3$ secara keseluruhan memiliki nilai yang lebih besar dibandingkan dengan factor dengan factor dengan $m = 2$.
 
 - $Uniquenesses$ atau $Specific \space Variance$ ($\tilde{\Psi}_{i}$)
 ```{r}
@@ -267,7 +269,7 @@ z
 -> Weigthed Least Square
 
 ```{r}
-fa_salespeople_rotated_pca_m3 <- fa(r = salespeople_dat, nfactors = 3, covar = T, fm = "pa", max.iter = 100, rotate = "varimax")
+fa_salespeople_rotated_pca_m3 <- fa(r = salespeople_norm, nfactors = 3, covar = F, fm = "pa", max.iter = 100, rotate = "varimax")
 print(fa_salespeople_rotated_pca_m3)
 ```
 
@@ -279,11 +281,16 @@ solve(delta) %*% t(fa_salespeople_rotated_pca_m3$loadings[, c(1:3)]) %*% solve(d
 ```
 
 -> Regression
+- PCA
 ```{r}
-reg <- matrix(nrow = 7)
-t(fa_salespeople_rotated_m3$loadings[, c(1:3)]) %*% solve(cor(salespeople_norm)) %*% z
+t(fa_salespeople_rotated_pca_m3$loadings[, c(1:3)]) %*% solve(cov(salespeople_norm)) %*% (x - mean(x))
 ```
 
+
+- MLE
+```{r}
+t(fa_salespeople_rotated_m3$loadings[, c(1:3)]) %*% solve(cor(salespeople_norm)) %*% z
+```
 
 ## 9.20
 Data yang digunakan pada soal ini adalah data yang ada pada tabel 1.5, tetapi cukup menggunakan 4 data saja, yaitu $wind$, $solar \space radiation$, $NO_{2}$, dan $O_{3}$.

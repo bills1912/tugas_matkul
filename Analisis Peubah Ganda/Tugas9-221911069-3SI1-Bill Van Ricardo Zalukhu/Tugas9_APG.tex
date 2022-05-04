@@ -1,0 +1,1727 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Tugas\_APG\_EFA},
+  pdfauthor={Bill Van Ricardo Zalukhu},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Tugas\_APG\_EFA}
+\author{Bill Van Ricardo Zalukhu}
+\date{2022-04-27}
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(psych)}
+\FunctionTok{library}\NormalTok{(corrplot)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'corrplot' was built under R version 4.1.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(}\StringTok{"psych"}\NormalTok{)}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(car)}
+\FunctionTok{library}\NormalTok{(openxlsx)}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{section}{%
+\subsection{9.10}\label{section}}
+
+Jika dilihat dari hasil kedua loadings yang diperoleh antara sebelum dan
+setelah dirotasi, ternyata hasil loading dari rotasi \(varimax\) lebih
+baik dibanding dengan sebelum dirotasi, sehingga factor loadings yang
+kita gunakan yaitu yang berasal dari hasil rotasi \(varimax\). Tetapi
+karena kebutuhan soal mengharuskan kita menggunakan \(unrotated\), maka
+factor loadings yang kita gunakan adalah factor loadings yang berasal
+dari hasil yang sebelum dirotasi.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{F\_1 }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(.}\DecValTok{602}\NormalTok{, .}\DecValTok{467}\NormalTok{, .}\DecValTok{926}\NormalTok{, }\DecValTok{1}\NormalTok{, .}\DecValTok{874}\NormalTok{, .}\DecValTok{894}\NormalTok{)}
+\NormalTok{F\_2 }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(.}\DecValTok{2}\NormalTok{, .}\DecValTok{154}\NormalTok{, .}\DecValTok{143}\NormalTok{, }\DecValTok{0}\NormalTok{, .}\DecValTok{476}\NormalTok{, .}\DecValTok{327}\NormalTok{)}
+
+\NormalTok{l\_unrotated }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(F\_1, F\_2)}
+\FunctionTok{as.data.frame}\NormalTok{(l\_unrotated)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     F_1   F_2
+## 1 0.602 0.200
+## 2 0.467 0.154
+## 3 0.926 0.143
+## 4 1.000 0.000
+## 5 0.874 0.476
+## 6 0.894 0.327
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{R\_chicken }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\FloatTok{1.000}\NormalTok{, .}\DecValTok{505}\NormalTok{, .}\DecValTok{569}\NormalTok{, .}\DecValTok{602}\NormalTok{, .}\DecValTok{621}\NormalTok{, .}\DecValTok{603}\NormalTok{,}
+\NormalTok{              .}\DecValTok{505}\NormalTok{, }\FloatTok{1.000}\NormalTok{, .}\DecValTok{422}\NormalTok{, .}\DecValTok{467}\NormalTok{, .}\DecValTok{482}\NormalTok{, .}\DecValTok{450}\NormalTok{,}
+\NormalTok{              .}\DecValTok{569}\NormalTok{, .}\DecValTok{422}\NormalTok{, }\FloatTok{1.000}\NormalTok{, .}\DecValTok{926}\NormalTok{, .}\DecValTok{877}\NormalTok{, .}\DecValTok{878}\NormalTok{,}
+\NormalTok{              .}\DecValTok{602}\NormalTok{, .}\DecValTok{467}\NormalTok{, .}\DecValTok{926}\NormalTok{, }\FloatTok{1.000}\NormalTok{, .}\DecValTok{874}\NormalTok{, .}\DecValTok{894}\NormalTok{,}
+\NormalTok{              .}\DecValTok{621}\NormalTok{, .}\DecValTok{482}\NormalTok{, .}\DecValTok{877}\NormalTok{, .}\DecValTok{874}\NormalTok{, }\FloatTok{1.000}\NormalTok{, .}\DecValTok{937}\NormalTok{,}
+\NormalTok{              .}\DecValTok{603}\NormalTok{, .}\DecValTok{450}\NormalTok{, .}\DecValTok{878}\NormalTok{, .}\DecValTok{894}\NormalTok{, .}\DecValTok{937}\NormalTok{, }\FloatTok{1.000}
+\NormalTok{              ), }\AttributeTok{nrow =} \DecValTok{6}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{6}\NormalTok{)}
+\NormalTok{R\_chicken}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       [,1]  [,2]  [,3]  [,4]  [,5]  [,6]
+## [1,] 1.000 0.505 0.569 0.602 0.621 0.603
+## [2,] 0.505 1.000 0.422 0.467 0.482 0.450
+## [3,] 0.569 0.422 1.000 0.926 0.877 0.878
+## [4,] 0.602 0.467 0.926 1.000 0.874 0.894
+## [5,] 0.621 0.482 0.877 0.874 1.000 0.937
+## [6,] 0.603 0.450 0.878 0.894 0.937 1.000
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Untuk menghitung \(specific \space variance\), kita bisa menggunakan
+  persamaan berikut: \[\tilde{\Psi} = R - \sum_{j=1}^{m} l_{ij}^{2}\]
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{psi\_chicken }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{6}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{))}
+\NormalTok{  psi\_chicken[i, i] }\OtherTok{\textless{}{-}}\NormalTok{ R\_chicken[i,i] }\SpecialCharTok{{-}}\NormalTok{ ((l\_unrotated[i, }\DecValTok{1}\NormalTok{]}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ (l\_unrotated[i, }\DecValTok{2}\NormalTok{]}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{diag}\NormalTok{(psi\_chicken))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   diag(psi_chicken)
+## 1          0.597596
+## 2          0.758195
+## 3          0.122075
+## 4          0.000000
+## 5          0.009548
+## 6          0.093835
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  \(Communalities\) dapat diperoleh menggunakan rumus:
+  \[\tilde{h}^2 = l_{i,1}^2 + l_{i,2}^2 + ... +l_{i,m}^2\] maka:
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{comm\_chicken }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\AttributeTok{nrow =} \DecValTok{6}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{))}
+\NormalTok{  comm\_chicken[i] }\OtherTok{\textless{}{-}}\NormalTok{ ((l\_unrotated[i, }\DecValTok{1}\NormalTok{]}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ (l\_unrotated[i, }\DecValTok{2}\NormalTok{]}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\FunctionTok{as.data.frame}\NormalTok{(comm\_chicken)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         V1
+## 1 0.402404
+## 2 0.241805
+## 3 0.877925
+## 4 1.000000
+## 5 0.990452
+## 6 0.906165
+\end{verbatim}
+
+Jika kita melihat dari hasil \(communalities\) di atas, terlihat bahwa
+sebagian besar nilainya sudah sangat besar, yang menandakan bahwa model
+factor yang dibentuk dari data tersebut sudah baik, walau masih ada
+nilai yang kecil (seperti pada \(\tilde{h}_{1}\) dan \(\tilde{h}_{2}\))
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{prop\_var\_chicken }\OtherTok{\textless{}{-}} \FunctionTok{colMeans}\NormalTok{(l\_unrotated}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{prop\_var\_chicken}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        F_1        F_2 
+## 0.66684683 0.06961167
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tot\_prop\_chicken }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(prop\_var\_chicken)}
+\NormalTok{tot\_prop\_chicken}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.7364585
+\end{verbatim}
+
+Dari hasil proporsi varians yang bisa dijelaskan dari factor yang
+berasal dari unrotated factor, terlihat bahwa \(F_{1}\) bisa menjelaskan
+\(66.68\%\) dari data yang ada, sedangkan \(F_{2}\) hanya bisa
+menjelaskan \(6,96\%\) dari data yang ada. Jika kita melihat dari total
+proporsi varians yang bisa dijelaskan oleh kedua factor ini, terlihat
+bahwa totalnya sebesar \(73,64\%\), yang masih belum dikatakan cukup
+baik.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Berikut rumus dari \(residual \space matrix\) yang akan dicari:
+  \[R - \tilde{L}\tilde{L'} - \tilde{\Psi}\]
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{res\_chicken }\OtherTok{\textless{}{-}}\NormalTok{ R\_chicken }\SpecialCharTok{{-}}\NormalTok{ (l\_unrotated }\SpecialCharTok{\%*\%} \FunctionTok{t}\NormalTok{(l\_unrotated)) }\SpecialCharTok{{-}}\NormalTok{ psi\_chicken}
+\NormalTok{res\_chicken}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           [,1]      [,2]      [,3] [,4]      [,5]      [,6]
+## [1,]  0.000000  0.193066 -0.017052    0 -0.000348 -0.000588
+## [2,]  0.193066  0.000000 -0.032464    0  0.000538 -0.017856
+## [3,] -0.017052 -0.032464  0.000000    0 -0.000392  0.003395
+## [4,]  0.000000  0.000000  0.000000    0  0.000000  0.000000
+## [5,] -0.000348  0.000538 -0.000392    0  0.000000 -0.000008
+## [6,] -0.000588 -0.017856  0.003395    0 -0.000008  0.000000
+\end{verbatim}
+
+\hypertarget{section-1}{%
+\subsection{9.19}\label{section-1}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{salespeople\_dat }\OtherTok{\textless{}{-}} \FunctionTok{read.xlsx}\NormalTok{(}\StringTok{"C://Users//bilva//OneDrive//Documents//3SI1//Semester 6//Tugas Matkul//tugas\_matkul//Analisis Peubah Ganda//Tugas9{-}221911069{-}3SI1{-}Bill Van Ricardo Zalukhu//Salespeople\_data.xlsx"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Tahap pertama, kita lakukan pengujian KMO untuk menguji kecocokan data
+apakah bisa dilakukan analisis faktor atau tidak, dan pengujian Bartlett
+Sphericity untuk menguji apakah antar variabel pada data berkorelasi.
+
+\begin{itemize}
+\tightlist
+\item
+  KMO
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{KMO}\NormalTok{(salespeople\_dat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Kaiser-Meyer-Olkin factor adequacy
+## Call: KMO(r = salespeople_dat)
+## Overall MSA =  0.62
+## MSA for each item = 
+##        sales_growth sales_profitability   new_account_sales     creativity_test 
+##                0.66                0.78                0.63                0.41 
+## mech_reasoning_test  abs_reasoning_test           math_test 
+##                0.75                0.42                0.63
+\end{verbatim}
+
+Dari hasil pengujian KMO di atas, terlihat bahwa nilai KMO nya sebesar
+0.63, sudah lebih besar dari nilai toleransi nya, yaitu 0.6, sehingga
+kesimpulannya adalah bahwa data cocok untuk dilakukan analisis faktor.
+
+\begin{itemize}
+\tightlist
+\item
+  Bartlett Sphericity
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cortest.bartlett}\NormalTok{(salespeople\_dat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R was not square, finding R from data
+\end{verbatim}
+
+\begin{verbatim}
+## $chisq
+## [1] 499.6613
+## 
+## $p.value
+## [1] 1.737779e-92
+## 
+## $df
+## [1] 21
+\end{verbatim}
+
+Jika dilihat dari hasil pengujian Bartlett Sphericity di atas, terlihat
+bahwa \(p-value\) \textless{} \(\alpha\), sehingga kesimpulan yang
+didapatkan adalah terdapat fenomena korelasi yang terjadi antar variabel
+di dalam data. Dari hasil kedua pengujian di atas, dapat kita ambil
+kesimpulan bahwa data yang digunakan dalam analisis telah cocok untuk
+dilakukan analisis faktor.
+
+Sesuai dengan instruksi soal, kita harus menormalkan data yang akan
+dianalisi karena adanya perbedaan tipe data pada variabel.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{salespeople\_norm }\OtherTok{\textless{}{-}}\NormalTok{ salespeople\_dat }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate\_all}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{(}\FunctionTok{scale}\NormalTok{(.) }\SpecialCharTok{\%\textgreater{}\%}\NormalTok{ as.vector))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fafitfree }\OtherTok{\textless{}{-}} \FunctionTok{fa}\NormalTok{(salespeople\_norm,}\AttributeTok{nfactors =} \FunctionTok{ncol}\NormalTok{(salespeople\_norm), }\AttributeTok{rotate =} \StringTok{"none"}\NormalTok{)}
+\NormalTok{n\_factors }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(fafitfree}\SpecialCharTok{$}\NormalTok{e.values)}
+\NormalTok{scree     }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{Factor\_n =}  \FunctionTok{as.factor}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{n\_factors), }
+  \AttributeTok{Eigenvalue =}\NormalTok{ fafitfree}\SpecialCharTok{$}\NormalTok{e.values)}
+\FunctionTok{ggplot}\NormalTok{(scree, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Factor\_n, }\AttributeTok{y =}\NormalTok{ Eigenvalue, }\AttributeTok{group =} \DecValTok{1}\NormalTok{)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_line}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Number of factors"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Initial eigenvalue"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{( }\AttributeTok{title =} \StringTok{"Scree Plot"}\NormalTok{, }
+        \AttributeTok{subtitle =} \StringTok{"(Based on the unreduced correlation matrix)"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Tugas9_APG_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+Jika dilihat dari hasil scree plot di atas, terlihat bahwa jumlah
+maksimum factor terbaik yang bisa kita gunakan dalam analisis faktor
+adalah sebanyak 5 faktor (sudah sesuai dengan instruksi dari soal yang
+menggunakan 2 dan 3 faktor untuk analisis nya)
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  a.1. m = 2
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Faktor tidak dirotasi
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fa\_salespeople\_unrotated\_m2 }\OtherTok{\textless{}{-}} \FunctionTok{fa}\NormalTok{(}\AttributeTok{r =}\NormalTok{ salespeople\_norm, }\AttributeTok{nfactors =} \DecValTok{2}\NormalTok{, }\AttributeTok{covar =}\NormalTok{ F, }\AttributeTok{fm =} \StringTok{"ml"}\NormalTok{, }\AttributeTok{max.iter =} \DecValTok{100}\NormalTok{, }\AttributeTok{rotate =} \StringTok{"none"}\NormalTok{)}
+\FunctionTok{print}\NormalTok{(fa\_salespeople\_unrotated\_m2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Factor Analysis using method =  ml
+## Call: fa(r = salespeople_norm, nfactors = 2, rotate = "none", covar = F, 
+##     max.iter = 100, fm = "ml")
+## Standardized loadings (pattern matrix) based upon correlation matrix
+##                      ML1   ML2   h2    u2 com
+## sales_growth        0.70  0.67 0.93 0.069 2.0
+## sales_profitability 0.67  0.69 0.93 0.070 2.0
+## new_account_sales   0.80  0.49 0.88 0.123 1.7
+## creativity_test     0.98 -0.17 1.00 0.005 1.1
+## mech_reasoning_test 0.65  0.31 0.53 0.474 1.4
+## abs_reasoning_test  0.25  0.57 0.39 0.614 1.4
+## math_test           0.56  0.81 0.97 0.029 1.8
+## 
+##                        ML1  ML2
+## SS loadings           3.33 2.28
+## Proportion Var        0.48 0.33
+## Cumulative Var        0.48 0.80
+## Proportion Explained  0.59 0.41
+## Cumulative Proportion 0.59 1.00
+## 
+## Mean item complexity =  1.6
+## Test of the hypothesis that 2 factors are sufficient.
+## 
+## The degrees of freedom for the null model are  21  and the objective function was  10.9 with Chi Square of  499.66
+## The degrees of freedom for the model are 8  and the objective function was  2.63 
+## 
+## The root mean square of the residuals (RMSR) is  0.06 
+## The df corrected root mean square of the residuals is  0.09 
+## 
+## The harmonic number of observations is  50 with the empirical chi square  6.79  with prob <  0.56 
+## The total number of observations was  50  with Likelihood Chi Square =  117.2  with prob <  1.3e-21 
+## 
+## Tucker Lewis Index of factoring reliability =  0.382
+## RMSEA index =  0.522  and the 90 % confidence intervals are  0.446 0.614
+## BIC =  85.9
+## Fit based upon off diagonal values = 0.99
+## Measures of factor score adequacy             
+##                                                    ML1  ML2
+## Correlation of (regression) scores with factors   1.00 0.99
+## Multiple R square of scores with factors          1.00 0.98
+## Minimum correlation of possible factor scores     0.99 0.96
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Faktor dirotasi dengan metode \(varimax\)
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fa\_salespeople\_rotated\_m2 }\OtherTok{\textless{}{-}} \FunctionTok{fa}\NormalTok{(}\AttributeTok{r =}\NormalTok{ salespeople\_norm, }\AttributeTok{nfactors =} \DecValTok{2}\NormalTok{, }\AttributeTok{covar =}\NormalTok{ F, }\AttributeTok{fm =} \StringTok{"ml"}\NormalTok{, }\AttributeTok{max.iter =} \DecValTok{100}\NormalTok{, }\AttributeTok{rotate =} \StringTok{"varimax"}\NormalTok{)}
+\FunctionTok{print}\NormalTok{(fa\_salespeople\_rotated\_m2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Factor Analysis using method =  ml
+## Call: fa(r = salespeople_norm, nfactors = 2, rotate = "varimax", covar = F, 
+##     max.iter = 100, fm = "ml")
+## Standardized loadings (pattern matrix) based upon correlation matrix
+##                      ML2  ML1   h2    u2 com
+## sales_growth        0.85 0.45 0.93 0.069 1.5
+## sales_profitability 0.87 0.42 0.93 0.070 1.4
+## new_account_sales   0.72 0.60 0.88 0.123 1.9
+## creativity_test     0.15 0.99 1.00 0.005 1.0
+## mech_reasoning_test 0.50 0.53 0.53 0.474 2.0
+## abs_reasoning_test  0.62 0.06 0.39 0.614 1.0
+## math_test           0.95 0.28 0.97 0.029 1.2
+## 
+##                        ML2  ML1
+## SS loadings           3.54 2.07
+## Proportion Var        0.51 0.30
+## Cumulative Var        0.51 0.80
+## Proportion Explained  0.63 0.37
+## Cumulative Proportion 0.63 1.00
+## 
+## Mean item complexity =  1.4
+## Test of the hypothesis that 2 factors are sufficient.
+## 
+## The degrees of freedom for the null model are  21  and the objective function was  10.9 with Chi Square of  499.66
+## The degrees of freedom for the model are 8  and the objective function was  2.63 
+## 
+## The root mean square of the residuals (RMSR) is  0.06 
+## The df corrected root mean square of the residuals is  0.09 
+## 
+## The harmonic number of observations is  50 with the empirical chi square  6.79  with prob <  0.56 
+## The total number of observations was  50  with Likelihood Chi Square =  117.2  with prob <  1.3e-21 
+## 
+## Tucker Lewis Index of factoring reliability =  0.382
+## RMSEA index =  0.522  and the 90 % confidence intervals are  0.446 0.614
+## BIC =  85.9
+## Fit based upon off diagonal values = 0.99
+## Measures of factor score adequacy             
+##                                                    ML2  ML1
+## Correlation of (regression) scores with factors   0.99 1.00
+## Multiple R square of scores with factors          0.98 0.99
+## Minimum correlation of possible factor scores     0.96 0.99
+\end{verbatim}
+
+a.2. m = 3 - Faktor tidak dirotasi
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fa\_salespeople\_unrotated\_m3 }\OtherTok{\textless{}{-}} \FunctionTok{fa}\NormalTok{(}\AttributeTok{r =}\NormalTok{ salespeople\_norm, }\AttributeTok{nfactors =} \DecValTok{3}\NormalTok{, }\AttributeTok{covar =}\NormalTok{ F, }\AttributeTok{fm =} \StringTok{"ml"}\NormalTok{, }\AttributeTok{max.iter =} \DecValTok{100}\NormalTok{, }\AttributeTok{rotate =} \StringTok{"none"}\NormalTok{)}
+\FunctionTok{print}\NormalTok{(fa\_salespeople\_unrotated\_m3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Factor Analysis using method =  ml
+## Call: fa(r = salespeople_norm, nfactors = 3, rotate = "none", covar = F, 
+##     max.iter = 100, fm = "ml")
+## Standardized loadings (pattern matrix) based upon correlation matrix
+##                      ML1   ML3   ML2   h2    u2 com
+## sales_growth        0.90  0.38 -0.07 0.96 0.039 1.4
+## sales_profitability 0.78  0.60  0.07 0.97 0.034 1.9
+## new_account_sales   0.93  0.20  0.06 0.91 0.088 1.1
+## creativity_test     0.73 -0.12  0.67 1.00 0.005 2.0
+## mech_reasoning_test 0.69  0.22  0.17 0.55 0.447 1.3
+## abs_reasoning_test  0.76 -0.13 -0.64 1.00 0.005 2.0
+## math_test           0.76  0.61 -0.11 0.96 0.038 2.0
+## 
+##                        ML1  ML3  ML2
+## SS loadings           4.44 1.00 0.90
+## Proportion Var        0.63 0.14 0.13
+## Cumulative Var        0.63 0.78 0.91
+## Proportion Explained  0.70 0.16 0.14
+## Cumulative Proportion 0.70 0.86 1.00
+## 
+## Mean item complexity =  1.7
+## Test of the hypothesis that 3 factors are sufficient.
+## 
+## The degrees of freedom for the null model are  21  and the objective function was  10.9 with Chi Square of  499.66
+## The degrees of freedom for the model are 3  and the objective function was  1.42 
+## 
+## The root mean square of the residuals (RMSR) is  0.03 
+## The df corrected root mean square of the residuals is  0.07 
+## 
+## The harmonic number of observations is  50 with the empirical chi square  1.43  with prob <  0.7 
+## The total number of observations was  50  with Likelihood Chi Square =  62.18  with prob <  2e-13 
+## 
+## Tucker Lewis Index of factoring reliability =  0.093
+## RMSEA index =  0.628  and the 90 % confidence intervals are  0.503 0.776
+## BIC =  50.44
+## Fit based upon off diagonal values = 1
+## Measures of factor score adequacy             
+##                                                    ML1  ML3  ML2
+## Correlation of (regression) scores with factors   1.00 0.98 1.00
+## Multiple R square of scores with factors          1.00 0.97 0.99
+## Minimum correlation of possible factor scores     0.99 0.94 0.99
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Faktor dirotasi dengan metode \(varimax\)
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fa\_salespeople\_rotated\_m3 }\OtherTok{\textless{}{-}} \FunctionTok{fa}\NormalTok{(}\AttributeTok{r =}\NormalTok{ salespeople\_norm, }\AttributeTok{nfactors =} \DecValTok{3}\NormalTok{, }\AttributeTok{covar =}\NormalTok{ F, }\AttributeTok{fm =} \StringTok{"ml"}\NormalTok{, }\AttributeTok{max.iter =} \DecValTok{100}\NormalTok{, }\AttributeTok{rotate =} \StringTok{"varimax"}\NormalTok{)}
+\FunctionTok{print}\NormalTok{(fa\_salespeople\_rotated\_m3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Factor Analysis using method =  ml
+## Call: fa(r = salespeople_norm, nfactors = 3, rotate = "varimax", covar = F, 
+##     max.iter = 100, fm = "ml")
+## Standardized loadings (pattern matrix) based upon correlation matrix
+##                      ML3  ML1  ML2   h2    u2 com
+## sales_growth        0.79 0.37 0.44 0.96 0.039 2.0
+## sales_profitability 0.91 0.32 0.18 0.97 0.034 1.3
+## new_account_sales   0.65 0.54 0.44 0.91 0.088 2.7
+## creativity_test     0.26 0.96 0.02 1.00 0.005 1.1
+## mech_reasoning_test 0.54 0.47 0.21 0.55 0.447 2.3
+## abs_reasoning_test  0.30 0.05 0.95 1.00 0.005 1.2
+## math_test           0.92 0.18 0.30 0.96 0.038 1.3
+## 
+##                        ML3  ML1  ML2
+## SS loadings           3.17 1.72 1.45
+## Proportion Var        0.45 0.25 0.21
+## Cumulative Var        0.45 0.70 0.91
+## Proportion Explained  0.50 0.27 0.23
+## Cumulative Proportion 0.50 0.77 1.00
+## 
+## Mean item complexity =  1.7
+## Test of the hypothesis that 3 factors are sufficient.
+## 
+## The degrees of freedom for the null model are  21  and the objective function was  10.9 with Chi Square of  499.66
+## The degrees of freedom for the model are 3  and the objective function was  1.42 
+## 
+## The root mean square of the residuals (RMSR) is  0.03 
+## The df corrected root mean square of the residuals is  0.07 
+## 
+## The harmonic number of observations is  50 with the empirical chi square  1.43  with prob <  0.7 
+## The total number of observations was  50  with Likelihood Chi Square =  62.18  with prob <  2e-13 
+## 
+## Tucker Lewis Index of factoring reliability =  0.093
+## RMSEA index =  0.628  and the 90 % confidence intervals are  0.503 0.776
+## BIC =  50.44
+## Fit based upon off diagonal values = 1
+## Measures of factor score adequacy             
+##                                                    ML3  ML1  ML2
+## Correlation of (regression) scores with factors   0.99 1.00 1.00
+## Multiple R square of scores with factors          0.98 0.99 0.99
+## Minimum correlation of possible factor scores     0.95 0.98 0.98
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fa\_salespeople\_rotated\_m2}\SpecialCharTok{$}\NormalTok{loadings}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Loadings:
+##                     ML2   ML1  
+## sales_growth        0.852 0.452
+## sales_profitability 0.868 0.419
+## new_account_sales   0.717 0.602
+## creativity_test     0.148 0.987
+## mech_reasoning_test 0.501 0.525
+## abs_reasoning_test  0.619      
+## math_test           0.946 0.277
+## 
+##                  ML2   ML1
+## SS loadings    3.545 2.071
+## Proportion Var 0.506 0.296
+## Cumulative Var 0.506 0.802
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fa\_salespeople\_rotated\_m3}\SpecialCharTok{$}\NormalTok{loadings}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Loadings:
+##                     ML3   ML1   ML2  
+## sales_growth        0.793 0.374 0.438
+## sales_profitability 0.911 0.317 0.185
+## new_account_sales   0.651 0.544 0.438
+## creativity_test     0.255 0.964      
+## mech_reasoning_test 0.542 0.465 0.207
+## abs_reasoning_test  0.299       0.950
+## math_test           0.917 0.180 0.298
+## 
+##                  ML3   ML1   ML2
+## SS loadings    3.175 1.718 1.453
+## Proportion Var 0.454 0.245 0.208
+## Cumulative Var 0.454 0.699 0.906
+\end{verbatim}
+
+Beberapa hal yang bisa kita dapatkan dari hasil factor analysis diatas
+antara lain:
+
+\begin{itemize}
+\item
+  jika kita melihat dari factor loadings antara hasil faktor yang telah
+  dirotasi antara hasil analisis faktor dengan m = 2 dan m = 3,
+  didapatkan bahwa antar satu faktor dengan faktor yang lainnya sudah
+  memiliki nilai unique loadings nya masing-masing, sehingga ambiguitas
+  pada kasus ini sudah lebih terminimalisir setelah faktor dirotasi,
+  baik faktor dengan m = 2 maupun faktor dengan m = 3;
+\item
+  jika kita lihat dari proporsi varians kumulatif yang bisa dijelaskan,
+  faktor dengan \(m = 3\) memiliki persentase yang sudah sangat tinggi,
+  yaitu \(90,7\%\), dibanding dengan faktor dengan \(m = 2\) yang hanya
+  sebesar \(80,3\%\).
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  \(Communalities\) (\(\tilde{h}_{i}\))
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(fa\_salespeople\_rotated\_m2}\SpecialCharTok{$}\NormalTok{communalities, fa\_salespeople\_rotated\_m3}\SpecialCharTok{$}\NormalTok{communalities))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                            V1        V2
+## sales_growth        0.9308084 0.9614288
+## sales_profitability 0.9296171 0.9655182
+## new_account_sales   0.8766888 0.9118758
+## creativity_test     0.9950000 0.9950000
+## mech_reasoning_test 0.5264156 0.5533880
+## abs_reasoning_test  0.3863585 0.9950000
+## math_test           0.9711829 0.9624919
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  \(Uniquenesses\) atau \(Specific \space Variance\)
+  (\(\tilde{\Psi}_{i}\))
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(fa\_salespeople\_rotated\_m2}\SpecialCharTok{$}\NormalTok{uniquenesses, fa\_salespeople\_rotated\_m3}\SpecialCharTok{$}\NormalTok{uniquenesses))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                              V1          V2
+## sales_growth        0.069191515 0.038571357
+## sales_profitability 0.070382519 0.034481797
+## new_account_sales   0.123310305 0.088124265
+## creativity_test     0.004987889 0.004956641
+## mech_reasoning_test 0.473588339 0.446619476
+## abs_reasoning_test  0.613637151 0.004968310
+## math_test           0.028817227 0.037508685
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Estimasi Matriks Kovarian dari Data (dalam hal ini karena menggunakan
+  data yang ternormalisasi, maka matriks kovarians data = matriks
+  korelasi data) (\(\tilde{L}\tilde{L}' + \tilde{\Psi}_{i}\))
+\end{itemize}
+
+-\textgreater{} matriks korelasi sebenarnya
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor}\NormalTok{(salespeople\_dat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                     sales_growth sales_profitability new_account_sales
+## sales_growth           1.0000000           0.9260758         0.8840023
+## sales_profitability    0.9260758           1.0000000         0.8425232
+## new_account_sales      0.8840023           0.8425232         1.0000000
+## creativity_test        0.5720363           0.5415080         0.7003630
+## mech_reasoning_test    0.7080738           0.7459097         0.6374712
+## abs_reasoning_test     0.6744073           0.4653880         0.6410886
+## math_test              0.9273116           0.9442960         0.8525682
+##                     creativity_test mech_reasoning_test abs_reasoning_test
+## sales_growth              0.5720363           0.7080738          0.6744073
+## sales_profitability       0.5415080           0.7459097          0.4653880
+## new_account_sales         0.7003630           0.6374712          0.6410886
+## creativity_test           1.0000000           0.5907360          0.1469074
+## mech_reasoning_test       0.5907360           1.0000000          0.3859502
+## abs_reasoning_test        0.1469074           0.3859502          1.0000000
+## math_test                 0.4126395           0.5745533          0.5663721
+##                     math_test
+## sales_growth        0.9273116
+## sales_profitability 0.9442960
+## new_account_sales   0.8525682
+## creativity_test     0.4126395
+## mech_reasoning_test 0.5745533
+## abs_reasoning_test  0.5663721
+## math_test           1.0000000
+\end{verbatim}
+
+-\textgreater{} untuk m = 2
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fa\_salespeople\_rotated\_m2}\SpecialCharTok{$}\NormalTok{loadings[, }\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{)] }\SpecialCharTok{\%*\%} \FunctionTok{t}\NormalTok{(fa\_salespeople\_rotated\_m2}\SpecialCharTok{$}\NormalTok{loadings[, }\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{)]) }\SpecialCharTok{+} \FunctionTok{diag}\NormalTok{(fa\_salespeople\_rotated\_m2}\SpecialCharTok{$}\NormalTok{uniquenesses)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                     sales_growth sales_profitability new_account_sales
+## sales_growth           1.0000000           0.9295185         0.8834713
+## sales_profitability    0.9295185           1.0000000         0.8749727
+## new_account_sales      0.8834713           0.8749727         1.0000000
+## creativity_test        0.5720627           0.5413952         0.6996404
+## mech_reasoning_test    0.6642314           0.6547844         0.6751659
+## abs_reasoning_test     0.5543376           0.5624010         0.4798313
+## math_test              0.9311883           0.9373106         0.8449575
+##                     creativity_test mech_reasoning_test abs_reasoning_test
+## sales_growth              0.5720627           0.6642314          0.5543376
+## sales_profitability       0.5413952           0.6547844          0.5624010
+## new_account_sales         0.6996404           0.6751659          0.4798313
+## creativity_test           1.0000000           0.5918666          0.1504776
+## mech_reasoning_test       0.5918666           1.0000000          0.3412918
+## abs_reasoning_test        0.1504776           0.3412918          1.0000000
+## math_test                 0.4126431           0.6189365          0.6017606
+##                     math_test
+## sales_growth        0.9311883
+## sales_profitability 0.9373106
+## new_account_sales   0.8449575
+## creativity_test     0.4126431
+## mech_reasoning_test 0.6189365
+## abs_reasoning_test  0.6017606
+## math_test           1.0000000
+\end{verbatim}
+
+-\textgreater{} untuk m = 3
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fa\_salespeople\_rotated\_m3}\SpecialCharTok{$}\NormalTok{loadings[, }\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{)] }\SpecialCharTok{\%*\%} \FunctionTok{t}\NormalTok{(fa\_salespeople\_rotated\_m3}\SpecialCharTok{$}\NormalTok{loadings[, }\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{)]) }\SpecialCharTok{+} \FunctionTok{diag}\NormalTok{(fa\_salespeople\_rotated\_m3}\SpecialCharTok{$}\NormalTok{uniquenesses)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                     sales_growth sales_profitability new_account_sales
+## sales_growth           1.0000000           0.9228132         0.9120900
+## sales_profitability    0.9228132           1.0000000         0.8471023
+## new_account_sales      0.9120900           0.8471023         1.0000000
+## creativity_test        0.5714373           0.5417814         0.6991263
+## mech_reasoning_test    0.6949346           0.6799445         0.6969684
+## abs_reasoning_test     0.6738835           0.4654561         0.6402870
+## math_test              0.9255325           0.9481931         0.8255831
+##                     creativity_test mech_reasoning_test abs_reasoning_test
+## sales_growth              0.5714373           0.6949346          0.6738835
+## sales_profitability       0.5417814           0.6799445          0.4654561
+## new_account_sales         0.6991263           0.6969684          0.6402870
+## creativity_test           1.0000000           0.5910467          0.1469508
+## mech_reasoning_test       0.5910467           1.0000000          0.3841949
+## abs_reasoning_test        0.1469508           0.3841949          1.0000000
+## math_test                 0.4130097           0.6425632          0.5669006
+##                     math_test
+## sales_growth        0.9255325
+## sales_profitability 0.9481931
+## new_account_sales   0.8255831
+## creativity_test     0.4130097
+## mech_reasoning_test 0.6425632
+## abs_reasoning_test  0.5669006
+## math_test           1.0000000
+\end{verbatim}
+
+Dari beberapa nilai di atas, berikut beberapa analisisnya:
+
+\begin{itemize}
+\item
+  jika dilihat dari \(communalities\) dan \(specific \space variance\)
+  antara kedua hasil, bisa kita simpulkan model faktor dengan \(m = 3\)
+  lebih baik karena mayoritas nilai \(communalities\) nya sudah besar
+  dan nilai dari \(specific \space variance\) sudah kecil dibanding
+  faktor dengan \(m = 2\), sehingga dapat disimpulkan bahwa model faktor
+  terbaik yang dapat dibangun diantar kedua jenis hasil analisis ini
+  adalah faktor dengan \(m = 3\);
+\item
+  jika dilihat dari estimasi matriks kovarians antara faktor dengan
+  \(m = 2\) dan \(m = 3\), jika kita bandingkan dengan matriks korelasi
+  data yang sebenaranya, dapat kita lihat bahwa estimasi matriks
+  kovarians yang cenderung konvergen dan mendekati nilai yang sebenarnya
+  adalah estimasi matriks kovarians dengan \(m = 3\). Hal ini
+  dimungkinkan karena tingkat error dari hasil analisis faktornya yang
+  mayoritas lebih rendah.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Hipotesis: \[H_{0}: \Sigma = \tilde{L}\tilde{L}' + \tilde{\Psi}_{i} \\
+  H_{1}: \Sigma \not = \tilde{L}\tilde{L}' + \tilde{\Psi}_{i}\]
+\end{enumerate}
+
+-\textgreater{} untuk m = 2
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{est\_cor\_m1 }\OtherTok{\textless{}{-}}\NormalTok{ fa\_salespeople\_rotated\_m2}\SpecialCharTok{$}\NormalTok{loadings[, }\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{)] }\SpecialCharTok{\%*\%} \FunctionTok{t}\NormalTok{(fa\_salespeople\_rotated\_m2}\SpecialCharTok{$}\NormalTok{loadings[, }\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{)]) }\SpecialCharTok{+} \FunctionTok{diag}\NormalTok{(fa\_salespeople\_rotated\_m2}\SpecialCharTok{$}\NormalTok{uniquenesses)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \DecValTok{7}
+\NormalTok{m1 }\OtherTok{\textless{}{-}} \DecValTok{2}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{50}
+
+\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (}\DecValTok{2} \SpecialCharTok{*}\NormalTok{ p }\SpecialCharTok{+} \DecValTok{4} \SpecialCharTok{*}\NormalTok{ m1 }\SpecialCharTok{+} \DecValTok{5}\NormalTok{)}\SpecialCharTok{/}\DecValTok{6}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{log}\NormalTok{(}\FunctionTok{det}\NormalTok{(est\_cor\_m1)}\SpecialCharTok{/}\FunctionTok{det}\NormalTok{(}\FunctionTok{cor}\NormalTok{(salespeople\_norm)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 117.3066
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_m1 }\OtherTok{\textless{}{-}}\NormalTok{ ((p }\SpecialCharTok{{-}}\NormalTok{ m1)}\SpecialCharTok{\^{}}\DecValTok{2} \SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}}\NormalTok{ m1)}\SpecialCharTok{/}\DecValTok{2}
+\FunctionTok{qchisq}\NormalTok{(}\AttributeTok{p =} \DecValTok{1} \SpecialCharTok{{-}} \FloatTok{0.01}\NormalTok{, }\AttributeTok{df =}\NormalTok{ df\_m1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 20.09024
+\end{verbatim}
+
+-\textgreater{} untuk m = 3
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{est\_cor\_m2 }\OtherTok{\textless{}{-}}\NormalTok{ fa\_salespeople\_rotated\_m3}\SpecialCharTok{$}\NormalTok{loadings[, }\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{)] }\SpecialCharTok{\%*\%} \FunctionTok{t}\NormalTok{(fa\_salespeople\_rotated\_m3}\SpecialCharTok{$}\NormalTok{loadings[, }\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{)]) }\SpecialCharTok{+} \FunctionTok{diag}\NormalTok{(fa\_salespeople\_rotated\_m3}\SpecialCharTok{$}\NormalTok{uniquenesses)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OtherTok{\textless{}{-}} \DecValTok{7}
+\NormalTok{m2 }\OtherTok{\textless{}{-}} \DecValTok{3}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{50}
+
+\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (}\DecValTok{2} \SpecialCharTok{*}\NormalTok{ p }\SpecialCharTok{+} \DecValTok{4} \SpecialCharTok{*}\NormalTok{ m2 }\SpecialCharTok{+} \DecValTok{5}\NormalTok{)}\SpecialCharTok{/}\DecValTok{6}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{log}\NormalTok{(}\FunctionTok{det}\NormalTok{(est\_cor\_m2)}\SpecialCharTok{/}\FunctionTok{det}\NormalTok{(}\FunctionTok{cor}\NormalTok{(salespeople\_norm)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 62.82397
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df\_m2 }\OtherTok{\textless{}{-}}\NormalTok{ ((p }\SpecialCharTok{{-}}\NormalTok{ m2)}\SpecialCharTok{\^{}}\DecValTok{2} \SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}}\NormalTok{ m2)}\SpecialCharTok{/}\DecValTok{2}
+\FunctionTok{qchisq}\NormalTok{(}\AttributeTok{p =} \DecValTok{1} \SpecialCharTok{{-}} \FloatTok{0.01}\NormalTok{, }\AttributeTok{df =}\NormalTok{ df\_m2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 11.34487
+\end{verbatim}
+
+Dari hasil kedua pengujian hipotesis, terlihat bahwa hasil uji statistik
+dari kedua macam faktor, m = 2 dan m = 3, memiliki nilai yang lebih
+besar dari nilai statistik tabel \(\chi^2_{[(p-m)^2 - p - m]}\),
+sehingga hasil uji hipotesis nya adalah tolak \(H_{0}\). Jika
+membandingkan antara hasil pada poin (b), (c), dan (d), maka model
+faktor yang terbaik dibentuk dari faktor dengan \(m = 3\).
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mean\_salespeople }\OtherTok{\textless{}{-}} \FunctionTok{colMeans}\NormalTok{(salespeople\_dat)}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{110}\NormalTok{, }\DecValTok{98}\NormalTok{, }\DecValTok{105}\NormalTok{, }\DecValTok{15}\NormalTok{, }\DecValTok{18}\NormalTok{, }\DecValTok{12}\NormalTok{, }\DecValTok{35}\NormalTok{)}
+\NormalTok{z }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\AttributeTok{nrow =} \DecValTok{7}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{7}\NormalTok{))\{}
+\NormalTok{  z[i] }\OtherTok{\textless{}{-}}\NormalTok{ (x[i] }\SpecialCharTok{{-}}\NormalTok{ mean\_salespeople[i])}\SpecialCharTok{/}\FunctionTok{sd}\NormalTok{(salespeople\_dat[, i])}
+\NormalTok{\}}
+\NormalTok{z}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            [,1]
+## [1,]  1.5215312
+## [2,] -0.8516132
+## [3,]  0.4647493
+## [4,]  0.9569260
+## [5,]  1.1285815
+## [6,]  0.6730178
+## [7,]  0.4972619
+\end{verbatim}
+
+-\textgreater{} Weigthed Least Square
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fa\_salespeople\_rotated\_pca\_m3 }\OtherTok{\textless{}{-}} \FunctionTok{fa}\NormalTok{(}\AttributeTok{r =}\NormalTok{ salespeople\_dat, }\AttributeTok{nfactors =} \DecValTok{3}\NormalTok{, }\AttributeTok{covar =}\NormalTok{ T, }\AttributeTok{fm =} \StringTok{"pa"}\NormalTok{, }\AttributeTok{max.iter =} \DecValTok{100}\NormalTok{, }\AttributeTok{rotate =} \StringTok{"varimax"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## maximum iteration exceeded
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in fa.stats(r = r, f = f, phi = phi, n.obs = n.obs, np.obs = np.obs, :
+## The estimated weights for the factor scores are probably incorrect. Try a
+## different factor score estimation method.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(fa\_salespeople\_rotated\_pca\_m3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Factor Analysis using method =  pa
+## Call: fa(r = salespeople_dat, nfactors = 3, rotate = "varimax", covar = T, 
+##     max.iter = 100, fm = "pa")
+## Unstandardized loadings (pattern matrix) based upon covariance matrix
+##                      PA1  PA3  PA2    h2   u2   H2     U2
+## sales_growth        4.78 4.34 2.95  50.3  3.5 0.93  0.065
+## sales_profitability 8.95 3.43 3.84 106.5 -4.0 1.04 -0.039
+## new_account_sales   2.22 3.02 2.57  20.7  1.5 0.93  0.070
+## creativity_test     0.71 0.81 3.29  12.0  3.6 0.77  0.233
+## mech_reasoning_test 1.79 0.48 2.03   7.5  3.9 0.66  0.343
+## abs_reasoning_test  0.44 1.48 0.29   2.5  2.1 0.54  0.460
+## math_test           7.98 6.45 1.87 108.9  2.2 0.98  0.020
+## 
+##                          PA1   PA3   PA2
+## SS loadings           175.45 84.40 48.48
+## Proportion Var          0.55  0.26  0.15
+## Cumulative Var          0.55  0.81  0.96
+## Proportion Explained    0.57  0.27  0.16
+## Cumulative Proportion   0.57  0.84  1.00
+## 
+##  Standardized loadings (pattern matrix)
+##                     item  PA1  PA3  PA2   h2     u2
+## sales_growth           1 0.65 0.59 0.40 0.93  0.065
+## sales_profitability    2 0.88 0.34 0.38 1.04 -0.039
+## new_account_sales      3 0.47 0.64 0.54 0.93  0.070
+## creativity_test        4 0.18 0.21 0.83 0.77  0.233
+## mech_reasoning_test    5 0.53 0.14 0.60 0.66  0.343
+## abs_reasoning_test     6 0.20 0.69 0.14 0.54  0.460
+## math_test              7 0.76 0.61 0.18 0.98  0.020
+## 
+##                  PA1  PA3  PA2
+## SS loadings     2.35 1.79 1.70
+## Proportion Var  0.34 0.26 0.24
+## Cumulative Var  0.34 0.59 0.84
+## Cum. factor Var 0.40 0.71 1.00
+## 
+## Mean item complexity =  2
+## Test of the hypothesis that 3 factors are sufficient.
+## 
+## The degrees of freedom for the null model are  21  and the objective function was  301.99 with Chi Square of  13841.36
+## The degrees of freedom for the model are 3  and the objective function was  1.73 
+## 
+## The root mean square of the residuals (RMSR) is  0.58 
+## The df corrected root mean square of the residuals is  1.53 
+## 
+## The harmonic number of observations is  50 with the empirical chi square  706.41  with prob <  8.5e-153 
+## The total number of observations was  50  with Likelihood Chi Square =  76.04  with prob <  2.2e-16 
+## 
+## Tucker Lewis Index of factoring reliability =  0.961
+## RMSEA index =  0.698  and the 90 % confidence intervals are  0.573 0.846
+## BIC =  64.3
+## Fit based upon off diagonal values = 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{delta }\OtherTok{\textless{}{-}} \FunctionTok{t}\NormalTok{(fa\_salespeople\_rotated\_pca\_m3}\SpecialCharTok{$}\NormalTok{loadings[, }\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{)]) }\SpecialCharTok{\%*\%} \FunctionTok{solve}\NormalTok{(}\FunctionTok{diag}\NormalTok{(fa\_salespeople\_rotated\_pca\_m3}\SpecialCharTok{$}\NormalTok{uniquenesses)) }\SpecialCharTok{\%*\%}\NormalTok{ fa\_salespeople\_rotated\_pca\_m3}\SpecialCharTok{$}\NormalTok{loadings[, }\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{)]}
+
+\FunctionTok{solve}\NormalTok{(delta) }\SpecialCharTok{\%*\%} \FunctionTok{t}\NormalTok{(fa\_salespeople\_rotated\_pca\_m3}\SpecialCharTok{$}\NormalTok{loadings[, }\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{)]) }\SpecialCharTok{\%*\%} \FunctionTok{solve}\NormalTok{(}\FunctionTok{diag}\NormalTok{(fa\_salespeople\_rotated\_pca\_m3}\SpecialCharTok{$}\NormalTok{uniquenesses)) }\SpecialCharTok{\%*\%}\NormalTok{ (x }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(x))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           [,1]
+## PA1   9.076057
+## PA3 -11.495162
+## PA2   8.627639
+\end{verbatim}
+
+-\textgreater{} Regression
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{reg }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\AttributeTok{nrow =} \DecValTok{7}\NormalTok{)}
+\FunctionTok{t}\NormalTok{(fa\_salespeople\_rotated\_m3}\SpecialCharTok{$}\NormalTok{loadings[, }\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{)]) }\SpecialCharTok{\%*\%} \FunctionTok{solve}\NormalTok{(}\FunctionTok{cor}\NormalTok{(salespeople\_norm)) }\SpecialCharTok{\%*\%}\NormalTok{ z}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           [,1]
+## ML3 -0.3285779
+## ML1  1.0631891
+## ML2  0.7927602
+\end{verbatim}
+
+\hypertarget{section-2}{%
+\subsection{9.20}\label{section-2}}
+
+Data yang digunakan pada soal ini adalah data yang ada pada tabel 1.5,
+tetapi cukup menggunakan 4 data saja, yaitu \(wind\),
+\(solar \space radiation\), \(NO_{2}\), dan \(O_{3}\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wind }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{8}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{8}\NormalTok{)}
+\NormalTok{solar\_rad }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{98}\NormalTok{, }\DecValTok{107}\NormalTok{, }\DecValTok{103}\NormalTok{, }\DecValTok{88}\NormalTok{, }\DecValTok{91}\NormalTok{, }\DecValTok{90}\NormalTok{, }\DecValTok{84}\NormalTok{, }\DecValTok{72}\NormalTok{, }\DecValTok{82}\NormalTok{, }\DecValTok{64}\NormalTok{, }\DecValTok{71}\NormalTok{, }\DecValTok{91}\NormalTok{, }\DecValTok{72}\NormalTok{, }\DecValTok{70}\NormalTok{, }\DecValTok{72}\NormalTok{, }\DecValTok{77}\NormalTok{, }\DecValTok{76}\NormalTok{, }\DecValTok{71}\NormalTok{, }\DecValTok{67}\NormalTok{, }\DecValTok{69}\NormalTok{, }\DecValTok{62}\NormalTok{, }\DecValTok{88}\NormalTok{, }\DecValTok{80}\NormalTok{, }\DecValTok{30}\NormalTok{, }\DecValTok{83}\NormalTok{, }\DecValTok{84}\NormalTok{, }\DecValTok{78}\NormalTok{, }\DecValTok{79}\NormalTok{, }\DecValTok{62}\NormalTok{, }\DecValTok{37}\NormalTok{, }\DecValTok{71}\NormalTok{, }\DecValTok{52}\NormalTok{, }\DecValTok{48}\NormalTok{, }\DecValTok{75}\NormalTok{, }\DecValTok{35}\NormalTok{, }\DecValTok{85}\NormalTok{, }\DecValTok{86}\NormalTok{, }\DecValTok{86}\NormalTok{, }\DecValTok{79}\NormalTok{, }\DecValTok{79}\NormalTok{, }\DecValTok{68}\NormalTok{, }\DecValTok{40}\NormalTok{)}
+\NormalTok{no\_2 }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{12}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{12}\NormalTok{, }\DecValTok{12}\NormalTok{, }\DecValTok{21}\NormalTok{, }\DecValTok{11}\NormalTok{, }\DecValTok{13}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{12}\NormalTok{, }\DecValTok{18}\NormalTok{, }\DecValTok{11}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{16}\NormalTok{, }\DecValTok{13}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{14}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{13}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{11}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{12}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{13}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{11}\NormalTok{, }\DecValTok{6}\NormalTok{)}
+\NormalTok{o\_3 }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{8}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{15}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{12}\NormalTok{, }\DecValTok{15}\NormalTok{, }\DecValTok{14}\NormalTok{, }\DecValTok{11}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{11}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{23}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{11}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{24}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{12}\NormalTok{, }\DecValTok{18}\NormalTok{, }\DecValTok{25}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{14}\NormalTok{, }\DecValTok{5}\NormalTok{)}
+
+\NormalTok{air\_pollution\_v2 }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(wind, solar\_rad, no\_2, o\_3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{S\_poll }\OtherTok{\textless{}{-}} \FunctionTok{cov}\NormalTok{(air\_pollution\_v2)}
+\NormalTok{S\_poll}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                 wind  solar_rad       no_2       o_3
+## wind       2.5000000  -2.780488 -0.5853659 -2.231707
+## solar_rad -2.7804878 300.515679  6.7630662 30.790941
+## no_2      -0.5853659   6.763066 11.3635308  3.126597
+## o_3       -2.2317073  30.790941  3.1265970 30.978513
+\end{verbatim}
+
+Dari hasil matriks kovarian di atas, bisa kita lihat bahwa data memiliki
+variasi nilai varians yang sangat beragam dan skalanya berbeda jauh
+dikarenakan satuan dari setiap variabel nya yang berbeda satu sama lain.
+Dapat kita simpulkan bahwa secara general, data sangat bervariasi.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{KMO}\NormalTok{(air\_pollution\_v2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Kaiser-Meyer-Olkin factor adequacy
+## Call: KMO(r = air_pollution_v2)
+## Overall MSA =  0.59
+## MSA for each item = 
+##      wind solar_rad      no_2       o_3 
+##      0.61      0.58      0.70      0.56
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cortest.bartlett}\NormalTok{(air\_pollution\_v2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R was not square, finding R from data
+\end{verbatim}
+
+\begin{verbatim}
+## $chisq
+## [1] 8.22784
+## 
+## $p.value
+## [1] 0.2218819
+## 
+## $df
+## [1] 6
+\end{verbatim}
+
+Jika dilihat dari hasil pengujian KMO dan Bartlett Sphericity nya, nilai
+KMO dari data masih kurang dari yang seharusnya, yaitu minimal 0.6,
+barulah data dikatakan sudah baik untuk dilakukan analisis faktor,
+tetapi karena kebutuhan soal, kita asumsikan bahwa uji KMO nya
+terpenuhi. Untuk hasil uji Bartlett Sphericity nya, \(p-value\) nya
+sudah lebih besar dari \(\alpha\), sehingga dapat kita simpulkan bahwa
+terjadi korelasi antarvariabel pada data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\NormalTok{fafitfree }\OtherTok{\textless{}{-}} \FunctionTok{fa}\NormalTok{(air\_pollution\_v2,}\AttributeTok{nfactors =} \FunctionTok{ncol}\NormalTok{(air\_pollution\_v2), }\AttributeTok{rotate =} \StringTok{"none"}\NormalTok{)}
+\NormalTok{n\_factors }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(fafitfree}\SpecialCharTok{$}\NormalTok{e.values)}
+\NormalTok{scree     }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{Factor\_n =}  \FunctionTok{as.factor}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{n\_factors), }
+  \AttributeTok{Eigenvalue =}\NormalTok{ fafitfree}\SpecialCharTok{$}\NormalTok{e.values)}
+\FunctionTok{ggplot}\NormalTok{(scree, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Factor\_n, }\AttributeTok{y =}\NormalTok{ Eigenvalue, }\AttributeTok{group =} \DecValTok{1}\NormalTok{)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_line}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Number of factors"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Initial eigenvalue"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{( }\AttributeTok{title =} \StringTok{"Scree Plot"}\NormalTok{, }
+        \AttributeTok{subtitle =} \StringTok{"(Based on the unreduced covariance matrix)"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Tugas9_APG_files/figure-latex/unnamed-chunk-38-1.pdf}
+
+Jika dilihat dari scree plot di atas, jumlah factor yang baik yaitu
+sebanyak 2 faktor yang bisa digunakan dalam melakukan analisis. Tetapi
+karena kebutuhan pengerjaan soal, kita akan menggunakan variasi data
+faktor, yaitu 1 faktor dan 2 faktor dengan 2 metode analisis, yaitu
+\(PCA\) dan \(MLE\)
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  a.1. m = 1
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Tidak merotasi faktor
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fa\_pca\_unrotated1 }\OtherTok{\textless{}{-}} \FunctionTok{fa}\NormalTok{(}\AttributeTok{r =}\NormalTok{ air\_pollution\_v2, }\AttributeTok{nfactors =} \DecValTok{1}\NormalTok{, }\AttributeTok{covar =}\NormalTok{ T, }\AttributeTok{fm =} \StringTok{"pa"}\NormalTok{, }\AttributeTok{max.iter =} \DecValTok{100}\NormalTok{, }\AttributeTok{rotate =} \StringTok{"none"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## maximum iteration exceeded
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(fa\_pca\_unrotated1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Factor Analysis using method =  pa
+## Call: fa(r = air_pollution_v2, nfactors = 1, rotate = "none", covar = T, 
+##     max.iter = 100, fm = "pa")
+## Unstandardized loadings (pattern matrix) based upon covariance matrix
+##             PA1    h2    u2    H2   U2
+## wind      -0.43  0.18   2.3 0.072 0.93
+## solar_rad  7.18 51.51 249.0 0.171 0.83
+## no_2       0.89  0.79  10.6 0.069 0.93
+## o_3        4.28 18.35  12.6 0.592 0.41
+## 
+##                  PA1
+## SS loadings    70.83
+## Proportion Var  0.21
+## 
+##  Standardized loadings (pattern matrix)
+##           V   PA1    h2   u2
+## wind      1 -0.27 0.072 0.93
+## solar_rad 2  0.41 0.171 0.83
+## no_2      3  0.26 0.069 0.93
+## o_3       4  0.77 0.592 0.41
+## 
+##                 PA1
+## SS loadings    0.82
+## Proportion Var 0.21
+## 
+## Mean item complexity =  1
+## Test of the hypothesis that 1 factor is sufficient.
+## 
+## The degrees of freedom for the null model are  6  and the objective function was  329.08 with Chi Square of  12779.43
+## The degrees of freedom for the model are 2  and the objective function was  0.01 
+## 
+## The root mean square of the residuals (RMSR) is  0.39 
+## The df corrected root mean square of the residuals is  0.67 
+## 
+## The harmonic number of observations is  42 with the empirical chi square  75.45  with prob <  4.1e-17 
+## The total number of observations was  42  with Likelihood Chi Square =  0.26  with prob <  0.88 
+## 
+## Tucker Lewis Index of factoring reliability =  1
+## RMSEA index =  0  and the 90 % confidence intervals are  0 0.153
+## BIC =  -7.21
+## Fit based upon off diagonal values = 1
+## Measures of factor score adequacy             
+##                                                    PA1
+## Correlation of (regression) scores with factors   0.80
+## Multiple R square of scores with factors          0.64
+## Minimum correlation of possible factor scores     0.29
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Dengan merotasi faktor
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fa\_pca\_rotated1 }\OtherTok{\textless{}{-}} \FunctionTok{fa}\NormalTok{(}\AttributeTok{r =}\NormalTok{ air\_pollution\_v2, }\AttributeTok{nfactors =} \DecValTok{1}\NormalTok{, }\AttributeTok{covar =}\NormalTok{ T, }\AttributeTok{fm =} \StringTok{"pa"}\NormalTok{, }\AttributeTok{max.iter =} \DecValTok{100}\NormalTok{, }\AttributeTok{rotate =} \StringTok{"varimax"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## maximum iteration exceeded
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(fa\_pca\_rotated1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Factor Analysis using method =  pa
+## Call: fa(r = air_pollution_v2, nfactors = 1, rotate = "varimax", covar = T, 
+##     max.iter = 100, fm = "pa")
+## Unstandardized loadings (pattern matrix) based upon covariance matrix
+##             PA1    h2    u2    H2   U2
+## wind      -0.43  0.18   2.3 0.072 0.93
+## solar_rad  7.18 51.51 249.0 0.171 0.83
+## no_2       0.89  0.79  10.6 0.069 0.93
+## o_3        4.28 18.35  12.6 0.592 0.41
+## 
+##                  PA1
+## SS loadings    70.83
+## Proportion Var  0.21
+## 
+##  Standardized loadings (pattern matrix)
+##           V   PA1    h2   u2
+## wind      1 -0.27 0.072 0.93
+## solar_rad 2  0.41 0.171 0.83
+## no_2      3  0.26 0.069 0.93
+## o_3       4  0.77 0.592 0.41
+## 
+##                 PA1
+## SS loadings    0.82
+## Proportion Var 0.21
+## 
+## Mean item complexity =  1
+## Test of the hypothesis that 1 factor is sufficient.
+## 
+## The degrees of freedom for the null model are  6  and the objective function was  329.08 with Chi Square of  12779.43
+## The degrees of freedom for the model are 2  and the objective function was  0.01 
+## 
+## The root mean square of the residuals (RMSR) is  0.39 
+## The df corrected root mean square of the residuals is  0.67 
+## 
+## The harmonic number of observations is  42 with the empirical chi square  75.45  with prob <  4.1e-17 
+## The total number of observations was  42  with Likelihood Chi Square =  0.26  with prob <  0.88 
+## 
+## Tucker Lewis Index of factoring reliability =  1
+## RMSEA index =  0  and the 90 % confidence intervals are  0 0.153
+## BIC =  -7.21
+## Fit based upon off diagonal values = 1
+## Measures of factor score adequacy             
+##                                                    PA1
+## Correlation of (regression) scores with factors   0.80
+## Multiple R square of scores with factors          0.64
+## Minimum correlation of possible factor scores     0.29
+\end{verbatim}
+
+a.2. m = 2 - Tidak merotasi faktor
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{eig\_poll }\OtherTok{\textless{}{-}} \FunctionTok{eigen}\NormalTok{(S\_poll)}
+\NormalTok{eig\_poll\_val }\OtherTok{\textless{}{-}}\NormalTok{ eig\_poll}\SpecialCharTok{$}\NormalTok{values}
+\NormalTok{eig\_poll\_vec }\OtherTok{\textless{}{-}}\NormalTok{ eig\_poll}\SpecialCharTok{$}\NormalTok{vector}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{l\_poll\_m2 }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\AttributeTok{nrow =} \DecValTok{4}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{2}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{))\{}
+  \ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{))\{}
+\NormalTok{    l\_poll\_m2[j, i] }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(eig\_poll\_val[i]) }\SpecialCharTok{*}\NormalTok{ eig\_poll\_vec[j, i]}
+\NormalTok{  \}}
+\NormalTok{\}}
+\FunctionTok{as.data.frame}\NormalTok{(l\_poll\_m2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            V1         V2
+## 1   0.1749782  0.4048141
+## 2 -17.3246829  0.6085601
+## 3  -0.4213923 -0.7421918
+## 4  -1.9587473 -5.1867451
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{h2 }\OtherTok{\textless{}{-}}\NormalTok{ (l\_poll\_m2[, }\DecValTok{1}\NormalTok{]}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ (l\_poll\_m2[, }\DecValTok{2}\NormalTok{]}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{h2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1]   0.1944918 300.5149843   0.7284201  30.7390159
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{psi\_poll }\OtherTok{\textless{}{-}} \FunctionTok{diag}\NormalTok{(}\FunctionTok{diag}\NormalTok{(S\_poll)) }\SpecialCharTok{{-}} \FunctionTok{diag}\NormalTok{(h2)}
+\NormalTok{psi\_poll}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          [,1]         [,2]     [,3]      [,4]
+## [1,] 2.305508 0.0000000000  0.00000 0.0000000
+## [2,] 0.000000 0.0006951005  0.00000 0.0000000
+## [3,] 0.000000 0.0000000000 10.63511 0.0000000
+## [4,] 0.000000 0.0000000000  0.00000 0.2394974
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cov}\NormalTok{(air\_pollution\_v2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                 wind  solar_rad       no_2       o_3
+## wind       2.5000000  -2.780488 -0.5853659 -2.231707
+## solar_rad -2.7804878 300.515679  6.7630662 30.790941
+## no_2      -0.5853659   6.763066 11.3635308  3.126597
+## o_3       -2.2317073  30.790941  3.1265970 30.978513
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{l\_poll\_m2 }\SpecialCharTok{\%*\%} \FunctionTok{t}\NormalTok{(l\_poll\_m2) }\SpecialCharTok{+}\NormalTok{ psi\_poll}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            [,1]       [,2]       [,3]      [,4]
+## [1,]  2.5000000  -2.785088 -0.3741842 -2.442406
+## [2,] -2.7850881 300.515679  6.8488198 30.778229
+## [3,] -0.3741842   6.848820 11.3635308  4.674961
+## [4,] -2.4424058  30.778229  4.6749605 30.978513
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  b.1. m = 1
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Faktor tidak dirotasi
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fa\_mle\_unrotated1 }\OtherTok{\textless{}{-}} \FunctionTok{fa}\NormalTok{(}\AttributeTok{r =} \FunctionTok{cov}\NormalTok{(air\_pollution\_v2), }\AttributeTok{nfactors =} \DecValTok{1}\NormalTok{, }\AttributeTok{covar =}\NormalTok{ T, }\AttributeTok{fm =} \StringTok{"ml"}\NormalTok{, }\AttributeTok{max.iter =} \DecValTok{100}\NormalTok{, }\AttributeTok{rotate =} \StringTok{"none"}\NormalTok{)}
+
+\FunctionTok{print}\NormalTok{(fa\_mle\_unrotated1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Factor Analysis using method =  ml
+## Call: fa(r = cov(air_pollution_v2), nfactors = 1, rotate = "none", 
+##     covar = T, max.iter = 100, fm = "ml")
+## Unstandardized loadings (pattern matrix) based upon covariance matrix
+##             ML1      h2   u2    H2   U2
+## wind      -0.19   0.035  2.5 0.014 0.99
+## solar_rad 16.39 268.483 32.0 0.893 0.11
+## no_2       0.44   0.190 11.2 0.017 0.98
+## o_3        1.91   3.636 27.3 0.117 0.88
+## 
+##                   ML1
+## SS loadings    272.34
+## Proportion Var   0.79
+## 
+##  Standardized loadings (pattern matrix)
+##           V   ML1    h2   u2
+## wind      1 -0.12 0.014 0.99
+## solar_rad 2  0.95 0.893 0.11
+## no_2      3  0.13 0.017 0.98
+## o_3       4  0.34 0.117 0.88
+## 
+##                 ML1
+## SS loadings    3.15
+## Proportion Var 0.79
+## 
+## Mean item complexity =  1
+## Test of the hypothesis that 1 factor is sufficient.
+## 
+## The degrees of freedom for the null model are  6  and the objective function was  329.08
+## The degrees of freedom for the model are 2  and the objective function was  0.08 
+## 
+## The root mean square of the residuals (RMSR) is  1.26 
+## The df corrected root mean square of the residuals is  2.18 
+## 
+## Fit based upon off diagonal values = 1
+## Measures of factor score adequacy             
+##                                                    ML1
+## Correlation of (regression) scores with factors   0.95
+## Multiple R square of scores with factors          0.90
+## Minimum correlation of possible factor scores     0.79
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Faktor dirotasi
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fa\_mle\_rotated1 }\OtherTok{\textless{}{-}} \FunctionTok{fa}\NormalTok{(}\AttributeTok{r =} \FunctionTok{cov}\NormalTok{(air\_pollution\_v2), }\AttributeTok{nfactors =} \DecValTok{1}\NormalTok{, }\AttributeTok{covar =}\NormalTok{ T, }\AttributeTok{fm =} \StringTok{"ml"}\NormalTok{, }\AttributeTok{max.iter =} \DecValTok{100}\NormalTok{, }\AttributeTok{rotate =} \StringTok{"varimax"}\NormalTok{)}
+
+\FunctionTok{print}\NormalTok{(fa\_mle\_rotated1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Factor Analysis using method =  ml
+## Call: fa(r = cov(air_pollution_v2), nfactors = 1, rotate = "varimax", 
+##     covar = T, max.iter = 100, fm = "ml")
+## Unstandardized loadings (pattern matrix) based upon covariance matrix
+##             ML1      h2   u2    H2   U2
+## wind      -0.19   0.035  2.5 0.014 0.99
+## solar_rad 16.39 268.483 32.0 0.893 0.11
+## no_2       0.44   0.190 11.2 0.017 0.98
+## o_3        1.91   3.636 27.3 0.117 0.88
+## 
+##                   ML1
+## SS loadings    272.34
+## Proportion Var   0.79
+## 
+##  Standardized loadings (pattern matrix)
+##           V   ML1    h2   u2
+## wind      1 -0.12 0.014 0.99
+## solar_rad 2  0.95 0.893 0.11
+## no_2      3  0.13 0.017 0.98
+## o_3       4  0.34 0.117 0.88
+## 
+##                 ML1
+## SS loadings    3.15
+## Proportion Var 0.79
+## 
+## Mean item complexity =  1
+## Test of the hypothesis that 1 factor is sufficient.
+## 
+## The degrees of freedom for the null model are  6  and the objective function was  329.08
+## The degrees of freedom for the model are 2  and the objective function was  0.08 
+## 
+## The root mean square of the residuals (RMSR) is  1.26 
+## The df corrected root mean square of the residuals is  2.18 
+## 
+## Fit based upon off diagonal values = 1
+## Measures of factor score adequacy             
+##                                                    ML1
+## Correlation of (regression) scores with factors   0.95
+## Multiple R square of scores with factors          0.90
+## Minimum correlation of possible factor scores     0.79
+\end{verbatim}
+
+b.2. m = 2 - Faktor tidak dirotasi
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fa\_mle\_unrotated2 }\OtherTok{\textless{}{-}} \FunctionTok{fa}\NormalTok{(}\AttributeTok{r=}\FunctionTok{cov}\NormalTok{(air\_pollution\_v2), }\AttributeTok{nfactors =} \DecValTok{2}\NormalTok{, }\AttributeTok{covar =}\NormalTok{ T, }\AttributeTok{fm =} \StringTok{"ml"}\NormalTok{, }\AttributeTok{max.iter =} \DecValTok{100}\NormalTok{, }\AttributeTok{rotate =} \StringTok{"none"}\NormalTok{)}
+
+\FunctionTok{print}\NormalTok{(fa\_mle\_unrotated2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Factor Analysis using method =  ml
+## Call: fa(r = cov(air_pollution_v2), nfactors = 2, rotate = "none", 
+##     covar = T, max.iter = 100, fm = "ml")
+## Unstandardized loadings (pattern matrix) based upon covariance matrix
+##             ML1   ML2     h2   u2    H2   U2
+## wind      -0.20 -0.64   0.45  2.1 0.179 0.82
+## solar_rad 16.37 -0.79 268.64 31.9 0.894 0.11
+## no_2       0.45  0.78   0.80 10.6 0.071 0.93
+## o_3        2.02  2.86  12.26 18.7 0.396 0.60
+## 
+##                          ML1  ML2
+## SS loadings           272.34 9.81
+## Proportion Var          0.79 0.03
+## Cumulative Var          0.79 0.82
+## Proportion Explained    0.97 0.03
+## Cumulative Proportion   0.97 1.00
+## 
+##  Standardized loadings (pattern matrix)
+##           item   ML1   ML2    h2   u2
+## wind         1 -0.13 -0.40 0.179 0.82
+## solar_rad    2  0.94 -0.05 0.894 0.11
+## no_2         3  0.13  0.23 0.071 0.93
+## o_3          4  0.36  0.51 0.396 0.60
+## 
+##                  ML1  ML2
+## SS loadings     1.06 0.48
+## Proportion Var  0.26 0.12
+## Cumulative Var  0.26 0.38
+## Cum. factor Var 0.69 1.00
+## 
+## Mean item complexity =  1.4
+## Test of the hypothesis that 2 factors are sufficient.
+## 
+## The degrees of freedom for the null model are  6  and the objective function was  329.08
+## The degrees of freedom for the model are -1  and the objective function was  0 
+## 
+## The root mean square of the residuals (RMSR) is  0 
+## The df corrected root mean square of the residuals is  NA 
+## 
+## Fit based upon off diagonal values = 1
+## Measures of factor score adequacy             
+##                                                    ML1   ML2
+## Correlation of (regression) scores with factors   0.95  0.64
+## Multiple R square of scores with factors          0.90  0.42
+## Minimum correlation of possible factor scores     0.79 -0.17
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Faktor dirotasi
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fa\_mle\_rotated2 }\OtherTok{\textless{}{-}} \FunctionTok{fa}\NormalTok{(}\AttributeTok{r=}\FunctionTok{cov}\NormalTok{(air\_pollution\_v2), }\AttributeTok{nfactors =} \DecValTok{2}\NormalTok{, }\AttributeTok{covar =}\NormalTok{ T, }\AttributeTok{fm =} \StringTok{"ml"}\NormalTok{, }\AttributeTok{max.iter =} \DecValTok{100}\NormalTok{, }\AttributeTok{rotate =} \StringTok{"varimax"}\NormalTok{)}
+
+\FunctionTok{print}\NormalTok{(fa\_mle\_rotated2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Factor Analysis using method =  ml
+## Call: fa(r = cov(air_pollution_v2), nfactors = 2, rotate = "varimax", 
+##     covar = T, max.iter = 100, fm = "ml")
+## Unstandardized loadings (pattern matrix) based upon covariance matrix
+##             ML1   ML2     h2   u2    H2   U2
+## wind      -0.04 -0.67   0.45  2.1 0.179 0.82
+## solar_rad 16.06  3.27 268.64 31.9 0.894 0.11
+## no_2       0.25  0.86   0.80 10.6 0.071 0.93
+## o_3        1.25  3.27  12.26 18.7 0.396 0.60
+## 
+##                          ML1   ML2
+## SS loadings           259.55 22.60
+## Proportion Var          0.75  0.07
+## Cumulative Var          0.75  0.82
+## Proportion Explained    0.92  0.08
+## Cumulative Proportion   0.92  1.00
+## 
+##  Standardized loadings (pattern matrix)
+##           item   ML1   ML2    h2   u2
+## wind         1 -0.02 -0.42 0.179 0.82
+## solar_rad    2  0.93  0.19 0.894 0.11
+## no_2         3  0.07  0.26 0.071 0.93
+## o_3          4  0.22  0.59 0.396 0.60
+## 
+##                  ML1  ML2
+## SS loadings     0.91 0.62
+## Proportion Var  0.23 0.16
+## Cumulative Var  0.23 0.38
+## Cum. factor Var 0.59 1.00
+## 
+## Mean item complexity =  1.1
+## Test of the hypothesis that 2 factors are sufficient.
+## 
+## The degrees of freedom for the null model are  6  and the objective function was  329.08
+## The degrees of freedom for the model are -1  and the objective function was  0 
+## 
+## The root mean square of the residuals (RMSR) is  0 
+## The df corrected root mean square of the residuals is  NA 
+## 
+## Fit based upon off diagonal values = 1
+## Measures of factor score adequacy             
+##                                                    ML1   ML2
+## Correlation of (regression) scores with factors   0.93  0.67
+## Multiple R square of scores with factors          0.87  0.45
+## Minimum correlation of possible factor scores     0.73 -0.11
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Jika dibandingkan hasil antara hasil faktor analisis menggunakan PCA
+  dengan MLE, analisis dengan metode MLE memberikan hasil yang lebih
+  baik saat \(m = 2\) dibandingkan dengan menggunakan metode PCA. Hal
+  ini bisa dilihat dari nilai \(specific \space variance\) dari hasil
+  menggunakan teknik MLE yang lebih kecil dibanding dengan hasil dari
+  metode PCA.
+\end{enumerate}
+
+\end{document}
