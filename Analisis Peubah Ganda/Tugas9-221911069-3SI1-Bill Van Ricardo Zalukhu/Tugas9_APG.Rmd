@@ -148,7 +148,7 @@ print(fa_salespeople_rotated_m2)
 a.2. m = 3
 - Faktor tidak dirotasi
 ```{r}
-fa_salespeople_unrotated_m3 <- fa(r = salespeople_norm, nfactors = 3, covar = F, fm = "ml", max.iter = 100, rotate = "none")
+fa_salespeople_unrotated_m3 <- fa(r = salespeople_norm, nfactors = 3, covar = F, fm = "ml", max.iter = 10, rotate = "none")
 print(fa_salespeople_unrotated_m3)
 ```
 
