@@ -8,6 +8,7 @@ output: html_document
 ```{r library, message=FALSE}
 library(factoextra)
 library(dplyr)
+library(openxlsx)
 ```
 
 ## 8.11
@@ -45,10 +46,6 @@ eig_vec_cen
 eig_val_cen
 ```
 
-```{r}
-eig_vec_cen
-```
-
 
 ```{r}
 prop_var_cen <- c()
@@ -59,6 +56,7 @@ for (i in c(1:5)){
   prop_var <- (temp / sum(eig_val_cen)) * 100
   prop_var_cen <- append(prop_var_cen, prop_var)
 }
+
 prop_var_cen
 ```
 
@@ -70,6 +68,7 @@ for (i in c(1:5)){
     rho_cen[j, i] <- (eig_vec_cen[j, i] * sqrt(eig_val_cen[i]))/sqrt(S_cen[j, j])
   }
 }
+
 rho_cen
 ```
 
@@ -126,6 +125,7 @@ for (i in c(1:7)){
   prop_var <- (temp / sum(eig_val_cov)) * 100
   prop_var_poll_cov <- append(prop_var_poll_cov, prop_var)
 }
+
 prop_var_poll_cov
 ```
 
@@ -136,6 +136,7 @@ for (i in c(1:7)){
     rho_poll_cov[j, i] <- (eig_vec_cov[j, i] * sqrt(eig_val_cov[i]))/sqrt(S_pollution[j, j])
   }
 }
+
 rho_poll_cov
 ```
 

@@ -269,19 +269,18 @@ z
 -> Weigthed Least Square
 
 ```{r}
-fa_salespeople_rotated_pca_m3 <- fa(r = salespeople_norm, nfactors = 3, covar = F, fm = "pa", max.iter = 100, rotate = "varimax")
-print(fa_salespeople_rotated_pca_m3)
-```
+delta <- t(fa_salespeople_rotated_m3$loadings[, c(1:3)]) %*% solve(diag(fa_salespeople_rotated_m3$uniquenesses)) %*% fa_salespeople_rotated_m3$loadings[, c(1:3)]
 
-
-```{r}
-delta <- t(fa_salespeople_rotated_pca_m3$loadings[, c(1:3)]) %*% solve(diag(fa_salespeople_rotated_pca_m3$uniquenesses)) %*% fa_salespeople_rotated_pca_m3$loadings[, c(1:3)]
-
-solve(delta) %*% t(fa_salespeople_rotated_pca_m3$loadings[, c(1:3)]) %*% solve(diag(fa_salespeople_rotated_pca_m3$uniquenesses)) %*% (x - mean(x))
+solve(delta) %*% t(fa_salespeople_rotated_m3$loadings[, c(1:3)]) %*% solve(diag(fa_salespeople_rotated_m3$uniquenesses)) %*% z
 ```
 
 -> Regression
 - PCA
+```{r}
+fa_salespeople_rotated_pca_m3 <- fa(r = salespeople_norm, nfactors = 3, covar = F, fm = "pa", max.iter = 100, rotate = "varimax")
+print(fa_salespeople_rotated_pca_m3)
+```
+
 ```{r}
 t(fa_salespeople_rotated_pca_m3$loadings[, c(1:3)]) %*% solve(cov(salespeople_norm)) %*% (x - mean(x))
 ```
