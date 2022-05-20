@@ -1,0 +1,97 @@
+---
+title: "Tugas 11 APG"
+author: "Bill Van Ricardo Zalukhu"
+date: '2022-05-19'
+output: html_document
+---
+
+```{r library}
+library(expm)
+```
+
+### 10.10
+Pada soal kali ini, kita diarahkan untuk melakukan analisis `canonical correlation` untuk melihat hubungan antara jumlah kasus pembunuhan pada tahun 1973 dengan jenis hukuman yang diberikan kepada para pelaku kasus pembunuhan pada tahun 1970, karena diduga kemungkinan adanya hubungan antara kedua hal ini, dimana kemungkinan karena tingkat penghukuman dari pelaku di tahun 1970 masih belum memberikan efek jera, sehingga pada tahun 1973, kasus pembunuhan tetap terjadi (praduga sementara).
+```{r}
+R <- matrix(c(1, .615, -.111, -.266,
+              .615, 1, -.195, -.085,
+              -.111, -.195, 1, -.269,
+              -.266, -.085, -.269, 1), 4, 4)
+
+```
+
+```{r}
+r11 <- R[c(1,2), c(1,2)]
+r12 <- R[c(1,2), c(3,4)]
+r21 <- R[c(3,4), c(1,2)]
+r22 <- R[c(3,4), c(3,4)]
+
+r11
+r12
+r21
+r22
+```
+
+```{r}
+com_mat <- solve(sqrtm(r11)) %*% r12 %*% solve(r22) %*% r21 %*% solve(sqrtm(r11))
+com_mat
+```
+
+a. Menghitung `sample canonical correlation` dari input matrix
+```{r}
+eig_com_mat <- eigen(com_mat)
+eig_comMat_val <- eig_com_mat$values
+eig_comMat_vec <- eig_com_mat$vector
+
+eig_comMat_val
+eig_comMat_vec
+```
+
+Untuk nilai dari $\rho^{*2}_{1}$ adalah sekitar $0.10668$ dan nilai dari $\rho^{*2}_{2}$ adalah sekitar $0.02926$, sehinggak untuk `canonical correlation` nya adalah:
+```{r}
+cc1 <- sqrt(eig_comMat_val[1])
+cc2 <- sqrt(eig_comMat_val[2])
+
+cc1
+cc2
+```
+
+b. Menentukan fungsi model dari unit $U_{1}$ dan $V_{1}$ dari input matriks
+Tahap pertama untuk memebentuk model unit dari masing-masing `first canonical variate` dari input matriks adalah dengan menghitung `first canonical coefficient` dari model unit tersebut, dengan proses sebagai berikut:
+```{r}
+a1 <- solve(sqrtm(r11)) %*% eig_comMat_vec[, 1]
+a1
+```
+
+```{r}
+b1 <- solve(r22) %*% r21 %*% a1
+b1
+```
+Kita lakukan penskalaan terhadap koefisien `b1`, dengan proses sebagai berikut:
+```{r}
+scaler <- sqrt(t(b1) %*% r22 %*% b1)
+scale_b1 <- (1/scaler[1]) * b1
+scale_b1
+```
+
+sehingga, dari hasil `a1` dan `b1` di atas, diperoleh model `first canonical variate`, dengan formula sebagai berikut:
+
+$$U_{1} = -1.00158976Z^{(1)}_{1} + 0.002588365Z^{(1)}_{2} \\ 
+  V_{1} = 0.6016105Z^{(2)}_{1} + 0.9768515Z^{(2)}_{2}$$
+
+Dimana $Z^{(1)}_{1}$ merupakan set atribut antara `kasus pembunuhan nonprimer dan primer tahun 1970` dan $Z^{(2)}_{1}$ merupakan set atribut dari variabel `hukuman, baik itu hukuman berat maupun hukuman untuk dipenjarakan pada tahun 1970`.
+
+Dari kedua hasil di atas, beberapa hal yang bisa kita dapatkan antara lain:
+- 
+  
+
+
+
+
+
+
+
+
+
+
+
+

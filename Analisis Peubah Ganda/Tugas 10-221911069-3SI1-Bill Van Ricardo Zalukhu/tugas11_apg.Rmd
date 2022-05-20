@@ -10,6 +10,9 @@ library(factoextra)
 library(dendextend)
 library(FactoClass)
 library(openxlsx)
+library(dplyr)
+library(cluster)
+library(plotly)
 ```
 
 ### 12.8
@@ -59,7 +62,7 @@ d_24_to_1
 d_24_to_35
 ```
 
-dari hasi lperhitungan di atas, diperoleh nilai $d_{(24)1} = 7.5$ dan $d_{(24)35} = 7.25$, sehingga didapatkan matriks baru:
+dari hasi lperhitungan di atas, diperoleh nilai $d_{(24)1} = 7.5$ dan $d_{(24)35} = 8.5$, sehingga didapatkan matriks baru:
 
 ```{r}
 D_24 <- matrix(c(0, 7.5, 7, 7.5, 0, 8.5, 7, 8.5, 0), 
@@ -94,13 +97,16 @@ Jika perhitungan di atas dimuat dalam dendogram, hasilnya adalah sebagai berikut
 ```{r}
 hc_data <- hclust(as.dist(D), method = "average")
 fviz_dend(hc_data, cex = 0.8,
-          main = "Dendogram - Average Linkage",
+          main = "Dendrogram - Average Linkage",
           k = 2,
           k_colors = c("#2E9FDF", "#FC4E07"),
           color_labels_by_k = T,
           rect = T,
           xlab = "Objects", ylab = "Distance", sub = "")
 ```
+
+Dari hasil dendrogram di atas, secara visual, dapat kita lihat bahwa jumlah optimal dari klaster yang terbentuk tanpa adanya outlier adalah sebanyak 2 klaster.
+
 
 ### 12.10
 ```{r}
@@ -141,22 +147,11 @@ ess <- rbind(ess_13_2_4, ess_14_2_3, ess_1_23_4, ess_1_24_3, ess_1_2_34)
 ess
 ```
 
-Increase ESS nya adalah:
-```{r}
-ess_inc <- c()
-ess_temp <- 5
-for(i in c(1:5)){
-  ess_temp <- ess[i] - ess_temp
-  ess_inc <- append(ess_inc, ess_temp)
-}
-as.data.frame(ess_inc)
-```
-
 c. Membuat Dendogram dari Hasil Pengklasteran Pada Step Kedua
 ```{r}
-hc_ward <- hclust(dist(X_dat), method = "ward.D")
+hc_ward <- hclust(dist(X_dat), "ward.D2")
 fviz_dend(hc_ward, cex = 0.8,
-          main = "Dendogram - Ward's Method",
+          main = "Dendrogram - Ward's Method",
           k = 2,
           k_colors = c("#2E9FDF", "#FC4E07"),
           color_labels_by_k = T,
@@ -164,15 +159,23 @@ fviz_dend(hc_ward, cex = 0.8,
           xlab = "Objects", ylab = "Distance", sub = "")
 ```
 
+Dari hasil di atas, jika kita melihat hasil dendrogram yang terbentuk, ternyata jumlah klaster optimal yang terbentuk yaitu ada 2 cluster, ${12}$ dan ${34}$.
+
 ### 12.12
 ```{r}
-#items <- c("A", "B", "C", "D")
+items <- c("A", "B", "C", "D")
 x1 <- c(5, -1, 1, -3)
 x2 <- c(3, 1, -2, -2)
 obs <- cbind(as.numeric(x1), as.numeric(x2))
 as.data.frame(obs)
 str(obs)
 ```
+Jika kita menggambarkan scatter plot datanya, hasilnya:
+```{r}
+plot(obs, xlab = "x1", ylab = "x2", pch = items)
+```
+
+Jika kita lihat secara visual, terlihat bahwa titik items B, C, dan D seperti mengelompok menjadi 1 kelompok klaster yang sama, dilihat dari jarak antar titiknya yang saling berdekatan dan juga lokasi dari ketiga titik ini yang seperti berada pada 1 titik pusat tertentu, membentuk wilayah klaster baru. Sedangkan untuk titik A, seperti memisahkan diri dengan wilayah titik B, C, dan D, sehingga secara visual, titik A membentuk klaster baru sendiri. Kemungkinan juga, klaster A ini dapat terindikasi sebagai outlier, tetapi harus dibuktikan kebenarannya dengan bantuan analisis yang berkaitan dengan deteksi outlier di luar analisis klaster ini.
 
 Selanjutnya, kita akan menghitung inisialisasi dari centroid cluster yang akan dibangung dengan kombinasi pengelompokan $(AC)$ dan $(BD)$
 
@@ -194,49 +197,24 @@ d2_A_AC <- (obs[1, 1] - cent[1, 1])^2  + (obs[1, 2] - cent[1, 2])^2
 d2_A_BD <- (obs[1, 1] - cent[2, 1])^2  + (obs[1, 2] - cent[2, 2])^2
 d2_B_AC <- (obs[2, 1] - cent[1, 1])^2  + (obs[2, 2] - cent[1, 2])^2
 d2_B_BD <- (obs[2, 1] - cent[2, 1])^2  + (obs[2, 2] - cent[2, 2])^2
+d2_C_AC <- (obs[3, 1] - cent[1, 1])^2  + (obs[3, 2] - cent[1, 2])^2
+d2_C_BD <- (obs[3, 1] - cent[2, 1])^2  + (obs[3, 2] - cent[2, 2])^2
+d2_D_AC <- (obs[4, 1] - cent[1, 1])^2  + (obs[4, 2] - cent[1, 2])^2
+d2_D_BD <- (obs[4, 1] - cent[2, 1])^2  + (obs[4, 2] - cent[2, 2])^2
 
-rbind(d2_A_AC, d2_A_BD, d2_B_AC, d2_B_BD)
+D2 <- matrix(c(d2_A_AC, d2_B_AC, d2_C_AC, d2_D_AC, d2_A_BD, d2_B_BD, d2_C_BD, d2_D_BD),
+             nrow = 4, ncol = 2)
+colnames(D2) <- c("(AC)", "(BD)")
+rownames(D2) <- c("A", "B", "C", "D")
+as.data.frame(D2)
 ```
 
-Dari hasil di atas, dapat kita lihat bahwa jarak terkecil diperoleh dari jarak antara titik B dengan centroid (AC), sehingga klaster baru yang terbentuk adalah klaster $(ABC)$, dengan koordinat centroidnya:
-```{r}
-ABC_xbar1 <- (obs[1, 1] + obs[2, 1] + obs[3, 1])/3
-ABC_xbar2 <- (obs[1, 2] + obs[2, 2] + obs[3, 2])/3
-
-cent_new <- matrix(c(ABC_xbar1, obs[4, 1], ABC_xbar2, obs[4, 2]), nrow = 2, ncol = 2)
-colnames(cent_new) <- c("xbar1", "xbar2")
-rownames(cent_new) <- c("(ABC)", "D")
-cent_new
-```
-
-Lalu, kita akan menghitung jarak antara centroid baru dengan semua observasi dari data:
-```{r}
-obs
-```
-
-
-```{r}
-d2_ABC_A <- (obs[1, 1] - cent_new[1, 1])^2 + (obs[1, 2] - cent_new[1, 2])^2
-d2_ABC_B <- (obs[2, 1] - cent_new[1, 1])^2 + (obs[2, 2] - cent_new[1, 2])^2
-d2_ABC_C <- (obs[3, 1] - cent_new[1, 1])^2 + (obs[3, 2] - cent_new[1, 2])^2
-d2_ABC_D <- (obs[4, 1] - cent_new[1, 1])^2 + (obs[4, 2] - cent_new[1, 2])^2
-
-d2_D_A <- (obs[1, 1] - cent_new[2, 1])^2 + (obs[1, 2] - cent_new[2, 2])^2
-d2_D_B <- (obs[2, 1] - cent_new[2, 1])^2 + (obs[2, 2] - cent_new[2, 2])^2
-d2_D_C <- (obs[3, 1] - cent_new[2, 1])^2 + (obs[3, 2] - cent_new[2, 2])^2
-d2_D_D <- (obs[4, 1] - cent_new[2, 1])^2 + (obs[4, 2] - cent_new[2, 2])^2
-
-d2_ABC <- cbind(d2_ABC_A, d2_ABC_B, d2_ABC_C, d2_ABC_D)
-d2_D <- cbind(d2_D_A, d2_D_B, d2_D_C, d2_D_D)
-rbind(d2_ABC, d2_D)
-```
-
-Jika kita melihat dari hasil matriks jarak antara observasi dengan centroid dari setiap cluster yang akan dibentuk, jika dibandingkan dengan hasil dari Example 12.12, kedua hasil tersebut memiliki sisi positif dan negatif nya sendiri. Misal jarak antara observasi dengan centroid A (dari hasil Example 12.12) yang nilainya itu cenderung lebih besar dibanding jarak antara observasi dengan centroid D (dari hasil pada soal ini). Tetapi sebaliknya, jarak antara observasi dengan centroid (BCD) (dari hasil Example 12.12) nilainya cenderung lebih kecil dibanding dengan jarak antara observasi dengan centroid (ABC) (dari hasil pada soal ini).
+Dari hasil di atas, ternyata cluster yang terbentuk adalah cluster yang sama dengan inisiasi awal, yaitu $(AC)$ dan $(BD)$, sehingga untuk jarak antar items dengan centroidnya tetap sama dengan perhitungan yang sebelumnya
 Dari hasil tersebut, untuk pemilihan pembentukan cluster nya, tergantung dari subjektifitas dan objektifitas dari peneliti sendiri, ingin memilih pembentukan cluster dengan centroid jenis apa. Hal yang perlu dipertimbangkan adalah dengan penggunaan centroid yang dipilih dalam pembentukan cluster, peneliti harus melihat dari sisi jarak dan juga sisi ketumpangtindihan cluster yang dibentuk dari centroid tersebut, agar hasil cluster lebih baik dan informasi yang didapatkan lebih optimal.
 
 ### 12.16
 ```{r}
-nat_rec <- read.xlsx("C:/Users/bilva/OneDrive/Documents/National Track Records for Women.xlsx")
+nat_rec <- read.xlsx("C:/Users/bilva/OneDrive/Documents/3SI1/Semester 6/Tugas Matkul/tugas_matkul/Analisis Peubah Ganda/Tugas 10-221911069-3SI1-Bill Van Ricardo Zalukhu/National Track Records for Women.xlsx")
 
 for(i in c(2:8)){
   nat_rec[, i] <- as.numeric(nat_rec[, i])
@@ -246,48 +224,106 @@ for(i in c(2:8)){
 
 a. Menghitung Matriks Distance dengan Euclidian
 ```{r}
-D_nat_rec <- dist(nat_rec[, c(2:8)])
+D_nat_rec <- dist(nat_rec[, c(2:8)], method = "euclidian")
 ```
 
 b. Membuat Hierarchical Cluster dengan Metode Single Linkage dan Complete Linkage
 ```{r}
 hc_single <- hclust(D_nat_rec, method = "single")
 fviz_dend(hc_single, cex = 0.5,
+          main = "Dendrogram - Single Linkage from Raw Dataset",
           k = 4,
-          k_colors = c("#2E9FDF", "#00AFBB", "#E7B800", "#FC4E07"),
+          k_colors = c("#2E9FDF", "#00ff00", "#E7B800", "#FC4E07"),
           color_labels_by_k = T,
           rect = T,
-          main = "Dendogram - Ward's Method",
           xlab = "Objects", ylab = "Distance", sub = "")
 ```
 
 ```{r}
 hc_complete <- hclust(D_nat_rec, method = "complete")
 fviz_dend(hc_complete, cex = 0.5,
-          k = 5,
-          k_colors = c("#2E9FDF", "#00AFBB", "#E7B800", "#FC4E07", "#00ff00"),
+          main = "Dendrogram - Complete Linkage from Raw Dataset",
+          k = 6,
+          k_colors = c("#cc33ff", "#00AFBB", "#E7B800", "#FC4E07", "#00ff00", "#3399ff"),
           color_labels_by_k = T,
           rect = T,
-          main = "Dendogram - Ward's Method",
           xlab = "Objects", ylab = "Distance", sub = "")
 ```
 
+Dari hasil klasterisasi di atas, dapat kita lihat bahwa untuk metode single linkage hierarchical cluster, jumlah klaster optimal yang bisa dibentuk menggunakan metode ini adalah sebanyak 4 klaster, dilihat dari kedekatan dan pengelompokan secara subjektif terhadpa dendogram nya. Lain halnya dengan complete linkage hierarchical cluster, secara subjektif dan visual, dapat kita lihat bahwa jumlah optimum dari klaster yang dapat dibentuk yaitu sebanyak 6 klaster. Dan jika bandingkan antara hasil dari single linkage dengan complete linkage, terlihat bahwa hasil dari complete linkage lebih baik dibandingkan dengan single linkage karena terlihat pada single linkage, lebih banyak cluster yang terindikasi sebagai pencilan cluster dibanding dengan complete linkage yang cluster nya sudah terlihat lebih optimum.
+
 c. Membuat Non-Hierarchical Cluster dengan K-Means Method
 ```{r}
-fviz_nbclust(nat_rec[, c(2:8)], kmeans)
+fviz_nbclust(nat_rec[, c(2:8)], kmeans, method = "wss")
 ```
 
-Dari diagram di atas, kita bisa menentukan kandidat jumlah klaster yang bisa kita bentuk dari data yang digunakan, yaitu antara 4 klaster dan 6 klaster.
+Dari diagram di atas, kita bisa menentukan kandidat jumlah klaster yang bisa kita bentuk dari data yang digunakan, yaitu antara 2 klaster dan/atau 3 klaster.
 
-- Untuk 4 klaster:
+- Untuk 2 klaster:
 ```{r}
-km_nat_rec <- kmeans(nat_rec[, c(2:8)], centers = 4)
+km_nat_rec <- kmeans(nat_rec[, c(2:8)], centers = 2, iter.max = 1000)
 fviz_cluster(km_nat_rec, data = as.data.frame(nat_rec[, c(2:8)]))
 ```
 
-- Untuk 6 klaster:
+- Untuk 3 klaster:
 ```{r}
-km_nat_rec <- kmeans(nat_rec[, c(2:8)], centers = 2)#, nstart = 25)
+km_nat_rec <- kmeans(nat_rec[, c(2:8)], centers = 3)
 fviz_cluster(km_nat_rec, data = as.data.frame(nat_rec[, c(2:8)]))
 ```
+
+Dari hasil di atas, secara natural dan dengan menggunakan metode k-means, klaster yang dapat dibentuk yaitu sebanyak 2 atau 3 klaster. Tetapi jika dilihat secar visual, baik itu 2 maupun 3 klaster, ternyata masih terjadi overlapping diantara klaster yang terbentuk. Untuk 2 klaster, tingkat overlapping nya masih tidak terlalu luas, tetapi untuk 3 klaster, overlapping yang terjadi dapat dikatakan buruk, terlihat dari overlapping yang terjadi antara klaster berwarna `merah` dengan klaster yang berwarna `biru`, dimana bahkan, centroid dari klaster berwarna `biru` ter-overlap dengan klaster berwarna `merah`. Hal ini dianggap kurang baik karena bisa saja oleh karena kejadian overlapping tersebut, peneliti bisa kehilangan informasi yang penting dari hasil pengklasterannya.
+Hal ini dapat diakibatkan oleh banyak hal, beberapa diantaranya adalah skala antar data yang jauh (data bervariasi), adanya pencilan, dan hal-hal lain yang dapat mempengaruhi hasil pengklasteran.
+
+Karena hasil klasternya kurang baik, dilakukan penormalisasian data yang dianggap salah satu cara yang efektif untuk menghasilkan klaster yang baik, dari segi jumlah dan visual.
+Jika datanya distandarisasikan, maka hasilnya akan seperti berikut:
+```{r}
+nat_rec_norm <- nat_rec[, c(2:8)] %>% mutate_all(~(scale(.) %>% as.vector))
+```
+
+```{r}
+D_nat_rec_norm <- dist(nat_rec_norm, method = "euclidian")
+```
+
+Untuk hierarchical single linkage cluster:
+```{r}
+hc_single_norm <- hclust(D_nat_rec_norm, method = "single")
+fviz_dend(hc_single_norm, cex = 0.5,
+          main = "Dendrogram - Single Linkage from Normalize Dataset",
+          k = 6,
+          k_colors = c("#2E9FDF", "#00ff00", "#E7B800", "#FC4E07", "#3399ff", "#00AFBB"),
+          color_labels_by_k = T,
+          rect = T,
+          xlab = "Objects", ylab = "Distance", sub = "")
+```
+
+Untuk hierarchical complete linkage cluster:
+```{r}
+hc_complete_norm <- hclust(D_nat_rec_norm, method = "complete")
+fviz_dend(hc_complete_norm, cex = 0.5,
+          main = "Dendrogram - Complete Linkage from Normalize Dataset",
+          k = 4,
+          k_colors = c("#cc33ff", "#00AFBB", "#E7B800", "#FC4E07", "#00ff00", "#3399ff"),
+          color_labels_by_k = T,
+          rect = T,
+          xlab = "Objects", ylab = "Distance", sub = "")
+```
+
+Dari hasil klasterisasi di atas, setelah datanya distandarkan, dapat kita lihat bahwa untuk metode single linkage hierarchical cluster, jumlah klaster optimal yang bisa dibentuk menggunakan metode ini adalah sebanyak 6 klaster, dilihat dari kedekatan dan pengelompokan secara subjektif terhadpa dendogram nya. Lain halnya dengan complete linkage hierarchical cluster, secara subjektif dan visual, dapat kita lihat bahwa jumlah optimum dari klaster yang dapat dibentuk yaitu sebanyak 4 klaster (hasilnya merupakan kebalikan dari hasil sebelumnya, dimana datanya masih belum distandarkan).
+Dan jika bandingkan antara hasil dari single linkage dengan complete linkage, terlihat bahwa hasil dari complete linkage lebih baik dibandingkan dengan single linkage karena terlihat pada single linkage, lebih banyak cluster yang terindikasi sebagai pencilan cluster dibanding dengan complete linkage yang cluster nya sudah terlihat lebih optimum.
+
+Untuk K-Means clustering:
+```{r}
+fviz_nbclust(nat_rec_norm, kmeans, method = "wss")
+```
+
+Dari plot di atas, keliatan jelas bahwa elbow atau titik pembelokan yang menjadi jumlah optimum klasternya jatuh pada titik dengan jumlah 3 klaster, maka:
+```{r}
+km_nat_rec <- kmeans(nat_rec_norm, centers = 3)
+fviz_cluster(km_nat_rec, data = as.data.frame(nat_rec_norm))
+```
+
+Dapat dilihat perubahan total dari hasil klasterisasi nya menggunakan k-means. Hasil dari klaster setelah dinormalisasi ternyata memberikan bentuk dan rupa klaster yang lebih baik, tidak saling tumpang tindih antar sesama klaster. Ini dapat mengindikasikan bahwa hasil dari klaster dari data ternormalisasi lebih baik dibanding dengan klaster dari data yang belum ternormalisai. Dapat dilihat dari hasilnya, jumlah optimum dari klaster yaitu sebanyak 3 klaster, dan setelah dibentuk, ternyata hasilnya sudah baik juga, dari segi visual dan pengelompokannya.
+
+
+
 
