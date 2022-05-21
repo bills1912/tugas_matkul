@@ -280,7 +280,7 @@ p.asym(rbind(cc_glucose1, cc_glucose2), N = 39, p = p_glucose, q = q_glucose, ts
 p.asym(rbind(cc_glucose1, cc_glucose2), N = 39, p = p_glucose, q = q_glucose, tstat = "Roy")
 ```
 
-## 11.9
+### 11.9
 ```{r}
 son <- read.xlsx("C:/Users/bilva/OneDrive/Documents/3SI1/Semester 6/Tugas Matkul/tugas_matkul/Analisis Peubah Ganda/Tugas 11-221911069-3SI1-Bill Van Ricardo Zalukhu/tabel3.8.xlsx")
 ```
