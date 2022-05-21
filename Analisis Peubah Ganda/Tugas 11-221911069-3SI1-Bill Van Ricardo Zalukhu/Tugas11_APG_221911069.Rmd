@@ -7,8 +7,12 @@ output: html_document
 
 ```{r library}
 library(expm)
+library(openxlsx)
+library(CCA)
+library(CCP)
 ```
 
+## Buku Johnson
 ### 10.10
 Pada soal kali ini, kita diarahkan untuk melakukan analisis `canonical correlation` untuk melihat hubungan antara jumlah kasus pembunuhan pada tahun 1973 dengan jenis hukuman yang diberikan kepada para pelaku kasus pembunuhan pada tahun 1970, karena diduga kemungkinan adanya hubungan antara kedua hal ini, dimana kemungkinan karena tingkat penghukuman dari pelaku di tahun 1970 masih belum memberikan efek jera, sehingga pada tahun 1973, kasus pembunuhan tetap terjadi (praduga sementara).
 ```{r}
@@ -16,7 +20,6 @@ R <- matrix(c(1, .615, -.111, -.266,
               .615, 1, -.195, -.085,
               -.111, -.195, 1, -.269,
               -.266, -.085, -.269, 1), 4, 4)
-
 ```
 
 ```{r}
@@ -55,6 +58,8 @@ cc1
 cc2
 ```
 
+Jika dilihat dari hasil `canonical correlation` nya, dapat kita lihat bahwa kedua kedua nilai tersebut kecil, sehingga dapat dikatakan bahwa kedua variabel tersebut tidak banyak memberikan informasi terkait analisis yang akan dilakukan, untuk melihat hubungan antara kedua kelompok variabel tersebut
+
 b. Menentukan fungsi model dari unit $U_{1}$ dan $V_{1}$ dari input matriks
 Tahap pertama untuk memebentuk model unit dari masing-masing `first canonical variate` dari input matriks adalah dengan menghitung `first canonical coefficient` dari model unit tersebut, dengan proses sebagai berikut:
 ```{r}
@@ -63,35 +68,333 @@ a1
 ```
 
 ```{r}
-b1 <- solve(r22) %*% r21 %*% a1
-b1
+t(a1) %*% r11 %*% a1
 ```
-Kita lakukan penskalaan terhadap koefisien `b1`, dengan proses sebagai berikut:
+
+```{r}
+b1 <- solve(r22) %*% r21 %*% a1
+b1_test <- solve(sqrtm(r22)) %*% solve(sqrtm(r22)) %*% r21 %*% solve(sqrtm(r11)) %*% eig_comMat_vec[, 1]
+
+b1
+b1_test
+```
+
+```{r}
+t(b1) %*% r22 %*% b1
+```
+
+Ternyata, nilai $Var(V_{1}) \not = 1$, sehingga kita perlu melakukan scaling terhadap koefisien `b1`, dengan proses sebagai berikut:
 ```{r}
 scaler <- sqrt(t(b1) %*% r22 %*% b1)
 scale_b1 <- (1/scaler[1]) * b1
 scale_b1
 ```
 
-sehingga, dari hasil `a1` dan `b1` di atas, diperoleh model `first canonical variate`, dengan formula sebagai berikut:
+```{r}
+t(scale_b1) %*% r22 %*% scale_b1
+```
 
+sehingga, dari hasil `a1` dan `b1` di atas, diperoleh model `first canonical variate`, dengan formula sebagai berikut:
 $$U_{1} = -1.00158976Z^{(1)}_{1} + 0.002588365Z^{(1)}_{2} \\ 
   V_{1} = 0.6016105Z^{(2)}_{1} + 0.9768515Z^{(2)}_{2}$$
 
 Dimana $Z^{(1)}_{1}$ merupakan set atribut antara `kasus pembunuhan nonprimer dan primer tahun 1970` dan $Z^{(2)}_{1}$ merupakan set atribut dari variabel `hukuman, baik itu hukuman berat maupun hukuman untuk dipenjarakan pada tahun 1970`.
 
-Dari kedua hasil di atas, beberapa hal yang bisa kita dapatkan antara lain:
-- 
-  
+Jka dilihat dari model `first canonical variate` nya, jika kita lihat dari koefisien dari setiap variate, dapat kita mengambil kesimpulan bahwa: (a). untuk $U_{1}$, variate ini dapat diberi label sebagai `kasus pembunuhan pada tahun 1973`; (b), untuk $V_{1}$, variate ini dapat diberi label sebagai `besaran index dari hukuman yang diberikan kepada pelaku pembunuhan di tahun 1970`.
 
+### 10.11
+Pada soal ini, akan dianalisis bagaimana hubungan antara perusahan yang bergerak di bidang bahan kimiawi dengan perusahan yang memproduksi minyak, apakah keduanya saling mempengaruhi, yang berakibat ke nilai dari saham dari kedua kelompok perusahaan ini atau tidak.
+```{r}
+R_company <- matrix(c(1, .577, .509, .387, .462,
+                      .577, 1, .599, .389, .322,
+                      .509, .599, 1, .436, .426,
+                      .387, .389, .436, 1, .523,
+                      .462, .322, .426, .523, 1), 5, 5)
 
+```
 
+```{r}
+r_comp11 <- R_company[c(1,2,3), c(1,2,3)]
+r_comp12 <- R_company[c(1,2,3), c(4,5)]
+r_comp21 <- R_company[c(4,5), c(1,2,3)]
+r_comp22 <- R_company[c(4,5), c(4,5)]
 
+r_comp11
+r_comp12
+r_comp21
+r_comp22
+```
 
+```{r}
+com_mat_company <- solve(sqrtm(r_comp11)) %*% r_comp12 %*% solve(r_comp22) %*% r_comp21 %*% solve(sqrtm(r_comp11))
 
+com_mat_company
+```
 
+```{r}
+eig_company <- eigen(com_mat_company)
+eig_company_val <- eig_company$values
+eig_company_vec <- eig_company$vector
 
+eig_company_val
+eig_company_vec
+```
 
+```{r}
+cc_comp1 <- sqrt(eig_company_val[1])
+cc_comp2 <- sqrt(eig_company_val[2])
+cc_comp3 <- sqrt(eig_company_val[3])
 
+cc_comp1
+cc_comp2
+cc_comp3
+```
+
+dari hasil di atas, jika diperbandingkan nilai dari `canonical correlation` nya, maka dapat kita ambil kesimpulan bahwa `canonical correlation` dari analisis ini adalah sebesar `0.5662376` atau $\rho^{(1)2}$ karena memiliki nilai yang lebih besar dibandingkan dengan nilai `canonical correlation` yang lain (dengan arti bahwa model variat yang akan dibentuk merupakan model variat pertama).
+
+## Buku Rencern dan Christensen
+### 11.8
+Pada kasus kali ini, analisis akan dilakukan untuk mengetahui hubungan antara `tingkat toleransi seorang pasien terhadap gula` dengan `berat badan relatif` dari pasien tersebut.
+```{r}
+glucose <- read.xlsx("C:/Users/bilva/OneDrive/Documents/3SI1/Semester 6/Tugas Matkul/tugas_matkul/Analisis Peubah Ganda/Tugas 11-221911069-3SI1-Bill Van Ricardo Zalukhu/tabel3.5.xlsx")
+
+glucose <- glucose[, -c(1)]
+```
+
+```{r}
+S_glucose <- cov(glucose)
+S_glucose
+```
+
+a. Menghitung `canonical correlation` dari data
+```{r}
+s_glucose11 <- S_glucose[c(1,2), c(1,2)]
+s_glucose12 <- S_glucose[c(1,2), c(3,4,5)]
+s_glucose21 <- S_glucose[c(3,4,5), c(1,2)]
+s_glucose22 <- S_glucose[c(3,4,5), c(3,4,5)]
+
+s_glucose11
+s_glucose12
+s_glucose21
+s_glucose22
+```
+
+```{r}
+com_mat_glucose <- solve(sqrtm(s_glucose11)) %*% s_glucose12 %*% solve(s_glucose22) %*% s_glucose21 %*% solve(sqrtm(s_glucose11))
+
+com_mat_glucose
+```
+
+```{r}
+eig_glucose <- eigen(com_mat_glucose)
+eig_glucose_val <- eig_glucose$values
+eig_glucose_vec <- eig_glucose$vector
+
+eig_glucose_val
+eig_glucose_vec
+```
+
+```{r}
+cc_glucose1 <- sqrt(eig_glucose_val[1])
+cc_glucose2 <- sqrt(eig_glucose_val[2])
+
+cc_glucose1
+cc_glucose2
+```
+
+Jika kita melihat dari hasil `canonical correlation` di atas, dapat kita lihat bahwa nilai dari $\rho^{(1)2}$ merupakan nilai terbesar, sehingga dapat kita simpulkan bahwa $\rho^{(1)2}$ memiliki kontribusi yang terbesar untuk memberikan informasi kepada penganalisis.
+
+```{r}
+cc_glucose <- cc(glucose[, c(3:5)], glucose[, c(1:2)])
+```
+
+b. Menghitung `standardized canonical coeficient` dari data
+Untuk menghiutng `standardized canonical coeficient`, kita akan menggunakan rumus berikut:
+$$c = D_{y}a \\
+  d = D_{x}b$$
+
+dimana c dan d merupakan `standardized canonical coeficient` dari data. Maka:
+
+```{r}
+a1_glucose <- solve(sqrtm(s_glucose11)) %*% eig_glucose_vec[, 1]
+a1_glucose
+```
+
+```{r}
+t(a1_glucose) %*% s_glucose11 %*% a1_glucose
+```
+
+```{r}
+b1_glucose <- solve(s_glucose22) %*% s_glucose21 %*% a1_glucose
+b1_glucose
+```
+
+```{r}
+t(b1_glucose) %*% s_glucose22 %*% b1_glucose
+```
+
+Karena nilai dari `b1` belum memenuhi sifat dari `canonical variat`, maka perlu distandarkan, dengan proses sebagai berikut:
+```{r}
+scaler_glucose <- sqrt(t(b1_glucose) %*% s_glucose22 %*% b1_glucose)
+scale_b1_glucose <- (1/scaler_glucose[1]) * b1_glucose
+scale_b1_glucose
+```
+
+```{r}
+t(scale_b1_glucose) %*% s_glucose22 %*% scale_b1_glucose
+```
+
+```{r}
+c1_glucose <- diag(sqrt(diag(s_glucose11))) %*% a1_glucose
+c1_glucose
+```
+
+```{r}
+d1_glucose <- diag(sqrt(diag(s_glucose22))) %*% scale_b1_glucose
+d1_glucose
+```
+
+c. 
+```{r}
+n_glucose <- 39
+p_glucose <- 2
+q_glucose <- 3
+w_glucose <- n_glucose - (1/2) * (p_glucose + q_glucose + 3)
+t_glucose <- sqrt((p_glucose^2 * q_glucose^2 - 4)/(p_glucose^2 + q_glucose^2 - 5))
+df1_glucose <- p_glucose * q_glucose
+df2_glucose <- w_glucose * t_glucose - (1/2) * p_glucose * q_glucose + 1
+
+lambda1 <- (1 - cc_glucose1) * (1 - cc_glucose2)
+F_glucose <- (1 - ((lambda1)^(1/t_glucose)) * df2_glucose)/(((lambda1)^(1/t_glucose)) * df1_glucose)
+F_glucose
+```
+
+```{r}
+qf(p = 1 - 0.05, df1 = df1_glucose, df2 = df2_glucose)
+```
+
+```{r}
+p.asym(rbind(cc_glucose1, cc_glucose2), N = 39, p = p_glucose, q = q_glucose, tstat = "Wilks")
+p.asym(rbind(cc_glucose1, cc_glucose2), N = 39, p = p_glucose, q = q_glucose, tstat = "Hotelling")
+p.asym(rbind(cc_glucose1, cc_glucose2), N = 39, p = p_glucose, q = q_glucose, tstat = "Pillai")
+p.asym(rbind(cc_glucose1, cc_glucose2), N = 39, p = p_glucose, q = q_glucose, tstat = "Roy")
+```
+
+## 11.9
+```{r}
+son <- read.xlsx("C:/Users/bilva/OneDrive/Documents/3SI1/Semester 6/Tugas Matkul/tugas_matkul/Analisis Peubah Ganda/Tugas 11-221911069-3SI1-Bill Van Ricardo Zalukhu/tabel3.8.xlsx")
+```
+
+```{r}
+S_son <- cov(son)
+S_son
+```
+
+```{r}
+s_son11 <- S_son[c(1,2), c(1,2)]
+s_son12 <- S_son[c(1,2), c(3,4)]
+s_son21 <- S_son[c(3,4), c(1,2)]
+s_son22 <- S_son[c(3,4), c(3,4)]
+
+s_son11
+s_son12
+s_son21
+s_son22
+```
+
+```{r}
+com_mat_son <- solve(sqrtm(s_son11)) %*% s_son12 %*% solve(s_son22) %*% s_son21 %*% solve(sqrtm(s_son11))
+
+com_mat_son
+```
+
+```{r}
+eig_son <- eigen(com_mat_son)
+eig_son_val <- eig_son$values
+eig_son_vec <- eig_son$vector
+
+eig_son_val
+eig_son_vec
+```
+
+```{r}
+cc_son1 <- sqrt(eig_son_val[1])
+cc_son2 <- sqrt(eig_son_val[2])
+
+cc_son1
+cc_son2
+```
+
+b. Menghitung `standardized canonical coeficient` dari data
+Untuk menghiutng `standardized canonical coeficient`, kita akan menggunakan rumus berikut:
+$$c = D_{y}a \\
+  d = D_{x}b$$
+
+dimana c dan d merupakan `standardized canonical coeficient` dari data. Maka:
+
+```{r}
+a1_son <- solve(sqrtm(s_son11)) %*% eig_son_vec[, 1]
+a1_son
+```
+
+```{r}
+t(a1_son) %*% s_son11 %*% a1_son
+```
+
+```{r}
+b1_son <- solve(s_son22) %*% s_son21 %*% a1_son
+b1_son
+```
+
+```{r}
+t(b1_son) %*% s_son22 %*% b1_son
+```
+
+Karena nilai dari `b1` belum memenuhi sifat dari `canonical variat`, maka perlu distandarkan, dengan proses sebagai berikut:
+```{r}
+scaler_son <- sqrt(t(b1_son) %*% s_son22 %*% b1_son)
+scale_b1_son <- (1/scaler_son[1]) * b1_son
+scale_b1_son
+```
+
+```{r}
+t(scale_b1_son) %*% s_son22 %*% scale_b1_son
+```
+
+```{r}
+c1_son <- diag(sqrt(diag(s_son11))) %*% a1_son
+c1_son
+```
+
+```{r}
+d1_son <- diag(sqrt(diag(s_son22))) %*% scale_b1_son
+d1_son
+```
+
+c.
+```{r}
+n_son <- 25
+p_son <- 2
+q_son <- 2
+w_son <- n_son - (1/2) * (p_son + q_son + 3)
+t_son <- sqrt((p_son^2 * q_son^2 - 4)/(p_son^2 + q_son^2 - 5))
+df1_son <- p_son * q_son
+df2_son <- w_son * t_son - (1/2) * p_son * q_son + 1
+
+lambda1_son <- (1 - cc_son1) * (1 - cc_son2)
+F_glucose <- (1 - ((lambda1_son)^(1/t_son)) * df2_son)/(((lambda1_son)^(1/t_son)) * df1_son)
+F_glucose
+```
+
+```{r}
+qf(p = 1 - 0.05, df1 = df1_son, df2 = df2_son)
+```
+
+```{r}
+p.asym(rbind(cc_son1, cc_son2), N = 39, p = p_glucose, q = q_glucose, tstat = "Wilks")
+p.asym(rbind(cc_son1, cc_son2), N = 39, p = p_glucose, q = q_glucose, tstat = "Hotelling")
+p.asym(rbind(cc_son1, cc_son2), N = 39, p = p_glucose, q = q_glucose, tstat = "Pillai")
+p.asym(rbind(cc_son1, cc_son2), N = 39, p = p_glucose, q = q_glucose, tstat = "Roy")
+```
 
 
