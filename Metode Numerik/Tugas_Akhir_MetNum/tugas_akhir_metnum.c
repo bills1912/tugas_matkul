@@ -33,7 +33,7 @@ float LagrangeInterpolation(float x[], float f_x[], int n, float x_interpolate)
             }
             f_interpolate += L * f_x[i];
       }
-      return x_interpolate, f_interpolate;
+      return f_interpolate;
 }
 
 int main(){
