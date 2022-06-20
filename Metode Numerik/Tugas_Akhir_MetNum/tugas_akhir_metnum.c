@@ -10,7 +10,7 @@ float func(float x)
 float LagrangeInterpolation(float x[], float f_x[], int n, float x_interpolate)
 {
       float f_interpolate = 0;
-      int i, j, d;
+      int i, j, d, num_point;
       printf("Masukan jumlah data: ");
       scanf("%d",&n);
 
@@ -28,12 +28,15 @@ float LagrangeInterpolation(float x[], float f_x[], int n, float x_interpolate)
             printf("\n");
       }
 
+      printf("\nMasukan jumlah titik yang ingin diestimasi: ");
+      scanf("%d", &num_point);
+
       printf("Masukan nilai x yang akan diestimasi nilai f(x)-nya: ");
       scanf("%f",&x_interpolate);
-      for (i = 0; i < n; i++)
+      for (i = 0; i < num_point; i++)
       {
             float L = 1;
-            for (j = 0; j < n; j++)
+            for (j = 0; j < num_point; j++)
             {
                   if (i != j)
                   {
@@ -42,7 +45,19 @@ float LagrangeInterpolation(float x[], float f_x[], int n, float x_interpolate)
             }
             f_interpolate += L * f_x[i];
       }
-      printf("\nHasil estimasi dari titik %0.3f: %0.7f", x_interpolate, f_interpolate);
+      switch(num_point){
+            case 2:
+                  printf("\nNilai estimasi f(%0.3f) untuk dua titik: %0.7f",x_interpolate, f_interpolate);
+                  break;
+            
+            case 3:
+                  printf("\nNilai estimasi f(%0.3f) untuk tiga titik: %0.7f",x_interpolate, f_interpolate);
+                  break;
+            
+            case 5:
+                  printf("\nNilai estimasi f(%0.3f) untuk lima titik: %0.7f",x_interpolate, f_interpolate);
+                  break;
+      }
 }
 
 float NewtonForwardDerivative(float x[], int n, float x_diff)
@@ -128,7 +143,7 @@ float NumericIntegral(float a, float b, float err[])
 
       c = (a + b)/2;
 
-      printf("Masukan solusi absolut dari fungsi: ");
+      printf("Masukan solusi absolut dari fungsi (arctan(b) - arctan(a)): ");
       scanf("%f",&abs_solution);
       printf("\n");
 
@@ -201,7 +216,7 @@ int main(){
 
       switch(num_menu){
             case 1:
-                  printf("\n\nAPROKSIMASI FUNGSI DENGAN METODE NUMERIK\n");
+                  printf("APROKSIMASI FUNGSI DENGAN METODE NUMERIK\n");
                   printf("Metode yang digunakan pada aproksimasi fungsi adalah metode Interpolasi Lagrange\n");
                   printf("Ingin lanjut? (y/n): ");
                   scanf("%s",&next);
