@@ -9,6 +9,7 @@ output: html_document
 library(factoextra)
 library(dplyr)
 library(openxlsx)
+library(ggplot2)
 ```
 
 ## 8.11
@@ -46,6 +47,16 @@ eig_vec_cen
 eig_val_cen
 ```
 
+```{r}
+pov <- c()
+
+for(i in c(1:5)){
+  prop <- (eig_val_cen[i]/sum(eig_val_cen)) * 100
+  pov <- append(pov, prop)
+}
+
+pov
+```
 
 ```{r}
 prop_var_cen <- c()
@@ -58,6 +69,19 @@ for (i in c(1:5)){
 }
 
 prop_var_cen
+```
+
+```{r}
+plot(eig_val_cen, ylab = "Eigen Value", type = "b", ylim = c(0, 100))
+```
+
+```{r}
+prop_var_ds <- as.data.frame(pov)
+prop_var_ds["Lambda"] <- c(1,2,3,4,5)
+ggplot(prop_var_ds, aes(Lambda, pov)) +
+  geom_bar(stat = "identity", fill = "#1e90ff") +
+  geom_line(stat = "identity", col = "red", size = 0.8) +
+  geom_point()
 ```
 
 c.

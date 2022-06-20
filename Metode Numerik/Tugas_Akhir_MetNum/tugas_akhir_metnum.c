@@ -162,6 +162,19 @@ float NumericIntegral(float a, float b, float err[])
       printf("MidPoint: %0.7f\n", err[0]);
       printf("Trapezoidal: %0.7f\n", err[1]);
       printf("Simpson: %0.7f\n", err[2]);
+      printf("\nDari hasil di atas, maka:");
+      if(err[0] < err[1] && err[0] < err[2])
+      {
+            printf("\nMetode MidPoint adalah metode yang paling akurat\n");
+      }
+      else if(err[1] < err[0] && err[1] < err[2])
+      {
+            printf("\nMetode Trapezoidal adalah metode yang paling akurat\n");
+      }
+      else
+      {
+            printf("\nMetode Simpson 1/3 adalah metode yang paling akurat\n");
+      }
 }
 
 float TrapezoidalNumericIntegral(float a, float b)

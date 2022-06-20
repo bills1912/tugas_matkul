@@ -170,6 +170,7 @@ obs <- cbind(as.numeric(x1), as.numeric(x2))
 as.data.frame(obs)
 str(obs)
 ```
+
 Jika kita menggambarkan scatter plot datanya, hasilnya:
 ```{r}
 plot(obs, xlab = "x1", ylab = "x2", pch = items)
