@@ -94,7 +94,7 @@ float NewtonForwardDerivative(float x[], int n, float x_diff)
                   break;
             }
       }
-      printf("%d", index);
+
       if (flag == 0)
       {
             printf("Nilai x yang dimasukkan tidak valid. Keluar dari program!");
@@ -110,13 +110,13 @@ float NewtonForwardDerivative(float x[], int n, float x_diff)
       }
 
       printf("Berikut daftar hasil selisih: \n");
-      for(i = 0; i < n; i++)
+      for(i = 1; i < n; i++)
       {
-            for(j = 0; j < n-i; j++)
+            for(j = 1; j < n-i; j++)
             {
-                  printf("%0.7f\t",f[j][i]);
-                  printf("\n");
+                  printf("%0.7f\t", f[i][j]);
             }
+            printf("\n");
       }
       printf("\n");
       h = x[1] - x[0];
@@ -190,11 +190,6 @@ float NumericIntegral(float a, float b, float err[])
       {
             printf("\nMetode Simpson 1/3 adalah metode yang paling akurat\n");
       }
-}
-
-float TrapezoidalNumericIntegral(float a, float b)
-{
-
 }
 
 int main(){
