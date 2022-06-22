@@ -14,7 +14,7 @@ float LagrangeInterpolation(float x[], float f_x[], int n, float x_interpolate)
       printf("Masukan jumlah data: ");
       scanf("%d",&n);
 
-      printf("\n\nMasukan titik kolokasi x dan hasil fungsi f(x) (dipisah dengan Spasi): \n");
+      printf("\n\nMasukan titik kolokasi x dan hasil fungsi f(x) (antara nilai x dan f(x) dipisahkan dengan Spasi): \n");
       for(i=0; i< n; i++)
       {
             scanf ("%f",&x[i]);
@@ -45,6 +45,7 @@ float LagrangeInterpolation(float x[], float f_x[], int n, float x_interpolate)
             }
             f_interpolate += L * f_x[i];
       }
+
       switch(num_point){
             case 2:
                   printf("\nNilai estimasi f(%0.3f) untuk dua titik: %0.7f",x_interpolate, f_interpolate);
@@ -68,7 +69,7 @@ float NewtonForwardDerivative(float x[], int n, float x_diff)
       printf("Masukan jumlah data: ");
       scanf("%d",&n);
 
-      printf("\n\nMasukan titik kolokasi x dan hasil fungsi f(x) (dipisah dengan Spasi): \n");
+      printf("\n\nMasukan titik kolokasi x dan hasil fungsi f(x) (antara nilai x dan f(x) dipisahkan dengan Spasi): \n");
       for(i = 0; i < n; i++)
       {
             scanf ("%f",&x[i]);
