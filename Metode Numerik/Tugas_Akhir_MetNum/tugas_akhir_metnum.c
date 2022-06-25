@@ -236,36 +236,22 @@ float NumericIntegral(float a, float b, float err[])
       scanf("%f",&b);
 
       c = (a + b)/2;
+      abs_solution = atan(b) - atan(a);
 
-      printf("Masukan solusi absolut dari fungsi (arctan(b) - arctan(a)): ");
-      scanf("%f",&abs_solution);
+      printf("Masukan solusi absolut dari fungsi (arctan(b) - arctan(a)): %0.7f\n", abs_solution);
       printf("\n");
-
-      float MidPoint()
-      {
-            midpoint = (b - a) * (func(c));
-            return midpoint;
-      }
-
-      float Trapezoidal()
-      {
-            trapezoidal = (b - a) * ((func(a) + func(b))/2);
-            return trapezoidal;
-      }
-
-      float Simpson()
-      {
-            simpson = (b - a) * ((func(a) + 4*func(c) + func(b))/6);
-            return simpson;
-      }
       
-      printf("Hasil integral numerik dari %0.2f sampai %0.2f dengan metode MidPoint adalah %0.7f\n", a, b, MidPoint());
-      printf("Hasil integral numerik dari %0.2f sampai %0.2f dengan metode Trapezoidal adalah %0.7f\n", a, b, Trapezoidal());
-      printf("Hasil integral numerik dari %0.2f sampai %0.2f dengan metode Simpson adalah %0.7f\n\n", a, b, Simpson());
+      midpoint = (b - a) * (func(c));
+      trapezoidal = (b - a) * ((func(a) + func(b))/2);
+      simpson = (b - a) * ((func(a) + 4*func(c) + func(b))/6);
+            
+      printf("Hasil integral numerik dari %0.2f sampai %0.2f dengan metode MidPoint adalah %0.7f\n", a, b, midpoint);
+      printf("Hasil integral numerik dari %0.2f sampai %0.2f dengan metode Trapezoidal adalah %0.7f\n", a, b, trapezoidal);
+      printf("Hasil integral numerik dari %0.2f sampai %0.2f dengan metode Simpson adalah %0.7f\n\n", a, b, simpson);
 
-      err[0] = fabs(abs_solution - MidPoint());
-      err[1] = fabs(abs_solution - Trapezoidal());
-      err[2] = fabs(abs_solution - Simpson());
+      err[0] = fabs(abs_solution - midpoint);
+      err[1] = fabs(abs_solution - trapezoidal);
+      err[2] = fabs(abs_solution - simpson);
 
       printf("Nilai absolute error dari setiap metode adalah: \n");
       printf("MidPoint: %0.7f\n", err[0]);
@@ -330,7 +316,7 @@ int main(){
 
             case 2:
                   printf("APROKSIMASI TURUNAN FUNGSI DENGAN METODE NUMERIK\n");
-                  printf("Metode yang digunakan untuk mengestimasi turunan dari suatu titik kolokasi yaitu\nmenggunakan metode Newton Forward\n");
+                  printf("Metode yang digunakan untuk mengestimasi turunan dari suatu titik kolokasi yaitu\nmenggunakan metode aproksimasi dengan dua titik, tiga titik, lima titik, dan Newton Forward\n");
                   printf("\nIngin lanjut? (y/n): ");
                   scanf("%s",&next);
                   if(next == 'y'){
@@ -349,7 +335,8 @@ int main(){
                                     system("cls");
                                     FungsiDiketahui:
                                     system("cls");
-                                    printf("APROKSIMASI TURUNAN NUMERIK DENGAN FUNGSI YANG DIKETAHUI\n");
+                                    printf("APROKSIMASI TURUNAN NUMERIK DENGAN FUNGSI YANG DIKETAHUI\n\n");
+                                    printf("Pada bagian metode ini, kita akan melakukan aproksimasi turunan dari fungsi f(x) = 1/(1 + x^2).");
                                     printf("\nPilih Metode yang diinginkan:\n");
                                     printf("1. Aproksimasi Turunan Numerik dengan Dua Titik\n");
                                     printf("2. Aproksimasi Turunan Numerik dengan Tiga Titik\n");
@@ -429,7 +416,7 @@ int main(){
 
             case 3:
                   printf("APROKSIMASI INTEGRAL FUNGSI DENGAN METODE NUMERIK\n");
-                  printf("Metode yang digunakan untuk menghitung integral dari suatu fungsi adalah metode MidPoint, Trapezoidal, dan Simpson 1/3\n");
+                  printf("Metode yang digunakan untuk menghitung integral dari suatu fungsi f(x) = 1/(1 + x^2)\ndegnan metode MidPoint, Trapezoidal, dan Simpson 1/3\n");
                   printf("\nIngin lanjut? (y/n): ");
                   scanf("%s",&next);
                   if(next == 'y'){
