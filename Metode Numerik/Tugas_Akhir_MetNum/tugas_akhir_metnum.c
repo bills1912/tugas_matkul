@@ -4,7 +4,7 @@
 
 float func(float x)
 {
-    return(1/(1+pow(x,2)));
+    return (1/(1+pow(x,2)));
 }
 
 float LagrangeInterpolation(float x[], float f_x[], int n, float x_interpolate)
@@ -33,6 +33,7 @@ float LagrangeInterpolation(float x[], float f_x[], int n, float x_interpolate)
 
       printf("Masukan nilai x yang akan diestimasi nilai f(x)-nya: ");
       scanf("%f",&x_interpolate);
+
       for (i = 0; i < num_point; i++)
       {
             float L = 1;
@@ -40,7 +41,7 @@ float LagrangeInterpolation(float x[], float f_x[], int n, float x_interpolate)
             {
                   if (i != j)
                   {
-                        L *= (x_interpolate - x[j]) / (x[i] - x[j]);
+                        L *=  (x_interpolate - x[j]) / (x[i] - x[j]);
                   }
             }
             f_interpolate += L * f_x[i];
@@ -84,6 +85,7 @@ float DiferensiasiDuaTitik(float f_x[], float x[], int n, float x_differ)
                   selisihMaju = (func(x_differ + h) - func(x_differ))/h;
                   printf("Hasil aproksimasi turunan dari titik %0.3f dengan selisih maju adalah: %0.7f", x_differ, selisihMaju);
                   break;
+
             case 2:
                   selisihMundur = (func(x_differ) - func(x_differ - h))/h;
                   printf("Hasil aproksimasi turunan dari titik %0.3f dengan selisih mundur adalah: %0.7f", x_differ, selisihMundur);
@@ -115,6 +117,7 @@ float DiferensiasiTigaTitik(float f_x[], float x[], int n, float x_differ)
                   diferTigaTitik = (func(x_differ + h) - func(x_differ - h))/(2*h);
                   printf("Hasil aproksimasi turunan dari titik %0.3f dengan psi yang berada di antara (x0 - h) s/d (x0 + h) adalah: %0.7f", x_differ, diferTigaTitik);
                   break;
+
             case 2:
                   diferTigaTitik = (-3*func(x_differ) + 4*func(x_differ + h) - func(x_differ + 2*h))/(2*h);
                   printf("Hasil aproksimasi turunan dari titik %0.3f dengan psi yang berada di antara x0 s/d (x0 + 2h) adalah: %0.7f", x_differ, diferTigaTitik);
@@ -146,6 +149,7 @@ float DiferensiasiLimaTitik(float f_x[], float x[], int n, float x_differ)
                   diferLimaTitik = (func(x_differ - 2*h) - 8*func(x_differ - h) + 8*func(x_differ + h) - func(x_differ + 2*h))/(12*h);
                   printf("Hasil aproksimasi turunan dari titik %0.3f dengan psi yang berada di antara (x0 - 2h) s/d (x0 + 2h) adalah: %0.7f", x_differ, diferLimaTitik);
                   break;
+
             case 2:
                   diferLimaTitik = (-25*func(x_differ) + 48*func(x_differ + h) - 36*func(x_differ + 2*h) + 16*func(x_differ + 3*h) - 3*func(x_differ + 4*h))/(12*h);
                   printf("Hasil aproksimasi turunan dari titik %0.3f dengan psi yang berada di antara x0 s/d (x0 + 4h) adalah: %0.7f", x_differ, diferLimaTitik);
@@ -172,7 +176,7 @@ float NewtonForwardDerivative(float x[], int n, float x_diff)
       printf("\n\nBerikut parameter x dan f(x) yang diinput:\n\n");
       for(i = 0; i < n; i++)
       {
-            printf("%0.3f\t%0.7f",x[i],f[i][0]);
+            printf("%0.3f\t%0.7f", x[i], f[i][0]);
             printf("\n");
       }
 
@@ -213,6 +217,7 @@ float NewtonForwardDerivative(float x[], int n, float x_diff)
             printf("\n");
       }
       printf("\n");
+
       h = x[1] - x[0];
 
       for(i = 1; i < n-index; i++)
@@ -238,7 +243,7 @@ float NumericIntegral(float a, float b, float err[])
       c = (a + b)/2;
       abs_solution = atan(b) - atan(a);
 
-      printf("Masukan solusi absolut dari fungsi (arctan(b) - arctan(a)): %0.7f\n", abs_solution);
+      printf("Hasil dari solusi absolut fungsi (arctan(b) - arctan(a)): %0.7f\n", abs_solution);
       printf("\n");
       
       midpoint = (b - a) * (func(c));
@@ -257,6 +262,7 @@ float NumericIntegral(float a, float b, float err[])
       printf("MidPoint: %0.7f\n", err[0]);
       printf("Trapezoidal: %0.7f\n", err[1]);
       printf("Simpson: %0.7f\n", err[2]);
+      
       printf("\nDari hasil di atas, maka:");
       if(err[0] < err[1] && err[0] < err[2])
       {
